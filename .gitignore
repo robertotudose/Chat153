@@ -1,0 +1,45 @@
+# ---------------------------------------------------------------------------
+# SCHOLAIA · qué NO se sube nunca al repositorio
+#
+# Este archivo vive en la raíz para que cubra los tres subproyectos a la vez.
+# Si añades un subproyecto nuevo, comprueba que sus secretos y su base de datos
+# caen dentro de alguna de estas reglas antes del primer commit.
+# ---------------------------------------------------------------------------
+
+# Dependencias: se reinstalan con `npm install`, no se versionan
+node_modules/
+
+# Secretos: claves de API y contraseñas. NUNCA al repositorio.
+# Cada persona del equipo tiene su propio .env local, y cada una su propia
+# clave de Gemini: así se aíslan consumos y se puede revocar una sin tocar la otra.
+.env
+.env.local
+.env.*.local
+
+# Bases de datos: contienen datos personales de familias y de menores (RGPD).
+# Cada máquina tiene la suya; la de producción vive en el servidor y se respalda aparte.
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# Registros del sistema anterior
+logs_consultas.json
+*.log
+
+# Resultados de compilación de la landing en React
+dist/
+build/
+.next/
+.cache/
+coverage/
+
+# Basura del sistema operativo y de los editores
+.DS_Store
+._*
+Thumbs.db
+.vscode/
+.idea/
+*.swp

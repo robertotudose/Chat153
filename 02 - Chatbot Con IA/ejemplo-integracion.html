@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejemplo de integración · Web de un centro</title>
+
+  <!--
+    Esta página simula la web YA EXISTENTE de un colegio, con sus propios
+    estilos. Incluye a propósito reglas CSS agresivas (las que suelen traer
+    las plantillas de WordPress o Drupal) para demostrar que NO afectan al
+    asistente: el widget vive dentro de un Shadow DOM y queda aislado.
+  -->
+  <style>
+    /* --- Estilos "hostiles" del centro, puestos aposta --- */
+    * { box-sizing: border-box; }
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      margin: 0;
+      background: #fdf6e3;
+      color: #3b3025;
+    }
+    /* Reglas que arrasarían con cualquier widget sin aislamiento */
+    button {
+      background: #8b0000 !important;
+      color: #ffe4b5 !important;
+      border: 4px dashed #ff8c00 !important;
+      border-radius: 0 !important;
+      font-size: 22px !important;
+      padding: 20px !important;
+      text-transform: uppercase !important;
+    }
+    div { line-height: 3 !important; }
+    input, select, textarea { border: 5px solid magenta !important; font-size: 26px !important; }
+    h3, h4 { color: limegreen !important; font-size: 40px !important; }
+    span { letter-spacing: 4px !important; }
+
+    .cabecera { background: #6b4423; color: #fdf6e3; padding: 24px 32px; }
+    .cabecera h1 { margin: 0; font-size: 28px; }
+    .contenido { max-width: 760px; margin: 0 auto; padding: 40px 24px; }
+    .aviso {
+      background: #fff8dc; border-left: 6px solid #8b0000;
+      padding: 16px 20px; margin: 24px 0;
+    }
+    code { background: #3b3025; color: #fdf6e3; padding: 2px 6px; font-size: 14px; }
+    pre { background: #3b3025; color: #fdf6e3; padding: 16px; overflow-x: auto; font-size: 13px; line-height: 1.5 !important; }
+  </style>
+</head>
+<body>
+
+  <header class="cabecera">
+    <h1>Colegio de Ejemplo · Web propia del centro</h1>
+  </header>
+
+  <main class="contenido">
+    <h2>Página de prueba de integración</h2>
+
+    <div class="aviso">
+      <strong>Qué estás viendo:</strong> esta página imita la web de un colegio con
+      una hoja de estilos deliberadamente destructiva: todos los botones son rojos
+      con borde naranja discontinuo, todos los campos tienen borde magenta de 5 píxeles
+      y todos los títulos son verde lima de 40 píxeles. Fíjate en el botón de abajo
+      para comprobarlo.
+    </div>
+
+    <button type="button">Un botón cualquiera del centro</button>
+
+    <p>
+      Pese a todo eso, el asistente que aparece abajo a la derecha conserva
+      íntegro su diseño. Está montado dentro de un <strong>Shadow DOM</strong>,
+      una caja aislada: el CSS de la página no entra, y el del asistente no sale.
+    </p>
+
+    <h2>Cómo se instala</h2>
+    <p>Una sola línea antes de cerrar <code>&lt;/body&gt;</code>:</p>
+
+<pre>&lt;script src="https://TU-SERVIDOR/widget.js"
+        data-servidor="https://TU-SERVIDOR"
+        defer&gt;&lt;/script&gt;</pre>
+
+    <p>Atributos disponibles:</p>
+    <ul>
+      <li><code>data-servidor</code>: dirección del servidor del asistente. Si se omite, se usa la del propio script.</li>
+      <li><code>data-posicion</code>: <code>derecha</code> (por defecto) o <code>izquierda</code>.</li>
+    </ul>
+
+    <h2>Abrir el asistente desde botones de la propia web</h2>
+    <p>
+      Basta con añadir el atributo <code>data-abrir-chat</code> a cualquier
+      elemento de la página del centro:
+    </p>
+
+    <p>
+      <button type="button" data-abrir-chat="orientacion">Test de orientación 4º ESO</button>
+      <button type="button" data-abrir-chat="admisiones">Solicitar plaza</button>
+      <button type="button" data-abrir-chat="calendario">Ver calendario escolar</button>
+    </p>
+
+    <p style="margin-top:48px; font-size:14px; opacity:.7;">
+      Valores admitidos: <code>inicio</code>, <code>admisiones</code>,
+      <code>orientacion</code> y <code>calendario</code>.
+    </p>
+  </main>
+
+  <!-- ▼▼▼ LA ÚNICA LÍNEA QUE HAY QUE AÑADIR ▼▼▼ -->
+  <script src="widget.js" defer></script>
+
+</body>
+</html>

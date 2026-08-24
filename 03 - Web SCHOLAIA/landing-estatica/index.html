@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SCHOLAIA · Plataforma de atención y secretaría digital para centros educativos. Configura y prueba en vivo el asistente de tu colegio o instituto.">
+  <title>SCHOLAIA · La atención escolar, reimaginada</title>
+
+  <!-- Tipografías Editoriales: DM Serif Display, Manrope y JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==================== FONDO DINÁMICO & SPOTLIGHT ==================== -->
+  <div class="ambient-background" id="ambient-background" aria-hidden="true">
+    <div class="spotlight-beam" id="spotlight-beam"></div>
+    <div class="ambient-orb orb-1" id="orb-1"></div>
+    <div class="ambient-orb orb-2" id="orb-2"></div>
+    <div class="ambient-orb orb-3" id="orb-3"></div>
+    <div class="scene-grain"></div>
+  </div>
+
+  <!-- ==================== BARRA DE NAVEGACIÓN (LIQUID GLASS) ==================== -->
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Navegación principal">
+      <a class="nav-brand" href="#inicio" aria-label="SCHOLAIA, inicio">
+        <div class="nav-brand-glyph">S</div>
+        <span class="nav-brand-architecture" aria-hidden="true">
+          <span>SCHO</span>
+          <span>LAIA</span>
+        </span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#manifiesto">Manifiesto</a>
+        <a href="#capacidades">Capacidades</a>
+        <a href="#studio">Studio</a>
+        <a href="#modelos">Modelos</a>
+        <a href="#comparativa">Impacto</a>
+        <a href="#confianza">Confianza</a>
+      </div>
+
+      <div class="nav-actions">
+        <button type="button" class="nav-cta" onclick="openFullscreenModal('core-ia')">
+          <span>Demostración Completa</span>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M5 17.59L15.59 7H9V5h10v10h-2V8.41L6.41 19 5 17.59z"/></svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="contenido">
+    
+    <!-- ==================== HERO ASIMÉTRICO (ARCHIVO NOCTURNO) ==================== -->
+    <section class="hero-scene" id="inicio">
+      <div class="hero-layout">
+        
+        <div class="hero-meta">
+          <span class="eyebrow">Atención escolar / 24 · 7</span>
+          <span class="hero-index">01 — 06</span>
+        </div>
+
+        <div class="hero-left-col">
+          <!-- Monograma Arquitectónico SCHO / LAIA -->
+          <div class="hero-monogram" aria-label="SCHOLAIA">
+            <span>SCHO</span>
+            <span>LAIA</span>
+          </div>
+
+          <div class="hero-statement">
+            <p class="serif-kicker">La atención escolar,</p>
+            <h1>reimaginada.</h1>
+            <p class="hero-copy">
+              La capa de atención inteligente que permite a cada colegio o instituto responder con calma, criterio institucional y disponibilidad ininterrumpida.
+            </p>
+            
+            <div class="hero-actions">
+              <a class="button-liquid button-liquid--solid" href="#studio">
+                <span>Personalizar en Vivo</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+              </a>
+              <a class="button-text" href="#capacidades">
+                <span>Descubrir capacidades</span>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Tarjeta de Métricas Liquid Glass -->
+        <div class="hero-stats-card">
+          <div class="hero-stats-header">
+            <h4>Atención sin esperas</h4>
+            <p>Automatización de secretaría y orientación escolar</p>
+          </div>
+          <div class="hero-stats-grid">
+            <div class="hero-stat-box">
+              <span class="val">&lt; 1 seg</span>
+              <span class="lbl">Respuesta inmediata a dudas de familias</span>
+            </div>
+            <div class="hero-stat-box">
+              <span class="val">5 Etapas</span>
+              <span class="lbl">Desde Infantil hasta Formación Profesional</span>
+            </div>
+            <div class="hero-stat-box">
+              <span class="val">85%</span>
+              <span class="lbl">Reducción de llamadas y trámites repetitivos</span>
+            </div>
+            <div class="hero-stat-box">
+              <span class="val">100%</span>
+              <span class="lbl">Cumplimiento estricto RGPD y privacidad</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== MANIFIESTO EDITORIAL ==================== -->
+    <section class="manifesto-section" id="manifiesto">
+      <div class="manifesto-rule"></div>
+      <div class="manifesto-layout">
+        <p class="section-caption">El propósito</p>
+        <div class="manifesto-copy">
+          <p>
+            Las preguntas llegan a cualquier hora. <em>La respuesta ya está preparada.</em>
+          </p>
+          <div class="manifesto-detail">
+            <span class="detail-line"></span>
+            <p>
+              SCHOLAIA acompaña a la secretaría del centro: atiende a las familias, conduce cada solicitud de admisión o visita y libera al equipo directivo para lo que realmente requiere criterio humano.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CAPACIDADES ("LA CAPA QUE ORDENA") ==================== -->
+    <section class="capabilities-section" id="capacidades">
+      <div class="section-intro section-intro--offset">
+        <div>
+          <span class="eyebrow">La capa que ordena</span>
+          <h2>
+            Una recepción digital<br>
+            <em>que sabe estar.</em>
+          </h2>
+        </div>
+        <p>
+          Cada interacción se diseña como la prolongación discreta, cálida y bien informada de la atención de tu centro.
+        </p>
+      </div>
+
+      <div class="capability-list">
+        
+        <article class="capability-row">
+          <span class="capability-number">01</span>
+          <div class="capability-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+          </div>
+          <h3>Responde con contexto</h3>
+          <p>Convierte las preguntas habituales de familias sobre comedor, horarios y matrículas en respuestas precisas y oficiales.</p>
+          <svg class="capability-arrow" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M5 17.59L15.59 7H9V5h10v10h-2V8.41L6.41 19 5 17.59z"/></svg>
+        </article>
+
+        <article class="capability-row">
+          <span class="capability-number">02</span>
+          <div class="capability-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+          </div>
+          <h3>Ordena los trámites</h3>
+          <p>Guía visitas escolares, justificaciones de ausencias y solicitudes de orientación con formularios estructurados en tiempo real.</p>
+          <svg class="capability-arrow" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M5 17.59L15.59 7H9V5h10v10h-2V8.41L6.41 19 5 17.59z"/></svg>
+        </article>
+
+        <article class="capability-row">
+          <span class="capability-number">03</span>
+          <div class="capability-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+          </div>
+          <h3>Protege la confianza</h3>
+          <p>Una capa de atención con información acotada exclusivamente a tu centro, sin alucinaciones y con total privacidad de datos.</p>
+          <svg class="capability-arrow" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M5 17.59L15.59 7H9V5h10v10h-2V8.41L6.41 19 5 17.59z"/></svg>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ==================== SCHOLAIA STUDIO (CONFIGURADOR & ASISTENTE EN VIVO) ==================== -->
+    <section class="studio-section" id="studio">
+      <div class="studio-head">
+        <span class="eyebrow">SCHOLAIA Studio / Vista en vivo</span>
+        <h2>
+          Configuremos una atención<br>
+          <em>que se parezca a tu centro.</em>
+        </h2>
+        <p>
+          Personaliza los datos institucionales y comprueba al instante cómo responde la secretaría digital de tu colegio.
+        </p>
+      </div>
+
+      <div class="studio-grid">
+        
+        <!-- Columna Izquierda: Configuración Liquid Glass -->
+        <section class="glass-panel configurator-panel" aria-labelledby="identidad-centro">
+          <div>
+            <div class="panel-topline">
+              <span>01 / Identidad</span>
+              <span>⚙️ Tiempo Real</span>
+            </div>
+            
+            <h3 id="identidad-centro">El centro, en primer plano.</h3>
+            <p class="panel-description">
+              Ajusta los elementos esenciales para contextualizar la demostración interactiva.
+            </p>
+
+            <label class="studio-field">
+              <span>Nombre del colegio o instituto</span>
+              <input type="text" id="custom-school-name" class="clean-input" value="Colegio San Gabriel" maxlength="42" placeholder="Ej: Instituto Politécnico..." autocomplete="off">
+            </label>
+
+            <label class="studio-field">
+              <span>Siglas identificativas</span>
+              <input type="text" id="custom-school-badge" class="clean-input" value="SG" maxlength="4" placeholder="SG" autocomplete="off" style="width: 110px;">
+            </label>
+
+            <div class="studio-field">
+              <span>Color institucional</span>
+              <div class="color-picker-wrapper">
+                <div class="color-palette-picker" id="color-picker-group">
+                  <button type="button" class="color-dot active" data-color="#0284c7" data-hover="#0369a1" data-light="rgba(2,132,199,0.15)" data-border="rgba(2,132,199,0.35)" style="background-color: #0284c7;" title="Azul"></button>
+                  <button type="button" class="color-dot" data-color="#059669" data-hover="#047857" data-light="rgba(5,150,105,0.15)" data-border="rgba(5,150,105,0.35)" style="background-color: #059669;" title="Verde"></button>
+                  <button type="button" class="color-dot" data-color="#7c3aed" data-hover="#6d28d9" data-light="rgba(124,58,237,0.15)" data-border="rgba(124,58,237,0.35)" style="background-color: #7c3aed;" title="Púrpura"></button>
+                  <button type="button" class="color-dot" data-color="#dc2626" data-hover="#b91c1c" data-light="rgba(220,38,38,0.15)" data-border="rgba(220,38,38,0.35)" style="background-color: #dc2626;" title="Rojo"></button>
+                  <button type="button" class="color-dot" data-color="#b8d7f4" data-hover="#94bce6" data-light="rgba(184,215,244,0.15)" data-border="rgba(184,215,244,0.35)" style="background-color: #b8d7f4;" title="Lumen Schola"></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="mode-select">
+              <button type="button" class="mode-button is-active" id="btn-mode-core" onclick="setInlineChatMode('core')">
+                <span>💬</span>
+                <span><strong>SCHOLAIA Core</strong><small>Conversacional inteligente</small></span>
+                <span>✓</span>
+              </button>
+              <button type="button" class="mode-button" id="btn-mode-lite" onclick="setInlineChatMode('lite')">
+                <span>⚡</span>
+                <span><strong>SCHOLAIA Lite</strong><small>Navegación directa por botones</small></span>
+                <span></span>
+              </button>
+            </div>
+          </div>
+
+          <div class="panel-signal">
+            <span class="signal-dot"></span> Sincronizado en tiempo real con el asistente.
+          </div>
+        </section>
+
+        <!-- Columna Derecha: Dispositivo Asistente en Vivo Liquid Glass -->
+        <section class="assistant-device" aria-label="Demostración del asistente SCHOLAIA">
+          <div class="device-shine" aria-hidden="true"></div>
+          
+          <div class="assistant-topbar">
+            <div class="school-badge school-badge-preview">SG</div>
+            <div>
+              <p class="school-name-preview">Colegio San Gabriel</p>
+              <span id="inline-model-subtitle"><span class="signal-dot"></span> SCHOLAIA Core</span>
+            </div>
+            <button type="button" onclick="openFullscreenModal()" title="Ampliar a pantalla completa">⛶</button>
+          </div>
+
+          <div class="chat-stage" id="inline-chat-feed">
+            <div id="inline-feed-inner" style="display: flex; flex-direction: column; gap: 12px; width: 100%;">
+              <!-- Burbujas renderizadas por app.js -->
+            </div>
+          </div>
+
+          <div class="chat-shortcuts" id="inline-chat-shortcuts">
+            <button type="button" onclick="triggerInlineShortcut('visitas')">📅 Solicitar Visita</button>
+            <button type="button" onclick="triggerInlineShortcut('comedor')">🍽️ Menú & Comedor</button>
+            <button type="button" onclick="triggerInlineShortcut('horarios')">🕒 Horarios Secretaría</button>
+            <button type="button" onclick="triggerInlineShortcut('admisiones')">📝 Admisiones 2026</button>
+          </div>
+
+          <div class="chat-input-bar" id="inline-input-bar-container">
+            <form id="inline-chat-form" style="display: flex; width: 100%; gap: 8px;">
+              <input type="text" id="inline-user-input" placeholder="Pregunta sobre comedor, visitas, horarios o admisiones..." autocomplete="off">
+              <button type="submit">Enviar</button>
+            </form>
+          </div>
+        </section>
+
+      </div>
+    </section>
+
+    <!-- ==================== MODELOS (CORE VS LITE) ==================== -->
+    <section class="models-section" id="modelos">
+      <div class="models-visual">
+        <div class="visual-label">
+          La información encuentra<br>
+          <em>su recorrido.</em>
+        </div>
+      </div>
+
+      <div class="models-content">
+        <span class="eyebrow">Dos ritmos, una misma atención</span>
+        <h2>Elige la forma de responder.</h2>
+        <p>
+          Desde un recorrido guiado hasta una conversación contextual con inteligencia artificial, SCHOLAIA se adapta al nivel de autonomía y preferencias de cada centro educativo.
+        </p>
+
+        <div class="model-cards">
+          
+          <article class="model-card model-card--core">
+            <span>01 / AVANZADO</span>
+            <h3>SCHOLAIA Core</h3>
+            <p>Para conversaciones naturales, comprensión de dudas complejas, detección automática de trámites y orientación académica personalizada.</p>
+            <a href="javascript:void(0)" onclick="openFullscreenModal('core-ia')">
+              <span>Probar modo Core</span>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </a>
+          </article>
+
+          <article class="model-card">
+            <span>02 / DETERMINISTA</span>
+            <h3>SCHOLAIA Lite</h3>
+            <p>Para centros que prefieren un árbol estructurado de opciones con botones directos y respuestas 100% fijadas por la dirección escolar.</p>
+            <a href="javascript:void(0)" onclick="openFullscreenModal('concierge')">
+              <span>Probar modo Lite</span>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </a>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TABLA DE CONTRASTE & IMPACTO ==================== -->
+    <section class="contrast-section" id="comparativa">
+      <div class="contrast-head">
+        <span class="eyebrow">Cuando la atención se organiza</span>
+        <h2>No se trata de atender más.<br><em>Se trata de atender mejor.</em></h2>
+      </div>
+
+      <div class="contrast-table" role="table" aria-label="Diferencias de atención escolar">
+        <div class="contrast-row contrast-row--header" role="row">
+          <span role="columnheader">Secretaría Tradicional</span>
+          <span role="columnheader">Con SCHOLAIA</span>
+        </div>
+
+        <div class="contrast-row" role="row">
+          <p role="cell">Una familia necesita consultar los plazos de admisión fuera del horario de ventanilla.</p>
+          <p role="cell">✓ Encuentra una respuesta oficial e inmediata en el móvil a cualquier hora.</p>
+        </div>
+
+        <div class="contrast-row" role="row">
+          <p role="cell">Llegan decenas de correos con datos incompletos pidiendo información de puertas abiertas.</p>
+          <p role="cell">✓ El asistente guía y registra la solicitud con todos los datos validados en 1 minuto.</p>
+        </div>
+
+        <div class="contrast-row" role="row">
+          <p role="cell">El personal de secretaría atiende llamadas repetitivas sobre el menú o ausencias del día.</p>
+          <p role="cell">✓ Las gestiones habituales se automatizan con total consistencia y criterio.</p>
+        </div>
+
+        <div class="contrast-row" role="row">
+          <p role="cell">Procesos dispersos en papeles de mano que retrasan la confirmación a las familias.</p>
+          <p role="cell">✓ Panel de control centralizado con exportación de solicitudes y seguimiento instantáneo.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN DE CONFIANZA ==================== -->
+    <section class="trust-section" id="confianza">
+      <div class="trust-mark">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+      </div>
+
+      <div>
+        <span class="eyebrow">La tecnología, con criterio</span>
+        <h2>Una atención que protege la confianza del centro.</h2>
+      </div>
+
+      <p>
+        SCHOLAIA se plantea como una extensión institucional respetuosa: con información estrictamente acotada, registro confidencial y un diseño que prioriza la seguridad de las familias.
+      </p>
+
+      <div class="trust-points">
+        <span>🔒 Cumplimiento estricto RGPD</span>
+        <span>🕒 Disponibilidad ininterrumpida 24/7</span>
+        <span>🏫 Adaptado a la normativa educativa</span>
+      </div>
+    </section>
+
+    <!-- ==================== CONTACTO & SOLICITUD DE DEMO ==================== -->
+    <section class="contact-scene" id="contacto">
+      <div class="contact-layout">
+        
+        <div class="contact-intro">
+          <span class="eyebrow">Una conversación para empezar</span>
+          <h2>Veamos cómo puede atender SCHOLAIA a tu comunidad.</h2>
+          <p>
+            Preparamos una demostración totalmente personalizada con el nombre, logotipo y casos habituales de tu colegio en menos de 48 horas.
+          </p>
+        </div>
+
+        <div class="glass-panel contact-panel">
+          <span class="eyebrow">SOLICITUD OFICIAL / CENTROS EDUCATIVOS</span>
+          
+          <form class="contact-form" id="scholaia-demo-form" novalidate>
+            <div class="form-field">
+              <label for="demo-nombre">Nombre y Apellidos *</label>
+              <input type="text" id="demo-nombre" class="letters-only-input" required placeholder="Ej: Carmen Morales" autocomplete="name">
+              <div class="chat-form-error" id="err-demo-nombre" style="color: #f87171; font-size: 11px; display: none;">⚠️ Introduce un nombre válido.</div>
+            </div>
+
+            <div class="form-field">
+              <label for="demo-cargo">Cargo en el Centro *</label>
+              <select id="demo-cargo" required>
+                <option value="">Selecciona tu cargo...</option>
+                <option value="Dirección / Equipo Directivo">Dirección / Equipo Directivo</option>
+                <option value="Jefatura de Estudios">Jefatura de Estudios</option>
+                <option value="Secretaría">Secretaría</option>
+                <option value="Orientación">Orientación</option>
+                <option value="AMPA">AMPA</option>
+              </select>
+              <div class="chat-form-error" id="err-demo-cargo" style="color: #f87171; font-size: 11px; display: none;">⚠️ Selecciona un cargo.</div>
+            </div>
+
+            <div class="form-field">
+              <label for="demo-centro">Nombre del Colegio o Instituto *</label>
+              <input type="text" id="demo-centro" required placeholder="Ej: Colegio San Gabriel">
+              <div class="chat-form-error" id="err-demo-centro" style="color: #f87171; font-size: 11px; display: none;">⚠️ Introduce el nombre del centro.</div>
+            </div>
+
+            <div class="form-field">
+              <label for="demo-email">Correo Electrónico *</label>
+              <input type="email" id="demo-email" required placeholder="direccion@colegio.es" autocomplete="email">
+              <div class="chat-form-error" id="err-demo-email" style="color: #f87171; font-size: 11px; display: none;">⚠️ Introduce un correo válido.</div>
+            </div>
+
+            <div class="form-field">
+              <label for="demo-telefono">Teléfono de Contacto *</label>
+              <input type="tel" id="demo-telefono" class="phone-strict-input" required placeholder="600 000 000" inputmode="numeric" autocomplete="tel">
+              <div class="chat-form-error" id="err-demo-telefono" style="color: #f87171; font-size: 11px; display: none;">⚠️ Introduce un teléfono válido de 9 dígitos.</div>
+            </div>
+
+            <button type="submit" class="button-liquid button-liquid--solid" style="width: 100%; margin-top: 6px;">
+              <span>Solicitar Demostración Institucional</span>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            </button>
+
+            <div class="form-feedback" id="demo-form-feedback"></div>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Monograma Monumental de Cierre -->
+      <div class="closing-monogram" aria-label="SCHOLAIA">
+        <span>SCHO</span>
+        <span>LAIA</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== PIE DE PÁGINA ==================== -->
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <div class="nav-brand-glyph" style="width: 26px; height: 26px; font-size: 11px;">S</div>
+      <span>SCHOLAIA</span>
+    </div>
+    <p>La atención escolar, reimaginada · © 2026</p>
+    <a href="#inicio">
+      <span>Volver arriba</span>
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
+    </a>
+  </footer>
+
+  <!-- ==================== MODAL DE PANTALLA COMPLETA ==================== -->
+  <div class="fullscreen-modal" id="fullscreen-modal" role="dialog" aria-modal="true" style="display: none;">
+    <div class="modal-backdrop" onclick="closeFullscreenModal()"></div>
+    <div class="modal-window" id="modal-window-container">
+      
+      <!-- Cabecera del Modal -->
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="school-badge school-badge-preview" id="modal-app-badge">SG</span>
+          <div>
+            <h3 id="modal-app-title" style="margin: 0; font-size: 14px; font-weight: 700; color: #fff;">Demostración en Vivo</h3>
+            <span class="school-name-preview" style="font-size: 11px; color: var(--mist);">Colegio San Gabriel</span>
+          </div>
+        </div>
+
+        <div class="modal-switcher">
+          <button type="button" class="modal-tab-btn active" id="modal-tab-core-ia" onclick="switchModalTool('core-ia')">SCHOLAIA Core</button>
+          <button type="button" class="modal-tab-btn" id="modal-tab-concierge" onclick="switchModalTool('concierge')">SCHOLAIA Lite</button>
+          <button type="button" class="modal-tab-btn" id="modal-tab-control" onclick="switchModalTool('control')">Panel de Control</button>
+        </div>
+
+        <div>
+          <button type="button" class="modal-tab-btn" onclick="closeFullscreenModal()" title="Cerrar (Esc)">✕</button>
+        </div>
+      </div>
+
+      <div class="modal-content" id="modal-interactive-body">
+        <!-- Renderizado dinámico -->
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1526 @@
+<!-- SCHOLAIA · Panel de negocio: simulador vivo de precios, costes y proyección. -->
+<title>Panel de negocio SCHOLAIA</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     TOKENS — paleta completa en :root (claro), redefinida bajo
+     prefers-color-scheme y bajo [data-theme] para el toggle del visor.
+     ============================================================ */
+  :root {
+    color-scheme: light;
+
+    /* ---- Tipografías del sistema de producto ---- */
+    --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-body:    'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono:    'JetBrains Mono', monospace;
+    --font-sans: var(--font-body); /* alias: así se llama internamente en este panel */
+
+    /* ---- Paleta slate ultra-limpia del sistema de producto ---- */
+    --slate-950: #020617;
+    --slate-900: #0f172a;
+    --slate-800: #1e293b;
+    --slate-700: #334155;
+    --slate-600: #475569;
+    --slate-500: #64748b;
+    --slate-400: #94a3b8;
+    --slate-300: #cbd5e1;
+    --slate-200: #e2e8f0;
+    --slate-100: #f1f5f9;
+    --slate-50:  #f8fafc;
+    --white:     #ffffff;
+
+    /* ---- Marca y semántica del sistema de producto ---- */
+    --primary:        #0284c7;
+    --primary-hover:  #0369a1;
+    --primary-light:  #f0f9ff;
+    --primary-border: #bae6fd;
+    --primary-focus:  #38bdf8;
+
+    --danger:         #ef4444;
+    --danger-soft:    #fef2f2;
+    --danger-border:  #fecaca;
+    --success:        #10b981;
+    --success-soft:   #ecfdf5;
+    --success-border: #a7f3d0;
+    --holiday-dot:    #f59e0b;
+
+    --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 4px 12px -1px rgba(15, 23, 42, 0.07), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 12px 28px -4px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+
+    --radius-xs: 4px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-full: 9999px;
+
+    --transition-fast: 0.1s ease-out;
+    --transition-smooth: 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    --spring-bounce: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* ---- Alias internos del panel: mismos nombres que ya usan el JS/CSS
+           de este archivo (var(--accent), var(--good), var(--ink)…). Solo
+           cambia el valor al que apuntan, así la lógica de cálculo no se toca.
+           El azul (--primary) es acento aquí — enlaces, línea de gráfica,
+           estado activo del segmentado — nunca relleno de un botón principal,
+           tal y como lo usa el producto real. ---- */
+    --bg: var(--slate-50);
+    --surface: var(--white);
+    --surface-sunken: var(--slate-100);
+    --surface-raised: var(--white);
+    --line: var(--slate-200);
+    --line-strong: var(--slate-300);
+
+    --ink: var(--slate-900);
+    --ink-soft: var(--slate-600);
+    --ink-faint: var(--slate-500);
+    --ink-deep: var(--slate-950);
+
+    --accent: var(--primary);
+    --accent-hover: var(--primary-hover);
+    --accent-soft: var(--primary-focus);
+    --accent-soft-bg: rgba(2, 132, 199, 0.08);
+    --accent-text-on-dark: var(--primary-focus);
+
+    --good: var(--success);
+    --good-soft: var(--success);
+    --good-bg: var(--success-soft);
+    --good-border: var(--success-border);
+    --bad: var(--danger);
+    --bad-soft: var(--danger);
+    --bad-bg: var(--danger-soft);
+    --bad-border: var(--danger-border);
+    --warn: #b45309;
+    --warn-soft: var(--holiday-dot);
+    --warn-bg: #fffbeb;
+    --warn-border: #fef3c7;
+
+    /* Fiabilidad — escala semántica fija en todo el panel */
+    --fiab-medido: var(--good);
+    --fiab-medido-bg: var(--good-bg);
+    --fiab-medido-border: var(--good-border);
+    --fiab-mercado: var(--warn);
+    --fiab-mercado-bg: var(--warn-bg);
+    --fiab-mercado-border: var(--warn-border);
+    --fiab-hipotesis: var(--bad);
+    --fiab-hipotesis-bg: var(--bad-bg);
+    --fiab-hipotesis-border: var(--bad-border);
+
+    --shadow-card: var(--shadow-lg);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: var(--slate-950);
+      --surface: var(--slate-900);
+      --surface-sunken: #0a1120;
+      --surface-raised: var(--slate-800);
+      --line: var(--slate-800);
+      --line-strong: var(--slate-700);
+
+      --ink: var(--slate-50);
+      --ink-soft: var(--slate-200);
+      --ink-faint: var(--slate-400);
+      --ink-deep: var(--slate-950);
+
+      --accent: var(--primary);
+      --accent-hover: var(--primary-focus);
+      --accent-soft: #7dd3fc;
+      --accent-soft-bg: rgba(56, 189, 248, 0.13);
+      --accent-text-on-dark: var(--primary-focus);
+
+      --good: #34d399;
+      --good-soft: #34d399;
+      --good-bg: rgba(52, 211, 153, 0.13);
+      --good-border: rgba(52, 211, 153, 0.35);
+      --bad: #f87171;
+      --bad-soft: #f87171;
+      --bad-bg: rgba(248, 113, 113, 0.14);
+      --bad-border: rgba(248, 113, 113, 0.35);
+      --warn: #fbbf24;
+      --warn-soft: #fcd34d;
+      --warn-bg: rgba(251, 191, 36, 0.14);
+      --warn-border: rgba(251, 191, 36, 0.35);
+
+      --fiab-medido: var(--good);
+      --fiab-medido-bg: var(--good-bg);
+      --fiab-medido-border: var(--good-border);
+      --fiab-mercado: var(--warn);
+      --fiab-mercado-bg: var(--warn-bg);
+      --fiab-mercado-border: var(--warn-border);
+      --fiab-hipotesis: var(--bad);
+      --fiab-hipotesis-bg: var(--bad-bg);
+      --fiab-hipotesis-border: var(--bad-border);
+
+      --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 28px -12px rgba(0, 0, 0, 0.55);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: var(--slate-950);
+    --surface: var(--slate-900);
+    --surface-sunken: #0a1120;
+    --surface-raised: var(--slate-800);
+    --line: var(--slate-800);
+    --line-strong: var(--slate-700);
+
+    --ink: var(--slate-50);
+    --ink-soft: var(--slate-200);
+    --ink-faint: var(--slate-400);
+    --ink-deep: var(--slate-950);
+
+    --accent: var(--primary);
+    --accent-hover: var(--primary-focus);
+    --accent-soft: #7dd3fc;
+    --accent-soft-bg: rgba(56, 189, 248, 0.13);
+    --accent-text-on-dark: var(--primary-focus);
+
+    --good: #34d399;
+    --good-soft: #34d399;
+    --good-bg: rgba(52, 211, 153, 0.13);
+    --good-border: rgba(52, 211, 153, 0.35);
+    --bad: #f87171;
+    --bad-soft: #f87171;
+    --bad-bg: rgba(248, 113, 113, 0.14);
+    --bad-border: rgba(248, 113, 113, 0.35);
+    --warn: #fbbf24;
+    --warn-soft: #fcd34d;
+    --warn-bg: rgba(251, 191, 36, 0.14);
+    --warn-border: rgba(251, 191, 36, 0.35);
+
+    --fiab-medido: var(--good);
+    --fiab-medido-bg: var(--good-bg);
+    --fiab-medido-border: var(--good-border);
+    --fiab-mercado: var(--warn);
+    --fiab-mercado-bg: var(--warn-bg);
+    --fiab-mercado-border: var(--warn-border);
+    --fiab-hipotesis: var(--bad);
+    --fiab-hipotesis-bg: var(--bad-bg);
+    --fiab-hipotesis-border: var(--bad-border);
+
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 28px -12px rgba(0, 0, 0, 0.55);
+  }
+
+  /* ============================================================
+     BASE
+     ============================================================ */
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .transition { transition: background-color .15s ease, border-color .15s ease, color .15s ease, opacity .2s ease; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  a { color: var(--accent); }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .num, .fig, .kpi-value, table td.num-cell, .tabnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+
+  /* ============================================================
+     SHELL
+     ============================================================ */
+  .app-shell {
+    display: grid;
+    grid-template-columns: 336px 1fr;
+    min-height: 100vh;
+    align-items: start;
+  }
+
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--surface-sunken);
+    border-right: 1px solid var(--line);
+    padding: 20px 18px 40px;
+  }
+
+  .main {
+    padding: 24px 28px 64px;
+    min-width: 0;
+  }
+
+  .scroll-x { overflow-x: auto; }
+
+  @media (max-width: 900px) {
+    .app-shell { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--line); }
+    .main { padding: 18px 14px 48px; }
+  }
+
+  /* ============================================================
+     SIDEBAR / BRAND / CONTROLES
+     ============================================================ */
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 4px;
+  }
+  .brand-glyph {
+    width: 30px; height: 30px; border-radius: var(--radius-sm);
+    background: linear-gradient(155deg, var(--accent), var(--accent-hover));
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 800; font-size: 15px; letter-spacing: -0.03em; flex: none;
+    box-shadow: var(--shadow-xs);
+  }
+  .brand-name { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.01em; font-size: 15px; }
+  .brand-tag { font-size: 11.5px; color: var(--ink-faint); margin: 2px 0 18px; }
+
+  .fiab-legend {
+    display: flex; flex-direction: column; gap: 6px;
+    padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-md);
+    background: var(--surface); margin-bottom: 20px;
+  }
+  .fiab-legend-title { font-size: 10.5px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-faint); font-weight: 700; margin-bottom: 2px; }
+  .fiab-legend-row { display: flex; align-items: baseline; gap: 7px; font-size: 11.5px; color: var(--ink-soft); }
+  .fiab-legend-row b { color: var(--ink); }
+
+  .ctrl-group {
+    margin-bottom: 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .ctrl-group > summary {
+    cursor: pointer; list-style: none; padding: 12px 14px;
+    font-weight: 700; font-size: 12.5px; letter-spacing: .02em;
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--ink);
+  }
+  .ctrl-group > summary::-webkit-details-marker { display: none; }
+  .ctrl-group > summary::after {
+    content: '▾'; color: var(--ink-faint); font-size: 11px;
+    transition: transform .15s ease;
+  }
+  .ctrl-group[open] > summary::after { transform: rotate(180deg); }
+  .ctrl-group-body { padding: 2px 14px 14px; display: flex; flex-direction: column; gap: 14px; }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .field-label { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+  .field-value {
+    font-family: var(--font-mono); font-size: 12.5px; font-weight: 700; color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .field-hint { font-size: 10.5px; color: var(--ink-faint); line-height: 1.4; }
+
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 4px; border-radius: 2px;
+    background: var(--line-strong);
+    outline-offset: 4px;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--surface);
+    box-shadow: 0 0 0 1px var(--accent);
+    cursor: pointer; margin-top: -6px;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--surface);
+    box-shadow: 0 0 0 1px var(--accent); cursor: pointer;
+  }
+  input[type="range"].has-floor {
+    background: linear-gradient(to right, var(--line-strong) 0%, var(--line-strong) 100%);
+  }
+
+  input[type="number"] {
+    width: 100%; font-family: var(--font-mono); font-size: 12.5px;
+    padding: 6px 8px; border-radius: 7px; border: 1px solid var(--line-strong);
+    background: var(--surface); color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .floor-note {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 10.5px; color: var(--bad); font-weight: 700;
+  }
+  .floor-note .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--bad); flex: none; }
+
+  .partida-row {
+    display: grid; grid-template-columns: 1fr 68px; gap: 8px; align-items: center;
+  }
+  .partida-row label { font-size: 11.5px; color: var(--ink-soft); }
+
+  .segmented {
+    display: inline-flex; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); overflow: hidden;
+  }
+  .segmented button {
+    font-family: var(--font-display); font-size: 11.5px; font-weight: 700;
+    padding: 6px 10px; border: none; background: var(--surface); color: var(--ink-soft);
+    cursor: pointer; transition: var(--transition-smooth);
+  }
+  .segmented button:hover { color: var(--ink); }
+  .segmented button.active { background: var(--accent); color: #fff; }
+  .segmented button:active { transform: scale(0.95); transition: transform 80ms ease-out; }
+  .segmented button + button { border-left: 1px solid var(--line-strong); }
+
+  .reset-link {
+    background: none; border: none; color: var(--accent); font-size: 11px; font-weight: 700;
+    cursor: pointer; padding: 4px 0; text-align: left; font-family: var(--font-display);
+  }
+  .reset-link:hover { color: var(--accent-hover); text-decoration: underline; }
+
+  /* ============================================================
+     BADGES DE FIABILIDAD
+     ============================================================ */
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: var(--font-display);
+    font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+    padding: 3px 8px 3px 6px; border-radius: var(--radius-full); border: 1px solid transparent; white-space: nowrap;
+  }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; flex: none; }
+  .badge.medido { color: var(--fiab-medido); background: var(--fiab-medido-bg); border-color: var(--fiab-medido-border); }
+  .badge.medido .dot { background: var(--fiab-medido); }
+  .badge.mercado { color: var(--fiab-mercado); background: var(--fiab-mercado-bg); border-color: var(--fiab-mercado-border); }
+  .badge.mercado .dot { background: var(--warn-soft); }
+  .badge.hipotesis { color: var(--fiab-hipotesis); background: var(--fiab-hipotesis-bg); border-color: var(--fiab-hipotesis-border); }
+  .badge.hipotesis .dot { background: var(--fiab-hipotesis); }
+
+  /* ============================================================
+     MAIN — cabecera y secciones
+     ============================================================ */
+  .page-head { margin-bottom: 22px; }
+  .eyebrow {
+    font-size: 11.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 6px;
+  }
+  .page-head h1 {
+    font-family: var(--font-display); font-weight: 800; font-size: clamp(26px, 3vw, 34px);
+    letter-spacing: -0.035em; color: var(--ink);
+  }
+  .page-head p { color: var(--ink-soft); margin: 6px 0 0; max-width: 62ch; font-size: 13.5px; }
+
+  section.block { margin: 34px 0; }
+  section.block:first-of-type { margin-top: 0; }
+  .block-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .block-head h2 { font-size: 17px; font-weight: 800; letter-spacing: -0.005em; }
+  .block-head .block-sub { font-size: 12.5px; color: var(--ink-faint); margin-top: 3px; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card); padding: 18px 20px;
+  }
+
+  /* ---- KPI hero ---- */
+  .hero-grid {
+    display: grid; grid-template-columns: 1.3fr repeat(3, 1fr); gap: 12px;
+  }
+  @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .hero-grid { grid-template-columns: 1fr; } }
+
+  .kpi-hero {
+    background: linear-gradient(155deg, var(--ink-deep), #0e1626 60%, var(--accent-hover));
+    color: #fff; border-radius: var(--radius-lg); padding: 22px 22px;
+    display: flex; flex-direction: column; justify-content: space-between; gap: 14px;
+    box-shadow: var(--shadow-card); position: relative; overflow: hidden;
+    min-height: 168px;
+  }
+  .kpi-hero::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(120% 90% at 100% 0%, rgba(2,132,199,.35), transparent 60%);
+    pointer-events: none;
+  }
+  .kpi-hero-label { font-size: 11.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--accent-soft); position: relative; }
+  .kpi-hero-value { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.03em; font-size: clamp(38px, 5vw, 54px); line-height: 1; position: relative; }
+  .kpi-hero-value .unit { font-family: var(--font-sans); font-size: 15px; font-weight: 700; margin-left: 6px; color: var(--accent-soft); }
+  .kpi-hero-foot { font-size: 12px; color: rgba(255,255,255,.72); position: relative; line-height: 1.45; }
+  .kpi-hero-status {
+    position: relative; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700;
+    padding: 4px 10px; border-radius: 999px; width: fit-content;
+  }
+  .kpi-hero-status.pos { background: rgba(52,211,153,.18); color: #6ee7b7; }
+  .kpi-hero-status.neg { background: rgba(248,113,113,.18); color: #fca5a5; }
+
+  .kpi-tile {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg);
+    padding: 16px 17px; box-shadow: var(--shadow-card);
+    display: flex; flex-direction: column; gap: 8px; justify-content: space-between;
+  }
+  .kpi-tile-label { font-size: 11.5px; font-weight: 700; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .04em; }
+  .kpi-tile-value { font-family: var(--font-mono); font-size: 23px; font-weight: 700; letter-spacing: -0.01em; }
+  .kpi-tile-sub { font-size: 11.5px; color: var(--ink-soft); }
+  .kpi-tile-sub.good { color: var(--good); font-weight: 700; }
+  .kpi-tile-sub.bad { color: var(--bad); font-weight: 700; }
+
+  /* ---- genérico de gráficos ---- */
+  .chart-wrap svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .legend-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; font-size: 12px; color: var(--ink-soft); }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+  .legend-line { width: 14px; height: 2px; border-radius: 2px; flex: none; }
+
+  .tooltip-box {
+    position: absolute; pointer-events: none; z-index: 20;
+    background: var(--ink-deep); color: #fff; border: 1px solid rgba(255,255,255,.14);
+    border-radius: 10px; padding: 8px 11px; font-size: 11.5px; line-height: 1.5;
+    box-shadow: 0 12px 30px rgba(0,0,0,.35); opacity: 0; transition: opacity .1s ease;
+    min-width: 150px;
+  }
+  .tooltip-box.show { opacity: 1; }
+  .tooltip-row { display: flex; justify-content: space-between; gap: 10px; }
+  .tooltip-row .k { color: rgba(255,255,255,.6); }
+  .tooltip-row .v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 12.5px; min-width: 640px; }
+  thead th {
+    text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em;
+    color: var(--ink-faint); font-weight: 700; padding: 8px 10px; border-bottom: 1px solid var(--line-strong);
+    white-space: nowrap;
+  }
+  tbody td { padding: 9px 10px; border-bottom: 1px solid var(--line); color: var(--ink-soft); white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody td.strong { color: var(--ink); font-weight: 700; }
+  td.num-cell { font-family: var(--font-mono); text-align: right; }
+
+  /* ---- banners de hipótesis ---- */
+  .banner {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 13px 15px; border-radius: var(--radius-md); border: 1px solid;
+    font-size: 12.5px; line-height: 1.5; margin-bottom: 14px;
+  }
+  .banner.hipotesis { background: var(--fiab-hipotesis-bg); border-color: color-mix(in srgb, var(--fiab-hipotesis) 35%, transparent); color: var(--ink); }
+  .banner.hipotesis strong { color: var(--fiab-hipotesis); }
+  .banner-icon { font-size: 16px; line-height: 1; flex: none; }
+
+  /* ---- riesgos ---- */
+  .risk-card {
+    border: 1px solid var(--line); border-left-width: 4px; border-radius: var(--radius-md);
+    padding: 14px 16px; background: var(--surface); box-shadow: var(--shadow-card);
+    margin-bottom: 10px;
+  }
+  .risk-card.alta { border-left-color: var(--bad); }
+  .risk-card.media { border-left-color: var(--warn); }
+  .risk-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+  .risk-head h3 { font-size: 13.5px; font-weight: 800; }
+  .sev-pill {
+    font-family: var(--font-display);
+    font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em;
+    padding: 2px 8px; border-radius: var(--radius-full);
+  }
+  .sev-pill.alta { color: var(--bad); background: var(--bad-bg); }
+  .sev-pill.media { color: var(--warn); background: var(--warn-bg); }
+  .risk-card p { margin: 0; font-size: 12.5px; color: var(--ink-soft); line-height: 1.55; }
+  .risk-card.critical { background: var(--bad-bg); border-color: color-mix(in srgb, var(--bad) 40%, transparent); }
+
+  .pasos-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .pasos-list li { display: flex; gap: 10px; font-size: 12.5px; color: var(--ink-soft); align-items: baseline; }
+  .pasos-list .n {
+    font-family: var(--font-mono); font-weight: 700; color: var(--accent); flex: none; width: 20px;
+  }
+
+  .foot-note { font-size: 11px; color: var(--ink-faint); margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); line-height: 1.6; }
+
+  .grid-2 { display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; }
+  @media (max-width: 1100px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .mini-table { width: 100%; font-size: 11.5px; border-collapse: collapse; }
+  .mini-table th { text-align: left; color: var(--ink-faint); font-weight: 700; padding: 4px 6px; border-bottom: 1px solid var(--line-strong); font-size: 10px; text-transform: uppercase; }
+  .mini-table td { padding: 5px 6px; border-bottom: 1px solid var(--line); color: var(--ink-soft); }
+  .mini-table td.num-cell { font-family: var(--font-mono); text-align: right; }
+  .mini-table tr.highlight td { background: var(--accent-soft-bg); color: var(--ink); font-weight: 700; }
+</style>
+
+<div class="app-shell">
+  <!-- ==================== SIDEBAR: CONTROLES ==================== -->
+  <aside class="sidebar" aria-label="Controles del simulador">
+    <div class="brand">
+      <div class="brand-glyph">S</div>
+      <span class="brand-name">SCHOLAIA</span>
+    </div>
+    <p class="brand-tag">Panel de negocio · simulador vivo</p>
+
+    <div class="fiab-legend">
+      <div class="fiab-legend-title">Fiabilidad de cada dato</div>
+      <div class="fiab-legend-row"><span class="badge medido"><span class="dot"></span>Medido</span> comprobado sobre el sistema real</div>
+      <div class="fiab-legend-row"><span class="badge mercado"><span class="dot"></span>Mercado</span> dato externo investigado</div>
+      <div class="fiab-legend-row"><span class="badge hipotesis"><span class="dot"></span>Hipótesis</span> suposición del equipo, sin verificar</div>
+    </div>
+
+    <div id="controles"><!-- inyectado por JS --></div>
+  </aside>
+
+  <!-- ==================== MAIN ==================== -->
+  <main class="main">
+    <div class="page-head">
+      <p class="eyebrow">Preparación comercial · 0 institutos firmados hoy</p>
+      <h1>Las cuentas de SCHOLAIA, en vivo</h1>
+      <p>Mueve los controles de la izquierda. Cada cifra de este panel se recalcula al instante a partir de tus supuestos — nada está precargado como verdad fija salvo lo que ya está medido sobre el sistema real.</p>
+    </div>
+
+    <div id="contenido"><!-- inyectado por JS --></div>
+
+    <p class="foot-note" id="foot-note"></p>
+  </main>
+</div>
+
+<div class="tooltip-box" id="tooltip"></div>
+
+<script>
+'use strict';
+
+/* ================================================================
+   DATOS — copia embebida de datos-negocio.json como respaldo.
+   Si el archivo se sirve por HTTP se intenta refrescar por fetch;
+   desde file:// o dentro de un Artifact el fetch fallará y se
+   usa este respaldo, que es idéntico al JSON fuente.
+   ================================================================ */
+const DATA_EMBEBIDA = {
+  "consumo_api": {
+    "fiabilidad": "MEDIDO",
+    "tokens_entrada_por_consulta": 964,
+    "tokens_salida_por_consulta": 328,
+    "conversaciones_mes_por_centro": 2000,
+    "porcentaje_que_llega_a_ia": 40,
+    "llamadas_ia_mes": 800,
+    "comentario_arquitectura": "El 60% restante lo resuelven los botones y el buscador local, sin coste. Esa arquitectura es lo que hace irrelevante el coste de API.",
+    "modelos": [
+      { "nombre": "Gemini 2.5 Flash-Lite", "entrada_usd_millon": 0.10, "salida_usd_millon": 0.40, "coste_mes_eur": 0.17 },
+      { "nombre": "Gemini 3.5 Flash-Lite", "entrada_usd_millon": 0.15, "salida_usd_millon": 1.25, "coste_mes_eur": 0.41 },
+      { "nombre": "Gemini 3.7 Flash", "entrada_usd_millon": 0.38, "salida_usd_millon": 1.88, "coste_mes_eur": 0.72 },
+      { "nombre": "Gemini 3.6 Flash", "entrada_usd_millon": 0.75, "salida_usd_millon": 3.75, "coste_mes_eur": 1.44, "nota": "El caro. Se usa solo en el test de orientación." }
+    ],
+    "tests_orientacion_mes": 60,
+    "coste_tests_orientacion_eur": 0.21,
+    "presupuesto_con_margen_eur": 3.00,
+    "aviso": "El nivel gratuito de Google devuelve 503 'high demand' sin prioridad de servicio. No se puede sostener un producto comercial encima. Hay que activar facturación antes del primer piloto."
+  },
+  "gastos_fijos_mes": {
+    "fiabilidad": "MERCADO",
+    "partidas": [
+      { "concepto": "Cuota de autónomo", "anio_1": 80, "anio_2": 300 },
+      { "concepto": "Gestoría", "anio_1": 60, "anio_2": 85 },
+      { "concepto": "Claude Code (desarrollo)", "anio_1": 100, "anio_2": 100 },
+      { "concepto": "Servidor + dominio", "anio_1": 10, "anio_2": 25 },
+      { "concepto": "Seguro de RC profesional", "anio_1": 20, "anio_2": 20 },
+      { "concepto": "Varios (correo, herramientas)", "anio_1": 20, "anio_2": 20 }
+    ],
+    "total_anio_1": 290,
+    "total_anio_2": 550,
+    "coste_variable_api_por_instituto": 2,
+    "segundo_autonomo_anio_3": 300,
+    "coste_oculto": "Hora y media de soporte al mes por instituto. Con 25 clientes son 38 horas mensuales, casi media jornada. Es el techo real del negocio, no el servidor."
+  },
+  "precios": {
+    "fiabilidad": "MERCADO",
+    "suelo_innegociable_eur": 140,
+    "niveles": [
+      { "nombre": "Esencial", "papel": "señuelo", "mensual": 89, "nota": "Deliberadamente NO se quiere vender. Su función es hacer obvio el salto al Completo." },
+      { "nombre": "Completo", "papel": "objetivo", "mensual": 149, "destacado": true },
+      { "nombre": "Centro+", "papel": "ancla superior", "mensual": 249 }
+    ],
+    "instalacion_primeros_centros": 400,
+    "instalacion_con_referencias": 750
+  },
+  "proyeccion": {
+    "fiabilidad": "HIPOTESIS",
+    "modelo_de_calculo": "Los 4 primeros institutos van a 140 € (precio de lanzamiento) y el resto a 149 €. La instalación se prorratea a 12 meses y solo cuenta la de los centros NUEVOS de cada tramo. Los costes son los fijos del año correspondiente más 2 €/mes por instituto.",
+    "escenarios": [
+      { "etiqueta": "Año 1 · cohorte inicial a 140 €", "institutos": 4, "ingresos_mes": 693, "costes_mes": 298, "beneficio_mes": 395, "beneficio_anio": 4744 },
+      { "etiqueta": "Año 1 · consolidación", "institutos": 8, "ingresos_mes": 1293, "costes_mes": 306, "beneficio_mes": 987, "beneficio_anio": 11848, "nota": "Recalculado desde el modelo da 1.289 €/mes, no 1.293 €. Diferencia de 4 € por redondeo. Se usa el cálculo." },
+      { "etiqueta": "Año 2 · crecimiento", "institutos": 15, "ingresos_mes": 2468, "costes_mes": 580, "beneficio_mes": 1888, "beneficio_anio": 22660 },
+      { "etiqueta": "Año 2-3 · masa crítica", "institutos": 25, "ingresos_mes": 4058, "costes_mes": 600, "beneficio_mes": 3458, "beneficio_anio": 41500 },
+      { "etiqueta": "Año 3 · dos socios a jornada", "institutos": 40, "ingresos_mes": 6460, "costes_mes": 930, "beneficio_mes": 5530, "beneficio_anio": 66360, "nota": "El salto de coste incluye un segundo autónomo (300 €/mes)." }
+    ]
+  },
+  "rentabilidad": {
+    "fiabilidad": "MEDIDO",
+    "umbral_institutos_anio_1": 3,
+    "umbral_institutos_anio_2": 4,
+    "margen_bruto_porcentaje": 98,
+    "ltv_eur": 5600,
+    "ltv_calculo": "149 € × 36 meses + 400 € de instalación, al 98 % de margen",
+    "cac_eur": 500,
+    "cac_calculo": "Unas 15 horas entre demos, visitas y seguimiento",
+    "ltv_cac_ratio": 11
+  },
+  "roi_cliente": {
+    "fiabilidad": "HIPOTESIS",
+    "aviso": "El ahorro depende del 80 % de llamadas evitadas, que TODAVÍA NO ESTÁ MEDIDO con ningún cliente real. Es el argumento de venta central y a la vez el dato más débil del plan.",
+    "coste_primer_anio": 2188,
+    "ahorro_estimado": 4500,
+    "ahorro_calculo": "1,5 h/día × 200 días lectivos × ~15 €/h de coste laboral",
+    "retorno_neto": 2312,
+    "como_venderlo": "No como despedir a nadie. El argumento honesto: en plena campaña de admisión la administrativa deja de repetir cuarenta veces el mismo horario, y las familias tienen respuesta a las diez de la noche y en fin de semana."
+  },
+  "subvenciones": {
+    "fiabilidad": "MERCADO",
+    "kit_digital_ia": { "importe_maximo": 12000, "nota": "El Kit Digital incorporó la categoría de Inteligencia Artificial en 2026." },
+    "ticket_innova": { "importe_maximo": 7000 },
+    "aviso_elegibilidad": "Verificar antes de usarlo como argumento: el programa está diseñado para pymes y autónomos, y muchos concertados son fundaciones o congregaciones. Confirmar con la gestoría."
+  },
+  "riesgos": [
+    { "severidad": "alta", "titulo": "Datos de menores: sois encargados del tratamiento", "detalle": "El mayor riesgo legal, por encima de cualquier tema técnico. Hace falta contrato de encargado de tratamiento (art. 28 RGPD) firmado con cada centro antes de empezar, registro de actividades de tratamiento y seguro de responsabilidad civil. Puede ser obligatorio un delegado de protección de datos. La arquitectura ayuda (conversación en memoria, sin cookies, anonimización antes de registrar), pero el papeleo no lo sustituye el código." },
+    { "severidad": "alta", "titulo": "Vender es más difícil que construir", "detalle": "El ciclo de venta en un colegio son de 3 a 6 meses, concentrado en primavera (para el curso siguiente) y septiembre. Si se pierde la ventana de primavera, se espera un año. Los institutos públicos compran por contratación administrativa, mucho más lenta: empezar por concertados y privados, donde decide el director o el titular." },
+    { "severidad": "media", "titulo": "Dependencia de Google", "detalle": "Ya ha pasado dos veces en este proyecto: un modelo retirado y saturación del nivel gratuito. Mitigado con modelos de respaldo y degradación a modo local. La capa de IA está aislada en un único archivo, así que cambiar de proveedor es asumible." },
+    { "severidad": "media", "titulo": "El soporte crece con los clientes", "detalle": "Los servidores escalan solos; el tiempo no. A partir de 25-30 centros el soporte come media jornada. Hace falta documentación de autoservicio y que cada centro edite su propia base de preguntas." },
+    { "severidad": "media", "titulo": "Alexia o Educamos pueden añadir un chatbot", "detalle": "Las plataformas grandes de gestión escolar podrían incorporar algo parecido. La ventaja no es la tecnología, que es replicable: es la base de conocimiento específica de cada centro y la cercanía." }
+  ],
+  "pasos": [
+    { "orden": 1, "que": "Activar facturación en la API de Google", "por_que": "Unos 3 € al mes por centro. Sin esto no hay producto vendible." },
+    { "orden": 2, "que": "Contrato de encargado de tratamiento", "por_que": "Antes del primer piloto real, no después." },
+    { "orden": 3, "que": "Un piloto gratuito de tres meses en un solo centro", "por_que": "A cambio de los datos de uso reales y permiso para usarlos como caso de éxito." },
+    { "orden": 4, "que": "Medir el porcentaje real de consultas resueltas", "por_que": "Para sustituir el 80 % estimado por una cifra defendible." },
+    { "orden": 5, "que": "Reestructurar los precios a tres niveles", "por_que": "89 / 149 / 249 €, con pago anual por curso escolar." },
+    { "orden": 6, "que": "Cerrar los cuatro primeros a 140 € con contrato de dos años", "por_que": "El descuento se justifica como precio de lanzamiento y se blinda con permanencia." },
+    { "orden": 7, "que": "Alta como autónomo con tarifa plana", "por_que": "80 €/mes el primer año." }
+  ],
+  "estado_comercial": { "fiabilidad": "MEDIDO", "institutos_firmados": 0, "nota": "Fase de preparación comercial. Todavía no hay ningún centro facturando." }
+};
+
+let DATA = DATA_EMBEBIDA;
+// Intento de refresco por fetch (funciona si se sirve por HTTP; falla en
+// file:// y en el Artifact, donde nos quedamos con la copia embebida).
+fetch('./datos-negocio.json').then(r => r.ok ? r.json() : null).then(json => {
+  if (json && json.precios && json.gastos_fijos_mes) { DATA = json; renderAll(); }
+}).catch(() => { /* respaldo embebido, esperado en file:// y Artifact */ });
+
+console.log('SCHOLAIA panel-negocio: datos cargados, inicializando…');
+
+/* ================================================================
+   FORMATO — español: coma decimal, punto de millar, € detrás.
+   ================================================================ */
+function formatEUR(n, dec) {
+  dec = dec === undefined ? 0 : dec;
+  const neg = n < 0;
+  n = Math.abs(n);
+  let s = n.toFixed(dec);
+  let [int, frac] = s.split('.');
+  int = int.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return (neg ? '−' : '') + int + (frac !== undefined ? ',' + frac : '') + ' €';
+}
+function formatNum(n, dec) {
+  dec = dec === undefined ? 0 : dec;
+  const neg = n < 0;
+  n = Math.abs(n);
+  let s = n.toFixed(dec);
+  let [int, frac] = s.split('.');
+  int = int.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return (neg ? '−' : '') + int + (frac !== undefined ? ',' + frac : '');
+}
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+/* ================================================================
+   ESTADO — controles del simulador, precargados con los valores
+   reales del JSON. institutos arranca en 0: es el estado real hoy.
+   ================================================================ */
+const state = {
+  institutos: 0,
+  precioEstandar: 149,      // precio del tramo "resto" (>4 institutos); suelo 140
+  precioInstalacion: 400,
+  nuevos12m: 0,              // institutos de alta en los últimos 12 meses (cuentan para instalación)
+  mezclaEsencialPct: 0,      // % del tramo "resto" vendido como Esencial (sin IA) — el equipo NO quiere vender esto
+  conversacionesMes: 2000,   // conversaciones/mes/centro — mueve el coste real medido de API
+  costeVariableModelo: 2,    // €/mes/instituto asumido en el modelo de costes
+  anioGastos: 1,             // 1 o 2 — qué año de gastos fijos se usa como base editable
+  partidas: DATA.gastos_fijos_mes.partidas.map(p => p.anio_1), // editable, arranca en año 1
+  ritmoCaptacion: 0.5        // institutos nuevos / mes, para la proyección 12/24/36 meses
+};
+
+const PRECIO_LANZAMIENTO = 140; // fijo: los 4 primeros institutos, precio de lanzamiento
+const SUELO = 140;
+
+/* ================================================================
+   MOTOR DE CÁLCULO
+   ================================================================ */
+
+// Reparte N institutos entre tramo "lanzamiento" (primeros 4, a 140€)
+// y tramo "resto" (a precioEstandar, salvo mezcla Esencial).
+function calcMRR(s) {
+  const nLanz = Math.min(s.institutos, 4);
+  const nResto = Math.max(s.institutos - 4, 0);
+  const nEsencial = Math.round(nResto * (s.mezclaEsencialPct / 100));
+  const nCompleto = nResto - nEsencial;
+
+  const precioResto = Math.max(s.precioEstandar, SUELO);
+  const mrrLanzamiento = nLanz * PRECIO_LANZAMIENTO;
+  const mrrCompleto = nCompleto * precioResto;
+  const mrrEsencial = nEsencial * 89; // nivel Esencial, precio fijo de catálogo
+  const mrr = mrrLanzamiento + mrrCompleto + mrrEsencial;
+
+  const nuevos = clamp(s.nuevos12m, 0, s.institutos);
+  const instalacionMes = (nuevos * s.precioInstalacion) / 12;
+
+  return {
+    nLanz, nResto, nEsencial, nCompleto,
+    mrrLanzamiento, mrrCompleto, mrrEsencial, mrr,
+    instalacionMes,
+    total: mrr + instalacionMes
+  };
+}
+
+// Coste variable: solo los institutos en plan Completo/Lanzamiento pagan IA;
+// el Esencial no lleva IA generativa y su coste marginal es ~0.
+function calcCostes(s) {
+  const fijos = s.partidas.reduce((a, b) => a + b, 0);
+  const nConIA = s.institutos - Math.round(Math.max(s.institutos - 4, 0) * (s.mezclaEsencialPct / 100));
+  const variable = nConIA * s.costeVariableModelo;
+  return { fijos, variable, nConIA, total: fijos + variable };
+}
+
+function calcMargen(s) {
+  const ingresos = calcMRR(s);
+  const costes = calcCostes(s);
+  // Beneficio e umbral se calculan SIEMPRE sobre ingreso recurrente (MRR),
+  // no sobre la facturación total del mes: la instalación es un ingreso de
+  // arranque prorrateado, no una medida de si el negocio se sostiene solo.
+  const margenBrutoPct = ingresos.mrr > 0 ? ((ingresos.mrr - costes.variable) / ingresos.mrr) * 100 : null;
+  const beneficioNetoMes = ingresos.mrr - costes.total;
+  const margenNetoPct = ingresos.mrr > 0 ? (beneficioNetoMes / ingresos.mrr) * 100 : null;
+  return { ingresos, costes, margenBrutoPct, beneficioNetoMes, margenNetoPct };
+}
+
+// Beneficio neto puramente recurrente (sin instalación) para N institutos,
+// con los parámetros de precio/coste actuales. Es la base del umbral.
+function beneficioRecurrente(s, n) {
+  const s2 = Object.assign({}, s, { institutos: n, nuevos12m: 0 });
+  const ingresos = calcMRR(s2);
+  const costes = calcCostes(s2);
+  return ingresos.mrr - costes.total;
+}
+
+// Umbral de rentabilidad: menor N entero tal que el beneficio recurrente >= 0.
+function calcUmbral(s) {
+  for (let n = 0; n <= 200; n++) {
+    if (beneficioRecurrente(s, n) >= 0) return n;
+  }
+  return null;
+}
+
+// ROI del cliente: coste real para el centro frente al ahorro estimado (hipótesis).
+function calcROICliente(s) {
+  const precioMensual = Math.max(s.precioEstandar, SUELO);
+  const costePrimerAnio = precioMensual * 12 + s.precioInstalacion;
+  const ahorroEstimado = DATA.roi_cliente.ahorro_estimado;
+  const retornoNeto = ahorroEstimado - costePrimerAnio;
+  const multiplo = costePrimerAnio > 0 ? ahorroEstimado / costePrimerAnio : null;
+  return { costePrimerAnio, ahorroEstimado, retornoNeto, multiplo };
+}
+
+// Coste real de API medido, escalado con el volumen de conversaciones.
+function calcCosteApiReal(s) {
+  const base = DATA.consumo_api;
+  const factor = s.conversacionesMes / base.conversaciones_mes_por_centro;
+  return base.modelos.map(m => ({
+    nombre: m.nombre,
+    esCaro: !!m.nota,
+    costeMes: m.coste_mes_eur * factor + (m.nota ? 0 : 0)
+  })).map(m => ({
+    ...m,
+    costeTotalConTest: m.costeMes + (m.esCaro ? 0 : base.coste_tests_orientacion_eur)
+  }));
+}
+
+// Simulación mes a mes para la proyección 12/24/36.
+function simulateProjection(s, meses) {
+  const out = [];
+  let n = s.institutos;
+  let acumulado = 0;
+  // cohortes activas: cada alta nueva aporta instalación/12 durante 12 meses
+  const cohortes = []; // { mesAlta, cantidad }
+  if (s.nuevos12m > 0) cohortes.push({ mesAlta: -1, cantidad: clamp(s.nuevos12m, 0, n) });
+
+  let acumuladorRitmo = 0;
+  for (let mes = 0; mes <= meses; mes++) {
+    if (mes > 0) {
+      acumuladorRitmo += s.ritmoCaptacion;
+      const altas = Math.floor(acumuladorRitmo);
+      if (altas > 0) {
+        acumuladorRitmo -= altas;
+        n += altas;
+        cohortes.push({ mesAlta: mes, cantidad: altas });
+      }
+    }
+    const sMes = Object.assign({}, s, { institutos: n });
+    const ingresos = calcMRR(Object.assign({}, sMes, { nuevos12m: 0 })).mrr;
+
+    // instalación: suma de cohortes cuya alta cae en los últimos 12 meses
+    let instalacionMes = 0;
+    for (const c of cohortes) {
+      if (mes - c.mesAlta < 12) instalacionMes += (c.cantidad * s.precioInstalacion) / 12;
+    }
+
+    // año de gastos fijos según el mes simulado
+    const fijos = mes <= 12 ? DATA.gastos_fijos_mes.total_anio_1
+      : (mes <= 24 ? DATA.gastos_fijos_mes.total_anio_2
+        : DATA.gastos_fijos_mes.total_anio_2 + DATA.gastos_fijos_mes.segundo_autonomo_anio_3);
+    const nConIA = n - Math.round(Math.max(n - 4, 0) * (s.mezclaEsencialPct / 100));
+    const costes = fijos + nConIA * s.costeVariableModelo;
+
+    const totalMes = ingresos + instalacionMes;
+    const beneficio = totalMes - costes;
+    acumulado += beneficio;
+
+    out.push({ mes, institutos: n, ingresos: totalMes, costes, beneficio, acumulado });
+  }
+  return out;
+}
+
+/* ================================================================
+   CONTROLES — sidebar
+   ================================================================ */
+function renderControls() {
+  const el = document.getElementById('controles');
+  el.innerHTML = `
+    <details class="ctrl-group" open>
+      <summary>Clientes y precio</summary>
+      <div class="ctrl-group-body">
+        <div class="field">
+          <div class="field-head"><span class="field-label">Institutos clientes</span><span class="field-value" id="v-institutos"></span></div>
+          <input type="range" id="in-institutos" min="0" max="50" step="1">
+          <span class="field-hint">Hoy: 0 firmados. El umbral de rentabilidad está marcado en el panel.</span>
+        </div>
+        <div class="field">
+          <div class="field-head"><span class="field-label">Precio mensual (a partir del 5º)</span><span class="field-value" id="v-precio"></span></div>
+          <input type="range" id="in-precio" min="140" max="249" step="1">
+          <div class="floor-note"><span class="dot"></span>Suelo innegociable: 140 €</div>
+          <span class="field-hint">Los 4 primeros institutos van fijos a 140 € (precio de lanzamiento).</span>
+        </div>
+        <div class="field">
+          <div class="field-head"><span class="field-label">Precio de instalación</span><span class="field-value" id="v-instalacion"></span></div>
+          <input type="range" id="in-instalacion" min="0" max="750" step="10">
+          <span class="field-hint">400 € primeros centros · 750 € con referencias.</span>
+        </div>
+        <div class="field">
+          <div class="field-head"><span class="field-label">Altas en los últimos 12 meses</span><span class="field-value" id="v-nuevos"></span></div>
+          <input type="range" id="in-nuevos" min="0" max="50" step="1">
+          <span class="field-hint">Solo estas facturan instalación (prorrateada 12 meses). Se ajusta sola al mover institutos; puedes anularlo.</span>
+        </div>
+      </div>
+    </details>
+
+    <details class="ctrl-group" open>
+      <summary>Estrategia de planes</summary>
+      <div class="ctrl-group-body">
+        <div class="field">
+          <div class="field-head"><span class="field-label">% del resto en plan Esencial (sin IA)</span><span class="field-value" id="v-mezcla"></span></div>
+          <input type="range" id="in-mezcla" min="0" max="100" step="5">
+          <span class="field-hint">El equipo NO quiere vender este plan: es el señuelo. Súbelo para ver cuánto cuesta igualmente hacerlo.</span>
+        </div>
+      </div>
+    </details>
+
+    <details class="ctrl-group">
+      <summary>Uso y coste de API</summary>
+      <div class="ctrl-group-body">
+        <div class="field">
+          <div class="field-head"><span class="field-label">Conversaciones / mes / centro</span><span class="field-value" id="v-conversaciones"></span></div>
+          <input type="range" id="in-conversaciones" min="500" max="5000" step="100">
+          <span class="field-hint">2.000 es la cifra medida. Mueve esto para ver el coste real de API.</span>
+        </div>
+        <div class="field">
+          <div class="field-head"><span class="field-label">Coste variable asumido en el modelo</span><span class="field-value" id="v-costevar"></span></div>
+          <input type="range" id="in-costevar" min="0" max="6" step="0.5">
+          <span class="field-hint">€/mes/instituto con IA. Mueve el margen; el coste medido real se muestra aparte, como contraste.</span>
+        </div>
+      </div>
+    </details>
+
+    <details class="ctrl-group">
+      <summary>Gastos fijos mensuales</summary>
+      <div class="ctrl-group-body">
+        <div class="segmented" id="seg-anio" role="group" aria-label="Año de referencia para restaurar partidas">
+          <button type="button" data-anio="1">Año 1</button>
+          <button type="button" data-anio="2">Año 2</button>
+        </div>
+        <div id="partidas-list"></div>
+        <button type="button" class="reset-link" id="btn-reset-partidas">Restaurar valores del año</button>
+      </div>
+    </details>
+
+    <details class="ctrl-group">
+      <summary>Ritmo de captación (proyección)</summary>
+      <div class="ctrl-group-body">
+        <div class="field">
+          <div class="field-head"><span class="field-label">Institutos nuevos / mes</span><span class="field-value" id="v-ritmo"></span></div>
+          <input type="range" id="in-ritmo" min="0" max="3" step="0.1">
+          <span class="field-hint">Es un deseo, no una previsión: mueve el gráfico de proyección de más abajo.</span>
+        </div>
+      </div>
+    </details>
+  `;
+
+  document.getElementById('partidas-list').innerHTML = DATA.gastos_fijos_mes.partidas.map((p, i) => `
+    <div class="partida-row">
+      <label for="in-partida-${i}">${p.concepto}</label>
+      <input type="number" id="in-partida-${i}" min="0" step="5" value="${state.partidas[i]}">
+    </div>
+  `).join('');
+
+  function bindRange(id, initial, formatFn, onChange) {
+    const input = document.getElementById(id);
+    const label = document.getElementById('v-' + id.replace('in-', ''));
+    input.value = initial;
+    if (label) label.textContent = formatFn(initial);
+    input.addEventListener('input', () => {
+      const v = parseFloat(input.value);
+      onChange(v);
+      if (label) label.textContent = formatFn(v);
+    });
+    return input;
+  }
+
+  const inputInstitutos = bindRange('in-institutos', state.institutos, v => formatNum(v), v => {
+    state.institutos = Math.round(v);
+    state.nuevos12m = Math.min(state.institutos, 4);
+    document.getElementById('in-nuevos').max = state.institutos;
+    document.getElementById('in-nuevos').value = state.nuevos12m;
+    document.getElementById('v-nuevos').textContent = formatNum(state.nuevos12m);
+    renderAll();
+  });
+
+  bindRange('in-precio', state.precioEstandar, v => formatEUR(v), v => {
+    state.precioEstandar = Math.max(SUELO, Math.round(v));
+    renderAll();
+  });
+
+  bindRange('in-instalacion', state.precioInstalacion, v => formatEUR(v), v => {
+    state.precioInstalacion = Math.round(v);
+    renderAll();
+  });
+
+  const inNuevos = document.getElementById('in-nuevos');
+  inNuevos.max = state.institutos;
+  bindRange('in-nuevos', state.nuevos12m, v => formatNum(v), v => {
+    state.nuevos12m = clamp(Math.round(v), 0, state.institutos);
+    renderAll();
+  });
+
+  bindRange('in-mezcla', state.mezclaEsencialPct, v => v + ' %', v => {
+    state.mezclaEsencialPct = Math.round(v);
+    renderAll();
+  });
+
+  bindRange('in-conversaciones', state.conversacionesMes, v => formatNum(v), v => {
+    state.conversacionesMes = Math.round(v);
+    renderAll();
+  });
+
+  bindRange('in-costevar', state.costeVariableModelo, v => formatEUR(v, 2), v => {
+    state.costeVariableModelo = v;
+    renderAll();
+  });
+
+  bindRange('in-ritmo', state.ritmoCaptacion, v => formatNum(v, 1) + ' /mes', v => {
+    state.ritmoCaptacion = v;
+    renderAll();
+  });
+
+  DATA.gastos_fijos_mes.partidas.forEach((p, i) => {
+    document.getElementById('in-partida-' + i).addEventListener('input', (e) => {
+      state.partidas[i] = parseFloat(e.target.value) || 0;
+      renderAll();
+    });
+  });
+
+  document.getElementById('btn-reset-partidas').addEventListener('click', () => {
+    const key = state.anioGastos === 1 ? 'anio_1' : 'anio_2';
+    state.partidas = DATA.gastos_fijos_mes.partidas.map(p => p[key]);
+    DATA.gastos_fijos_mes.partidas.forEach((p, i) => {
+      document.getElementById('in-partida-' + i).value = state.partidas[i];
+    });
+    renderAll();
+  });
+
+  const segAnio = document.getElementById('seg-anio');
+  segAnio.querySelectorAll('button').forEach(btn => {
+    if (parseInt(btn.dataset.anio, 10) === state.anioGastos) btn.classList.add('active');
+    btn.addEventListener('click', () => {
+      state.anioGastos = parseInt(btn.dataset.anio, 10);
+      segAnio.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const key = state.anioGastos === 1 ? 'anio_1' : 'anio_2';
+      state.partidas = DATA.gastos_fijos_mes.partidas.map(p => p[key]);
+      DATA.gastos_fijos_mes.partidas.forEach((p, i) => {
+        document.getElementById('in-partida-' + i).value = state.partidas[i];
+      });
+      renderAll();
+    });
+  });
+}
+
+/* ================================================================
+   VERIFICACIÓN DEL MODELO — reconciliación con los escenarios del
+   documento fuente, con parámetros fijos (no ligados a los sliders).
+   ================================================================ */
+function calcScenarioCheck() {
+  const escenarios = DATA.proyeccion.escenarios;
+  const nuevosPorTramo = [4, 4, 7, 10, 15]; // altas nuevas de cada tramo respecto al anterior
+  const fijosPorTramo = [290, 290, 550, 550, 550 + 300];
+  return escenarios.map((esc, i) => {
+    const n = esc.institutos;
+    const nLanz = Math.min(n, 4);
+    const nResto = Math.max(n - 4, 0);
+    const mrr = nLanz * 140 + nResto * 149;
+    const instalacion = (nuevosPorTramo[i] * 400) / 12;
+    const ingresosCalc = mrr + instalacion;
+    const costesCalc = fijosPorTramo[i] + n * 2;
+    const beneficioCalc = ingresosCalc - costesCalc;
+    return {
+      etiqueta: esc.etiqueta, institutos: n,
+      ingresosDoc: esc.ingresos_mes, ingresosCalc,
+      costesDoc: esc.costes_mes, costesCalc,
+      beneficioDoc: esc.beneficio_mes, beneficioCalc,
+      nota: esc.nota || null
+    };
+  });
+}
+
+/* ================================================================
+   RENDER PRINCIPAL
+   ================================================================ */
+function badge(fiab) {
+  const map = { MEDIDO: 'medido', MERCADO: 'mercado', HIPOTESIS: 'hipotesis' };
+  const cls = map[fiab] || 'mercado';
+  const txt = fiab === 'MEDIDO' ? 'Medido' : (fiab === 'MERCADO' ? 'Mercado' : 'Hipótesis');
+  return `<span class="badge ${cls}"><span class="dot"></span>${txt}</span>`;
+}
+
+function miniBarRow(label, value, max, fmt) {
+  const pct = max > 0 ? clamp((value / max) * 100, 0, 100) : 0;
+  return `
+    <div style="display:flex;flex-direction:column;gap:4px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-soft);">
+        <span>${label}</span><span class="num" style="font-family:var(--font-mono);color:var(--ink);font-weight:700;">${fmt}</span>
+      </div>
+      <div style="height:8px;border-radius:4px;background:var(--surface-sunken);overflow:hidden;">
+        <div style="height:100%;width:${pct}%;background:var(--accent);border-radius:4px;"></div>
+      </div>
+    </div>`;
+}
+
+function renderAll() {
+  const calc = calcMargen(state);
+  const ingresos = calc.ingresos;
+  const costes = calc.costes;
+  const umbral = calcUmbral(state);
+  const roi = calcROICliente(state);
+  const apiReal = calcCosteApiReal(state);
+  const sim = simulateProjection(state, 36);
+  const scenarioCheck = calcScenarioCheck();
+
+  const porEncimaUmbral = umbral !== null && state.institutos >= umbral;
+  const facturacionAnualSinInst = ingresos.mrr * 12;
+  const facturacionAnualConInst = ingresos.total * 12;
+
+  const html = `
+    <!-- ============ HERO KPI ============ -->
+    <section class="block">
+      <div class="hero-grid">
+        <div class="kpi-hero">
+          <div>
+            <div class="kpi-hero-label">Umbral de rentabilidad</div>
+            <div class="kpi-hero-value">${umbral === null ? '—' : formatNum(umbral)}<span class="unit">institutos</span></div>
+          </div>
+          <div>
+            <span class="kpi-hero-status ${porEncimaUmbral ? 'pos' : 'neg'}">${porEncimaUmbral ? '✓ Cubierto con tus supuestos actuales' : `Faltan ${umbral === null ? '—' : (umbral - state.institutos)} institutos para cubrir gastos`}</span>
+          </div>
+          <div class="kpi-hero-foot">Documento original: 3 institutos en año 1 · 4 en año 2 con gastos fijos más altos. Este número se recalcula en vivo con tus precios y gastos actuales. ${badge('MEDIDO')}</div>
+        </div>
+
+        <div class="kpi-tile">
+          <div class="kpi-tile-label">MRR recurrente</div>
+          <div class="kpi-tile-value num">${formatEUR(ingresos.mrr)}</div>
+          <div class="kpi-tile-sub">Facturación anual sin instalaciones: <b class="num">${formatEUR(facturacionAnualSinInst)}</b></div>
+        </div>
+
+        <div class="kpi-tile">
+          <div class="kpi-tile-label">Facturación total del mes</div>
+          <div class="kpi-tile-value num">${formatEUR(ingresos.total)}</div>
+          <div class="kpi-tile-sub">Con instalaciones prorrateadas · anualizado: <b class="num">${formatEUR(facturacionAnualConInst)}</b></div>
+        </div>
+
+        <div class="kpi-tile">
+          <div class="kpi-tile-label">Margen neto (recurrente)</div>
+          <div class="kpi-tile-value num" style="color:${calc.beneficioNetoMes >= 0 ? 'var(--good)' : 'var(--bad)'}">${calc.margenNetoPct === null ? '—' : formatNum(calc.margenNetoPct, 1) + ' %'}</div>
+          <div class="kpi-tile-sub ${calc.beneficioNetoMes >= 0 ? 'good' : 'bad'}">Beneficio: ${formatEUR(calc.beneficioNetoMes)} / mes · sobre MRR, sin instalación</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ COSTES Y ESTRATEGIA ============ -->
+    <section class="block">
+      <div class="grid-2">
+        <div class="card">
+          <div class="block-head">
+            <div><h2>Desglose de costes</h2><div class="block-sub">Gastos fijos (año ${state.anioGastos}) + coste variable de API ${badge('MERCADO')}</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            ${DATA.gastos_fijos_mes.partidas.map((p, i) => miniBarRow(p.concepto, state.partidas[i], Math.max(...state.partidas), formatEUR(state.partidas[i]))).join('')}
+          </div>
+          <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Total gastos fijos</span><b class="num">${formatEUR(costes.fijos)}</b></div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Coste variable de API (${costes.nConIA} institutos con IA × ${formatEUR(state.costeVariableModelo,2)})</span><b class="num">${formatEUR(costes.variable)}</b></div>
+            <div style="display:flex;justify-content:space-between;font-size:14.5px;padding-top:8px;border-top:1px dashed var(--line-strong);"><span><b>Coste total / mes</b></span><b class="num" style="font-family:var(--font-mono);">${formatEUR(costes.total)}</b></div>
+            <div style="font-size:11.5px;color:var(--ink-faint);">Coste marginal por instituto añadido con IA: <b class="num" style="color:var(--ink);">${formatEUR(state.costeVariableModelo,2)}/mes</b> — los gastos fijos no se mueven por un cliente más, salvo el salto de un segundo autónomo a partir de cierta escala.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="block-head">
+            <div><h2>Efecto de vender el plan Esencial</h2><div class="block-sub">El equipo no quiere vender este plan ${badge('MERCADO')}</div></div>
+          </div>
+          ${renderMezclaEffect(state, ingresos, costes)}
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROYECCIÓN ============ -->
+    <section class="block">
+      <div class="card">
+        <div class="block-head">
+          <div><h2>Proyección a 12 / 24 / 36 meses</h2><div class="block-sub">Ritmo de captación ajustable en el panel lateral</div></div>
+        </div>
+        <div class="banner hipotesis">
+          <span class="banner-icon">◆</span>
+          <div><strong>Hipótesis, no previsión.</strong> Depende de cuántos institutos se consigan cerrar realmente — la variable que la tecnología no controla. ${badge('HIPOTESIS')}</div>
+        </div>
+        <div id="proyeccion-chart"></div>
+      </div>
+    </section>
+
+    <!-- ============ ROI CLIENTE ============ -->
+    <section class="block">
+      <div class="card">
+        <div class="block-head">
+          <div><h2>ROI del cliente</h2><div class="block-sub">El argumento de venta central — y el dato más débil del plan ${badge('HIPOTESIS')}</div></div>
+        </div>
+        <div class="banner hipotesis">
+          <span class="banner-icon">◆</span>
+          <div><strong>El 80 % de llamadas evitadas TODAVÍA NO ESTÁ MEDIDO</strong> con ningún cliente real. Pendiente del primer piloto. El ahorro que ves aquí es una estimación del equipo, no un dato comprobado.</div>
+        </div>
+        <div id="roi-chart"></div>
+        <div style="margin-top:10px;font-size:12px;color:var(--ink-faint);">${DATA.roi_cliente.ahorro_calculo} · ${DATA.roi_cliente.como_venderlo}</div>
+      </div>
+    </section>
+
+    <!-- ============ COSTE REAL DE API ============ -->
+    <section class="block">
+      <div class="card">
+        <div class="block-head">
+          <div><h2>Coste real de API medido</h2><div class="block-sub">Sobre el sistema ya construido, no estimado ${badge('MEDIDO')}</div></div>
+        </div>
+        <p style="font-size:12.5px;color:var(--ink-soft);margin:0 0 12px;">${DATA.consumo_api.comentario_arquitectura} A ${formatNum(state.conversacionesMes)} conversaciones/mes/centro, un ${DATA.consumo_api.porcentaje_que_llega_a_ia}% llega a la IA (${formatNum(Math.round(state.conversacionesMes * DATA.consumo_api.porcentaje_que_llega_a_ia/100))} llamadas/mes).</p>
+        <div class="scroll-x">
+        <table class="mini-table">
+          <thead><tr><th>Modelo</th><th>Uso</th><th style="text-align:right">Coste/mes a este volumen</th></tr></thead>
+          <tbody>
+            ${apiReal.map(m => `<tr class="${m.esCaro ? '' : 'highlight'}"><td>${m.nombre}</td><td>${m.esCaro ? 'Test de orientación (60/mes, fijo)' : 'Consultas normales'}</td><td class="num-cell">${formatEUR(m.esCaro ? DATA.consumo_api.coste_tests_orientacion_eur : m.costeMes, 2)}</td></tr>`).join('')}
+          </tbody>
+        </table>
+        </div>
+        <div style="margin-top:12px;font-size:11.5px;color:var(--ink-faint);">El modelo financiero asume <b class="num" style="color:var(--ink);">${formatEUR(state.costeVariableModelo,2)}/mes/instituto</b> — un margen de seguridad amplio sobre el coste medido real. ${DATA.consumo_api.aviso}</div>
+      </div>
+    </section>
+
+    <!-- ============ VERIFICACIÓN DE ESCENARIOS ============ -->
+    <section class="block">
+      <div class="card">
+        <div class="block-head">
+          <div><h2>Verificación contra el documento original</h2><div class="block-sub">El modelo se calcula, no se copia de la tabla de escenarios ${badge('HIPOTESIS')}</div></div>
+        </div>
+        <div class="scroll-x">
+        <table>
+          <thead><tr><th>Escenario</th><th>Institutos</th><th>Ingresos doc.</th><th>Ingresos calc.</th><th>Costes doc.</th><th>Costes calc.</th><th>Beneficio doc.</th><th>Beneficio calc.</th></tr></thead>
+          <tbody>
+            ${scenarioCheck.map(s => `
+              <tr>
+                <td class="strong">${s.etiqueta}${s.nota ? ' <span title="'+s.nota.replace(/"/g,'&quot;')+'" style="cursor:help;color:var(--warn);">•</span>' : ''}</td>
+                <td class="num-cell">${s.institutos}</td>
+                <td class="num-cell">${formatEUR(s.ingresosDoc)}</td>
+                <td class="num-cell">${formatEUR(Math.round(s.ingresosCalc))}</td>
+                <td class="num-cell">${formatEUR(s.costesDoc)}</td>
+                <td class="num-cell">${formatEUR(Math.round(s.costesCalc))}</td>
+                <td class="num-cell">${formatEUR(s.beneficioDoc)}</td>
+                <td class="num-cell strong">${formatEUR(Math.round(s.beneficioCalc))}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--ink-faint);">El escenario de 8 institutos difiere en ~4 €/mes por redondeo del documento original (1.293 € frente a 1.289 € calculados); el resto de escenarios muestra una desviación sistemática menor al 2%, coherente con las simplificaciones del modelo. Se fía del cálculo, como indica el propio documento fuente.</div>
+      </div>
+    </section>
+
+    <!-- ============ RIESGOS ============ -->
+    <section class="block">
+      <div class="block-head"><div><h2>Riesgos</h2><div class="block-sub">Lo que puede tumbar una venta, no solo lo técnico</div></div></div>
+      ${DATA.riesgos.map(r => {
+        const critico = r.titulo.toLowerCase().includes('menores');
+        return `
+        <div class="risk-card ${r.severidad}${critico ? ' critical' : ''}">
+          <div class="risk-head">
+            <span class="sev-pill ${r.severidad}">${r.severidad === 'alta' ? 'Severidad alta' : 'Severidad media'}</span>
+            ${critico ? '<span class="sev-pill alta">RGPD · art. 28</span>' : ''}
+            <h3>${r.titulo}</h3>
+          </div>
+          <p>${r.detalle}</p>
+        </div>`;
+      }).join('')}
+    </section>
+
+    <!-- ============ SUBVENCIONES + PASOS ============ -->
+    <section class="block">
+      <div class="grid-2">
+        <div class="card">
+          <div class="block-head"><div><h2>Subvenciones</h2><div class="block-sub">Verificar elegibilidad antes de usarlas como argumento ${badge('MERCADO')}</div></div></div>
+          <div style="display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap;">
+            <div class="kpi-tile" style="flex:1;min-width:150px;">
+              <div class="kpi-tile-label">Kit Digital IA</div>
+              <div class="kpi-tile-value num">${formatEUR(DATA.subvenciones.kit_digital_ia.importe_maximo)}</div>
+            </div>
+            <div class="kpi-tile" style="flex:1;min-width:150px;">
+              <div class="kpi-tile-label">Ticket Innova</div>
+              <div class="kpi-tile-value num">${formatEUR(DATA.subvenciones.ticket_innova.importe_maximo)}</div>
+            </div>
+          </div>
+          <p style="font-size:11.5px;color:var(--ink-faint);margin:0;">${DATA.subvenciones.aviso_elegibilidad}</p>
+        </div>
+        <div class="card">
+          <div class="block-head"><div><h2>Próximos pasos</h2></div></div>
+          <ol class="pasos-list">
+            ${DATA.pasos.map(p => `<li><span class="n">${String(p.orden).padStart(2,'0')}</span><span><b style="color:var(--ink)">${p.que}.</b> ${p.por_que}</span></li>`).join('')}
+          </ol>
+        </div>
+      </div>
+    </section>
+  `;
+
+  document.getElementById('contenido').innerHTML = html;
+  document.getElementById('foot-note').textContent =
+    'Fuente de datos: datos-negocio.json. Cifras MEDIDO comprobadas sobre el sistema real; MERCADO investigadas externamente; HIPOTESIS sin verificar, pendientes del primer piloto. ' + DATA.gastos_fijos_mes.coste_oculto;
+
+  drawProjectionChart(sim, umbral);
+  drawROIChart(roi);
+}
+
+/* ================================================================
+   GRÁFICO DE PROYECCIÓN — SVG dibujado a mano, con leyenda,
+   cruce del umbral marcado y tooltip por meses.
+   ================================================================ */
+function drawProjectionChart(sim, umbral) {
+  const host = document.getElementById('proyeccion-chart');
+  if (!host) return;
+
+  const W = 900, H = 300, ML = 54, MR = 14, MT = 18, MB = 32;
+  const plotW = W - ML - MR, plotH = H - MT - MB;
+
+  const maxIngresos = Math.max(...sim.map(d => d.ingresos), 1);
+  const minY = Math.min(0, ...sim.map(d => d.beneficio));
+  const maxY = Math.max(maxIngresos, ...sim.map(d => d.costes)) * 1.08;
+  const spanY = (maxY - minY) || 1;
+
+  const x = mes => ML + (mes / 36) * plotW;
+  const y = v => MT + plotH - ((v - minY) / spanY) * plotH;
+  const yZero = y(0);
+
+  function pathFor(key) {
+    return sim.map((d, i) => (i === 0 ? 'M' : 'L') + x(d.mes).toFixed(1) + ',' + y(d[key]).toFixed(1)).join(' ');
+  }
+  const pathIngresos = pathFor('ingresos');
+  const pathCostes = pathFor('costes');
+
+  // Beneficio: tramos coloreados por signo (verde/rojo), área desde cero.
+  let beneficioSegs = '';
+  for (let i = 0; i < sim.length - 1; i++) {
+    const a = sim[i], b = sim[i + 1];
+    const bienSigno = (a.beneficio + b.beneficio) >= 0 ? 'var(--good)' : 'var(--bad)';
+    const bienSignoBg = (a.beneficio + b.beneficio) >= 0 ? 'var(--good)' : 'var(--bad)';
+    const x1 = x(a.mes), x2 = x(b.mes), y1 = y(a.beneficio), y2 = y(b.beneficio);
+    beneficioSegs += `<polygon points="${x1},${yZero} ${x1},${y1} ${x2},${y2} ${x2},${yZero}" fill="${bienSignoBg}" fill-opacity="0.12"></polygon>`;
+    beneficioSegs += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${bienSigno}" stroke-width="2" stroke-linecap="round"></line>`;
+  }
+
+  // Cruce del umbral: primer mes con beneficio >= 0.
+  const cruce = sim.find(d => d.beneficio >= 0);
+
+  const yTicks = 4;
+  let gridLines = '';
+  for (let i = 0; i <= yTicks; i++) {
+    const v = minY + (spanY / yTicks) * i;
+    const yy = y(v);
+    gridLines += `<line x1="${ML}" y1="${yy.toFixed(1)}" x2="${W - MR}" y2="${yy.toFixed(1)}" stroke="var(--line)" stroke-width="1"></line>`;
+    gridLines += `<text x="${ML - 8}" y="${(yy + 3.5).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--ink-faint)" font-family="var(--font-mono)">${formatEUR(Math.round(v))}</text>`;
+  }
+  let xTicks = '';
+  [0, 12, 24, 36].forEach(m => {
+    xTicks += `<text x="${x(m).toFixed(1)}" y="${H - 10}" text-anchor="middle" font-size="10.5" fill="var(--ink-faint)" font-family="var(--font-sans)" font-weight="700">Mes ${m}</text>`;
+  });
+
+  const zeroLine = `<line x1="${ML}" y1="${yZero.toFixed(1)}" x2="${W - MR}" y2="${yZero.toFixed(1)}" stroke="var(--ink-faint)" stroke-width="1" stroke-dasharray="3,3"></line>`;
+
+  const cruceMarker = cruce ? `
+    <line x1="${x(cruce.mes).toFixed(1)}" y1="${MT}" x2="${x(cruce.mes).toFixed(1)}" y2="${MT + plotH}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4,3"></line>
+    <circle cx="${x(cruce.mes).toFixed(1)}" cy="${y(cruce.beneficio).toFixed(1)}" r="4" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"></circle>
+    <text x="${x(cruce.mes).toFixed(1)}" y="${MT + 12}" text-anchor="${cruce.mes > 30 ? 'end' : 'start'}" font-size="10.5" fill="var(--accent)" font-family="var(--font-sans)" font-weight="800">Mes ${cruce.mes}: cubre gastos</text>
+  ` : '';
+
+  // Puntos invisibles para el hover.
+  let hitAreas = '';
+  sim.forEach((d, i) => {
+    const px = x(d.mes);
+    const bandW = plotW / 36;
+    hitAreas += `<rect data-i="${i}" x="${(px - bandW/2).toFixed(1)}" y="${MT}" width="${bandW.toFixed(1)}" height="${plotH}" fill="transparent"></rect>`;
+  });
+
+  host.innerHTML = `
+    <div class="legend-row">
+      <span class="legend-item"><span class="legend-line" style="background:var(--accent)"></span>Ingresos totales</span>
+      <span class="legend-item"><span class="legend-line" style="background:var(--ink-faint)"></span>Costes totales</span>
+      <span class="legend-item"><span class="legend-line" style="background:var(--good)"></span>Beneficio (verde ≥ 0, rojo &lt; 0)</span>
+    </div>
+    <div class="chart-wrap" style="position:relative;">
+      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Proyección de ingresos, costes y beneficio a 36 meses">
+        ${gridLines}
+        ${zeroLine}
+        ${beneficioSegs}
+        <path d="${pathCostes}" fill="none" stroke="var(--ink-faint)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
+        <path d="${pathIngresos}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
+        ${cruceMarker}
+        ${xTicks}
+        <g id="proy-hoverline" style="display:none;">
+          <line x1="0" y1="${MT}" x2="0" y2="${MT + plotH}" stroke="var(--ink)" stroke-width="1"></line>
+        </g>
+        ${hitAreas}
+      </svg>
+    </div>
+  `;
+
+  const svg = host.querySelector('svg');
+  const hoverLine = host.querySelector('#proy-hoverline');
+  const tooltip = document.getElementById('tooltip');
+
+  svg.querySelectorAll('rect[data-i]').forEach(rect => {
+    rect.addEventListener('mousemove', (e) => {
+      const i = parseInt(rect.dataset.i, 10);
+      const d = sim[i];
+      hoverLine.style.display = '';
+      hoverLine.querySelector('line').setAttribute('x1', x(d.mes).toFixed(1));
+      hoverLine.querySelector('line').setAttribute('x2', x(d.mes).toFixed(1));
+
+      tooltip.innerHTML = `
+        <div style="font-weight:700;margin-bottom:4px;">Mes ${d.mes} · ${d.institutos} institutos</div>
+        <div class="tooltip-row"><span class="k">Ingresos</span><span class="v">${formatEUR(Math.round(d.ingresos))}</span></div>
+        <div class="tooltip-row"><span class="k">Costes</span><span class="v">${formatEUR(Math.round(d.costes))}</span></div>
+        <div class="tooltip-row"><span class="k">Beneficio</span><span class="v" style="color:${d.beneficio>=0?'#6ee7b7':'#fca5a5'}">${formatEUR(Math.round(d.beneficio))}</span></div>
+      `;
+      tooltip.classList.add('show');
+      const bodyRect = document.body.getBoundingClientRect();
+      tooltip.style.left = (e.clientX - bodyRect.left + 14) + 'px';
+      tooltip.style.top = (e.clientY - bodyRect.top - 10) + 'px';
+    });
+    rect.addEventListener('mouseleave', () => {
+      tooltip.classList.remove('show');
+      hoverLine.style.display = 'none';
+    });
+  });
+}
+
+/* ================================================================
+   GRÁFICO ROI CLIENTE — barras horizontales
+   ================================================================ */
+function drawROIChart(roi) {
+  const host = document.getElementById('roi-chart');
+  if (!host) return;
+  const rows = [
+    { label: 'Coste primer año para el centro', value: roi.costePrimerAnio, color: 'var(--ink-faint)' },
+    { label: 'Ahorro estimado (hipótesis)', value: roi.ahorroEstimado, color: 'var(--good)' },
+    { label: 'Retorno neto', value: roi.retornoNeto, color: roi.retornoNeto >= 0 ? 'var(--accent)' : 'var(--bad)' }
+  ];
+  const W = 900, rowH = 46, H = rows.length * rowH + 10;
+  const ML = 4, MR = 90;
+  const maxV = Math.max(...rows.map(r => Math.abs(r.value)), 1);
+  const plotW = W - ML - MR;
+
+  let bars = '';
+  rows.forEach((r, i) => {
+    const barW = Math.max((Math.abs(r.value) / maxV) * plotW, 2);
+    const yy = i * rowH + 8;
+    bars += `
+      <text x="${ML}" y="${yy + 4}" font-size="12" fill="var(--ink-soft)" font-family="var(--font-sans)" font-weight="600">${r.label}</text>
+      <rect x="${ML}" y="${yy + 10}" width="${barW.toFixed(1)}" height="20" rx="4" fill="${r.color}"></rect>
+      <text x="${(ML + barW + 8).toFixed(1)}" y="${yy + 24}" font-size="12.5" fill="var(--ink)" font-family="var(--font-mono)" font-weight="700">${formatEUR(r.value)}</text>
+    `;
+  });
+
+  host.innerHTML = `
+    <div class="chart-wrap">
+      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Comparación de coste anual y ahorro estimado para el centro">
+        ${bars}
+      </svg>
+    </div>
+    <div style="margin-top:6px;font-size:12.5px;color:var(--ink-soft);">Múltiplo estimado: el centro recupera <b class="num" style="color:var(--ink)">×${roi.multiplo === null ? '—' : formatNum(roi.multiplo, 2)}</b> lo que paga el primer año, <b>si</b> el ahorro estimado se confirma en el piloto.</div>
+  `;
+}
+
+/* ================================================================
+   INICIO
+   ================================================================ */
+function init() {
+  renderControls();
+  renderAll();
+  console.log('SCHOLAIA panel-negocio: listo.');
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+function renderMezclaEffect(s, ingresos, costes) {
+  if (s.institutos <= 4) {
+    return `<p style="font-size:12.5px;color:var(--ink-soft);">La mezcla solo aplica a partir del 5º instituto: los 4 primeros van siempre al plan Completo, a precio de lanzamiento. Sube "Institutos clientes" para ver el efecto.</p>`;
+  }
+  const base = Object.assign({}, s, { mezclaEsencialPct: 0 });
+  const mrrBase = calcMRR(base).mrr;
+  const costesBase = calcCostes(base).variable;
+  const deltaIngresos = mrrBase - ingresos.mrr;
+  const ahorroCoste = costesBase - costes.variable;
+  const maxV = Math.max(mrrBase, ingresos.mrr, 1);
+  return `
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      ${miniBarRow('MRR si 0% en Esencial (todo Completo)', mrrBase, maxV, formatEUR(mrrBase))}
+      ${miniBarRow(`MRR con tu mezcla actual (${s.mezclaEsencialPct}% Esencial)`, ingresos.mrr, maxV, formatEUR(ingresos.mrr))}
+    </div>
+    <div style="margin-top:16px;padding:12px 14px;border-radius:10px;background:${deltaIngresos > 0 ? 'var(--bad-bg)' : 'var(--surface-sunken)'};font-size:12.5px;line-height:1.55;">
+      ${deltaIngresos > 0
+        ? `Vender Esencial a este ritmo cuesta <b class="num" style="color:var(--bad)">${formatEUR(deltaIngresos)}/mes</b> de ingresos, para ahorrar solo <b class="num">${formatEUR(ahorroCoste)}/mes</b> en coste de API. La estrategia del equipo — no venderlo — se sostiene con los números.`
+        : `Con 0% de mezcla no hay pérdida de ingresos: todo el tramo superior a 4 institutos va al plan Completo, tal como quiere el equipo.`}
+    </div>`;
+}
+</script>

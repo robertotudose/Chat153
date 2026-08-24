@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Nota de Actualización Técnica v2.0 - Chatbot Salesianas</title>
+  <style>
+    /* Estilos Premium optimizados para Lectura y Exportación a PDF (A4) */
+    @media print {
+      body {
+        background-color: #ffffff;
+        color: #000000;
+        font-size: 12pt;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+      .no-print {
+        display: none;
+      }
+      a {
+        text-decoration: none;
+        color: #000000;
+      }
+    }
+    
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #334155;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background-color: #f8fafc;
+    }
+    
+    .document-card {
+      background-color: #ffffff;
+      padding: 50px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+    }
+    
+    /* Encabezado */
+    header {
+      border-bottom: 2px solid #3490b0;
+      padding-bottom: 24px;
+      margin-bottom: 40px;
+    }
+    
+    .title-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    
+    h1 {
+      font-size: 26px;
+      color: #0f172a;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    
+    .subtitle {
+      font-size: 13px;
+      color: #b6bc00;
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+    
+    .meta {
+      font-size: 12px;
+      color: #94a3b8;
+      text-align: right;
+    }
+    
+    /* Secciones */
+    h2 {
+      font-size: 18px;
+      color: #3490b0;
+      margin-top: 36px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 8px;
+    }
+    
+    h3 {
+      font-size: 15px;
+      color: #0f172a;
+      margin-top: 24px;
+    }
+    
+    p {
+      margin-top: 8px;
+      margin-bottom: 16px;
+      text-align: justify;
+    }
+    
+    /* Listas */
+    ul, ol {
+      padding-left: 24px;
+      margin-bottom: 20px;
+    }
+    
+    li {
+      margin-bottom: 8px;
+    }
+    
+    /* Bloques de código */
+    pre {
+      background-color: #f1f5f9;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      overflow-x: auto;
+      border: 1px solid #cbd5e1;
+      margin: 20px 0;
+    }
+    
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+    
+    /* Alertas */
+    .alert {
+      background-color: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+    
+    .alert-warning {
+      background-color: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      color: #78350f;
+    }
+    
+    /* Botón flotante para imprimir */
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #3490b0;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      z-index: 1000;
+      transition: background 0.2s;
+    }
+    
+    .print-btn:hover {
+      background-color: #27748f;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Botón no imprimible para exportar -->
+  <button class="print-btn no-print" onclick="window.print()">🖨️ Guardar / Imprimir PDF</button>
+
+  <div class="document-card">
+    <header>
+      <div class="title-area">
+        <div>
+          <h1>Nota de Actualización Técnica (v2.0)</h1>
+          <div class="subtitle">Chatbot de Secretaría Virtual - Salesianas Zaragoza</div>
+        </div>
+        <div class="meta">
+          <strong>Versión:</strong> 2.0 (Segura e Inteligente)<br>
+          <strong>Fecha:</strong> Julio 2026<br>
+          <strong>Destinatario:</strong> Administrador de Sistemas
+        </div>
+      </div>
+    </header>
+
+    <h2>1. Resumen de la Actualización</h2>
+    <p>Esta nota técnica documenta los cambios arquitectónicos, mejoras de usabilidad (UX), blindaje de seguridad y optimizaciones de rendimiento aplicadas en la **versión 2.0** del asistente virtual de secretaría. El objetivo de esta versión ha sido segmentar el comportamiento por ciclos escolares (Infantil, Primaria, ESO, FP), optimizar las peticiones de Inteligencia Artificial (Gemini) y pulir de forma drástica el comportamiento del chatbot cuando opera de manera local/offline (sin IA).</p>
+
+    <h2>2. Mejoras del Frontend (<code>chat.js</code> y <code>style.css</code>)</h2>
+    
+    <h3>2.1. Selector Inicial de Etapas (UX Segmentada)</h3>
+    <p>Al iniciar, el chat presenta un selector interactivo donde las familias eligen su ciclo (Infantil, Primaria, ESO o FP). Al hacerlo, el bot filtra y muestra de inmediato las FAQs específicas de ese bloque, pasando esta variable (<code>stage</code>) al backend para contextualizar las consultas libres.</p>
+    <ul>
+      <li>Se ha programado una opción rápida `🔄 Cambiar de Etapa Escolar` en el pie de las FAQs para restablecer el ciclo en caliente sin refrescar el chat.</li>
+    </ul>
+
+    <h3>2.2. Buscador Local Semántico Difuso (Offline)</h3>
+    <p>Para pulir las consultas de texto libre cuando el servidor de IA está apagado, se ha implementado un motor difuso inteligente local:</p>
+    <ul>
+      <li><strong>Distancia de Levenshtein:</strong> Una función matemática que mide diferencias entre caracteres. Esto tolera erratas tipográficas del usuario (ej: *"sieta"* o *"siestas"* coincidirán correctamente con *"siesta"*).</li>
+      <li><strong>Filtro de Stopwords:</strong> Un listado en español que limpia y descarta artículos y preposiciones vacías (*"el", "la", "para", "con"*), reduciendo el ruido.</li>
+      <li><strong>Diccionario de Sinónimos:</strong> Vincula términos equivalentes en secretaría (ej: *admisión* $\leftrightarrow$ *matrícula* $\leftrightarrow$ *inscripción*; *excursiones* $\leftrightarrow$ *salidas*; *prácticas* $\leftrightarrow$ *FCT*).</li>
+      <li><strong>Sugerencias Inteligentes:</strong> Si una búsqueda arroja coincidencia baja/ambigua, el bot ofrece hasta 3 botones de FAQs sugeridas relacionadas en lugar de dar un error.</li>
+    </ul>
+
+    <h3>2.3. Blindaje XSS basado en DOMParser</h3>
+    <p>Se ha implementado una sanitización ultra-segura en <code>chat.js</code> utilizando la API nativa de **<code>DOMParser</code>** en un documento desconectado:</p>
+    <ul>
+      <li>Se aplica una lista blanca estricta de etiquetas permitidas para formatear respuestas (<code>strong</code>, <code>em</code>, <code>b</code>, <code>a</code>, <code>br</code>, <code>p</code>, <code>span</code>, <code>ul</code>, <code>li</code>).</li>
+      <li>Se inspeccionan atributos y se neutraliza cualquier esquema malicioso (como <code>javascript:</code>, <code>data:</code> o <code>vbscript:</code> en enlaces <code>href</code>) sustituyéndolo por `#`.</li>
+      <li>Se fuerza <code>rel="noopener noreferrer"</code> y <code>target="_blank"</code> en todos los enlaces hipervínculos salientes.</li>
+    </ul>
+
+    <h3>2.4. Accesibilidad ARIA (WCAG Compliance) y Control de Estados</h3>
+    <ul>
+      <li>Se inyectaron atributos descriptivos ARIA en toda la interfaz (<code>aria-expanded</code>, <code>aria-controls</code>, <code>aria-label</code>, <code>role="log"</code>, <code>aria-live="polite"</code>).</li>
+      <li>Se vinculan correctamente las etiquetas <code>&lt;label&gt;</code> con los inputs del formulario mediante atributos <code>for</code> e <code>id</code>.</li>
+      <li>Se implementó una bandera de estado <code>isTyping</code> que bloquea e inhabilita temporalmente el input y los botones de FAQs durante la simulación de escritura del bot, previniendo duplicidades e inconsistencias en la conversación.</li>
+    </ul>
+
+    <div class="page-break"></div>
+
+    <h2>3. Mejoras del Backend (<code>servidor_ia.js</code>)</h2>
+
+    <h3>3.1. Optimización en Gemini (Caché de Modelos por Etapa)</h3>
+    <p>Para optimizar la latencia en Express y reducir los tiempos de red, se implementó un mapa de **caché de instancias del modelo** (<code>modelsCache</code>) indexado por el ciclo escolar del usuario (Infantil, Primaria, ESO, FP, Global). Esto evita inicializar el SDK de Google Generative AI en cada llamada HTTP, cacheando las directrices de Prompt del sistema ya construidas.</p>
+    <ul>
+      <li>Se configuró una temperatura baja (<code>temperature: 0.15</code>) para garantizar consistencia y eliminar alucinaciones, limitando el tamaño máximo de respuesta a 800 tokens.</li>
+    </ul>
+
+    <h3>3.2. Rate Limiting Optimizada (Fixed Window O(1))</h3>
+    <p>El rate limiter de protección contra DoS e inundaciones de peticiones por alumnos ahora opera con una lógica de ventana fija ligera de complejidad $O(1)$. Cuenta con un **Garbage Collector periódico** en Node (<code>setInterval</code> cada 5 minutos) para limpiar IPs inactivas, asegurando un consumo de memoria plano en producción.</p>
+
+    <h3>3.3. Saneamiento RGPD a Prueba de Fallos en Logs</h3>
+    <p>Antes de registrar las preguntas anónimas de los usuarios para el panel de analíticas, el backend las sanea activamente con expresiones regulares mejoradas:</p>
+    <ul>
+      <li><strong>Emails:</strong> Filtrado exacto con límites de palabra (<code>\b</code>).</li>
+      <li><strong>Teléfonos:</strong> RegExp avanzada que intercepta fijos y móviles españoles e internacionales en formatos con prefijos (+34, 0034, (+34)), espaciados y paréntesis variables.</li>
+      <li><strong>Documentos de Identidad:</strong> Anonimización automatizada de números de **DNI** y **NIE** de España (reemplazados por <code>[DNI-OCULTO]</code> y <code>[NIE-OCULTO]</code>).</li>
+    </ul>
+
+    <h3>3.4. Cabeceras OWASP de Endurecimiento de Servidor</h3>
+    <p>Se configuran de forma nativa cabeceras HTTP de blindaje perimetral básico para producción:</p>
+    <pre>res.setHeader('X-Content-Type-Options', 'nosniff');
+res.setHeader('X-Frame-Options', 'DENY');
+res.setHeader('X-XSS-Protection', '1; mode=block');
+res.setHeader('Referrer-Policy', 'no-referrer');</pre>
+    <p>Además, se restringe la carga de las solicitudes Express entrantes a un máximo de **10kb** para anular exploits de DoS por desbordamiento de búfer en memoria.</p>
+
+    <h2>4. Contenidos Oficiales Cargados (FP e Integraciones)</h2>
+    <ul>
+      <li>Se cargó la URL oficial del proceso de admisión de FP de Aragón: <a href="https://educa.aragon.es/-/admisionfp" target="_blank">educa.aragon.es/-/admisionfp</a>, explicando que solo aplica a 1º curso, y que para 2º curso la reserva se realiza directamente de forma interna en el centro.</li>
+      <li>Se detallaron los usos de las plataformas tecnológicas del colegio: **Alexia** (gestión de familias, asistencia y notas) y **Microsoft Teams / Office 365** (entorno de clase y tareas).</li>
+      <li>Se documentaron los requisitos de promoción a 2º de FP (máximo de materias pendientes cuya carga lectiva total no supere **9 horas semanales**) y el límite de **2 repeticiones por módulo**.</li>
+    </ul>
+
+  </div>
+
+</body>
+</html>

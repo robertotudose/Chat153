@@ -1,0 +1,711 @@
+{
+  "_lee_esto_primero": "Base de conocimiento del asistente. Para añadir o cambiar una respuesta no hace falta programar: copia el bloque de una pregunta existente y edítalo. Los datos del centro (nombre, teléfono, horarios) NO se ponen aquí, sino en configuracion_centro.json.",
+  "version": 3,
+  "actualizado": "2026-08-19",
+  "categorias": [
+    {
+      "id": "admisiones",
+      "icono": "🏫",
+      "titulo": "Buscamos plaza (Admisiones y Visitas)",
+      "descripcion": "Jornadas de puertas abiertas, escolarización y solicitud de entrevista personalizada.",
+      "preguntas": [
+        {
+          "id": "adm_fechas",
+          "pregunta": "¿Cuándo son las jornadas de puertas abiertas y admisiones?",
+          "keywords": [
+            "puertas abiertas",
+            "visita",
+            "conocer el centro",
+            "admision",
+            "plazas",
+            "preinscripcion",
+            "fechas",
+            "cuando",
+            "matricula",
+            "matricular",
+            "apuntar",
+            "inscripcion",
+            "matriculacion"
+          ],
+          "respuesta": "Las <strong>Jornadas de Puertas Abiertas</strong> se organizan periódicamente antes del proceso oficial de escolarización. Si deseas una visita personalizada con el equipo directivo, puedes solicitar cita directamente a través de nuestro formulario o escribiendo a <strong>secretaria@centroeducativo.es</strong>."
+        },
+        {
+          "id": "adm_etapas",
+          "pregunta": "¿Qué etapas educativas se imparten en el centro?",
+          "keywords": [
+            "etapas",
+            "cursos",
+            "infantil",
+            "primaria",
+            "secundaria",
+            "eso",
+            "bachillerato",
+            "fp",
+            "grados",
+            "edad"
+          ],
+          "respuesta": "Ofrecemos un itinerario pedagógico completo y continuo:<br>• <strong>Educación Infantil:</strong> 3 a 6 años.<br>• <strong>Educación Primaria:</strong> 6 a 12 años.<br>• <strong>Educación Secundaria Obligatoria (ESO):</strong> 12 a 16 años.<br>• <strong>Bachillerato:</strong> Modalidades de Ciencias y Tecnología, Humanidades y Ciencias Sociales, Artes y General.<br>• <strong>Formación Profesional:</strong> Grado Básico, Medio y Superior."
+        },
+        {
+          "id": "adm_criterios",
+          "pregunta": "¿Cómo funciona el baremo de puntos y criterios de admisión?",
+          "keywords": [
+            "puntos",
+            "baremo",
+            "criterios",
+            "hermanos",
+            "proximidad",
+            "domicilio",
+            "renta",
+            "matricula",
+            "puntuacion"
+          ],
+          "respuesta": "El proceso de admisión escolar se rige por el baremo normativo oficial. Se otorgan puntuaciones por:<br>1. Existencia de hermanos matriculados en el centro.<br>2. Proximidad del domicilio familiar o del lugar de trabajo.<br>3. Rentas de la unidad familiar, familias numerosas o monoparentales.<br>4. Criterio complementario aprobado por el Consejo Escolar."
+        },
+        {
+          "id": "adm_solicitar_visita",
+          "pregunta": "¿Cómo concertar una entrevista o visita personalizada?",
+          "keywords": [
+            "visita",
+            "entrevista",
+            "cita previa",
+            "reunion",
+            "conocer",
+            "matricula",
+            "apuntar",
+            "inscribir",
+            "quiero plaza"
+          ],
+          "respuesta": "Puedes concertar una visita guiada a nuestras instalaciones y una reunión informativa con Dirección completando este breve formulario:",
+          "accion": "formulario_admisiones"
+        }
+      ],
+      "ambito": "admision"
+    },
+    {
+      "id": "orientacion_4eso",
+      "icono": "🎓",
+      "titulo": "🎓 4º ESO TEST (Ayuda a futuro)",
+      "descripcion": "Qué estudiar al terminar 4º de ESO: Bachillerato, Formación Profesional y test vocacional.",
+      "preguntas": [
+        {
+          "id": "orientacion_opciones_4eso",
+          "pregunta": "¿Qué opciones formativas tengo tras terminar 4º de ESO?",
+          "keywords": [
+            "que estudiar tras la eso",
+            "opciones 4 eso",
+            "salidas 4 eso",
+            "que hacer despues de la eso",
+            "que estudio despues de la eso",
+            "que estudiar despues de la eso",
+            "que hago despues de la eso",
+            "opciones despues de la eso",
+            "despues de 4 eso",
+            "terminar la eso",
+            "itinerarios",
+            "salidas eso",
+            "no se que estudiar"
+          ],
+          "respuesta": "Al terminar 4º de ESO se abren vías formativas clave:<br><br>1) <strong>Bachillerato (2 cursos):</strong> Formación académica orientada a Universidad o Ciclos Formativos de Grado Superior.<br>2) <strong>Formación Profesional de Grado Medio (2 cursos):</strong> Formación técnica y práctica con prácticas en empresa y acceso directo a Grado Superior.<br>3) <strong>Artes Plásticas y Diseño o Enseñanzas Deportivas.</strong>"
+        },
+        {
+          "id": "orientacion_modalidades_bachillerato",
+          "pregunta": "¿Qué modalidades de Bachillerato existen?",
+          "keywords": [
+            "modalidades bachillerato",
+            "ciencias",
+            "humanidades",
+            "artes",
+            "general",
+            "que bachillerato elijo",
+            "elegir bachillerato",
+            "itinerario bachillerato"
+          ],
+          "respuesta": "Existen 4 modalidades oficiales de Bachillerato:<br>• <strong>Ciencias y Tecnología:</strong> Orientado a Ingenierías, Ciencias de la Salud, Informática y Arquitectura.<br>• <strong>Humanidades y Ciencias Sociales:</strong> Orientado a ADE, Derecho, Psicología, Educación y Comunicación.<br>• <strong>Artes:</strong> Bellas Artes, Diseño y Medios Audiovisuales.<br>• <strong>General:</strong> Itinerario multidisciplinar."
+        },
+        {
+          "id": "orientacion_fp_grados",
+          "pregunta": "¿Qué ventajas ofrece la Formación Profesional?",
+          "keywords": [
+            "ventajas fp",
+            "grado medio",
+            "practicas fct",
+            "fp dual",
+            "empleo fp",
+            "merece la pena la fp",
+            "estudiar fp",
+            "hacer un grado"
+          ],
+          "respuesta": "La Formación Profesional ofrece una alta tasa de empleabilidad gracias al aprendizaje práctico en talleres, 370 horas obligatorias de prácticas en empresas y la posibilidad de cursar FP Dual remunerada. Además, un Grado Medio da acceso directo a Grado Superior sin selectividad."
+        }
+      ],
+      "ambito": "orientacion"
+    },
+    {
+      "id": "infantil",
+      "icono": "🧸",
+      "titulo": "Educación Infantil (3 a 6 años)",
+      "descripcion": "Comedor con siesta, horarios, aula de madrugadores, cuotas y justificación de faltas.",
+      "preguntas": [
+        {
+          "id": "inf_comedor_siesta",
+          "pregunta": "🍲 Comedor Escolar y Siesta Asistida",
+          "keywords": [
+            "comedor infantil",
+            "siesta",
+            "comida",
+            "alergias",
+            "intolerancias",
+            "celiacos",
+            "menu infantil",
+            "celiaco",
+            "celiaquia",
+            "alergia"
+          ],
+          "respuesta": "En <strong>Educación Infantil</strong> disponemos de cocina propia con menús diarios adaptados por nutricionistas para todo tipo de alergias e intolerancias.<br><br>• <strong>Horario:</strong> De 12:30 a 15:30 h con monitoras especializadas.<br>• <strong>Siesta supervisada:</strong> Espacio de descanso adaptado con camas individuales para 1º y 2º de Infantil (13:30 a 14:30 h).<br>• <strong>Altas y bajas:</strong> Se gestionan antes del día 25 del mes anterior."
+        },
+        {
+          "id": "inf_horarios_madrugadores",
+          "pregunta": "⏰ Horarios, Entradas y Aula Madrugadores",
+          "keywords": [
+            "horario infantil",
+            "madrugadores",
+            "entrada",
+            "salida",
+            "recogida"
+          ],
+          "respuesta": "• <strong>Horario lectivo:</strong> De 09:00 a 12:30 h y de 15:30 a 17:00 h (jornada intensiva según calendario oficial).<br>• <strong>Aula de Madrugadores:</strong> Servicio matinal disponible desde las 07:30 / 07:45 h con opción de desayuno supervisado.<br>• <strong>Entradas y salidas:</strong> Accesos adaptados con recepción directa por el equipo docente."
+        },
+        {
+          "id": "inf_pagos_recibos",
+          "pregunta": "💳 Pagos, Cuotas y Recibos Bancarios",
+          "keywords": [
+            "pagos infantil",
+            "cuotas",
+            "recibos",
+            "banco",
+            "domiciliacion",
+            "portal"
+          ],
+          "respuesta": "Los recibos de servicios complementarios (comedor, madrugadores y actividades) se domicilian mensualmente a primeros de mes.<br><br>Las familias pueden consultar el detalle de facturación desde la plataforma escolar. Para incidencias, contacta con administración en <strong>secretaria@centroeducativo.es</strong>."
+        },
+        {
+          "id": "inf_justificar_faltas",
+          "pregunta": "📝 Justificar Ausencias y Faltas de Asistencia",
+          "keywords": [
+            "falta infantil",
+            "ausencia",
+            "justificar",
+            "medico",
+            "enfermo"
+          ],
+          "respuesta": "Las ausencias se notifican y justifican preferentemente a través de la aplicación del centro o informando a la tutora a la entrada. Si la ausencia se debe a motivos médicos, se recomienda comunicarlo para coordinar la vuelta a clase."
+        }
+      ],
+      "ambito": "etapa"
+    },
+    {
+      "id": "primaria",
+      "icono": "📚",
+      "titulo": "Educación Primaria (6 a 12 años)",
+      "descripcion": "Comedor con estudio dirigido, horarios, banco de libros, pagos y faltas.",
+      "preguntas": [
+        {
+          "id": "pri_comedor_estudio",
+          "pregunta": "🍲 Comedor Escolar y Estudio Dirigido",
+          "keywords": [
+            "comedor primaria",
+            "estudio dirigido",
+            "patio",
+            "ludoteca",
+            "menu"
+          ],
+          "respuesta": "El servicio de comedor en <strong>Primaria</strong> cuenta con supervisión pedagógica continua.<br><br>• <strong>Horario:</strong> 12:30 a 15:30 h.<br>• <strong>Aula de Estudio Dirigido:</strong> Espacio silencioso supervisado para realización de tareas y fomento de la lectura.<br>• <strong>Actividades de recreo:</strong> Dinamización deportiva y talleres en patio."
+        },
+        {
+          "id": "pri_horarios",
+          "pregunta": "⏰ Horarios de Clases y Calendario Escolar",
+          "keywords": [
+            "horario primaria",
+            "entradas primaria",
+            "calendario escolar"
+          ],
+          "respuesta": "• <strong>Horario lectivo ordinario:</strong> De 09:00 a 12:30 h y de 15:30 a 17:00 h.<br>• <strong>Atención a familias:</strong> Tutorías individuales concertadas con cita previa a través del portal de familias.<br>• <strong>Puntualidad:</strong> Se ruega máxima puntualidad en las franjas de entrada y salida."
+        },
+        {
+          "id": "pri_libros",
+          "pregunta": "🎒 Banco de Libros y Material Escolar",
+          "keywords": [
+            "banco de libros",
+            "libros primaria",
+            "becas libros",
+            "material escolar",
+            "libros"
+          ],
+          "respuesta": "El centro participa en el <strong>Programa de Banco de Libros y Gratuidad</strong>:<br><br>• <strong>Adhesión y renovación:</strong> Convocatoria anual al finalizar el curso lectivo.<br>• <strong>Lotes de libros:</strong> Entrega organizada al inicio del curso en septiembre.<br>• El material fungible y cuadernillos de actividades se gestionan según las indicaciones del equipo docente."
+        },
+        {
+          "id": "pri_pagos_actividades",
+          "pregunta": "💳 Pagos de Actividades y Salidas Culturales",
+          "keywords": [
+            "pagos primaria",
+            "excursiones primaria",
+            "salidas",
+            "recibos"
+          ],
+          "respuesta": "Las excursiones, salidas culturales y talleres se autorizan y abonan digitalmente a través del portal escolar de forma segura mediante pasarela TPV."
+        },
+        {
+          "id": "pri_justificar_faltas",
+          "pregunta": "📝 Justificar Falta de Asistencia",
+          "keywords": [
+            "falta primaria",
+            "justificante medico",
+            "ausencia primaria"
+          ],
+          "respuesta": "Toda falta debe justificarse mediante la app escolar o aportando el volante o justificante médico correspondiente a la tutora en un plazo máximo de 48 horas desde la reincorporación."
+        }
+      ],
+      "ambito": "etapa"
+    },
+    {
+      "id": "eso",
+      "icono": "🎓",
+      "titulo": "Educación Secundaria (ESO)",
+      "descripcion": "Horarios matinales, comedor, tutorías, pagos de salidas y justificación de faltas.",
+      "preguntas": [
+        {
+          "id": "eso_horarios_tutorias",
+          "pregunta": "⏰ Horarios de Clases y Atención a Familias",
+          "keywords": [
+            "horario eso",
+            "clases secundaria",
+            "tutorias eso"
+          ],
+          "respuesta": "• <strong>Horario lectivo ESO:</strong> De 08:30 a 14:30 h (jornada continua de mañanas).<br>• <strong>Atención a familias:</strong> Horas de atención de tutoría semanal con cita previa concertada por la plataforma escolar.<br>• <strong>Guardias y permanencia:</strong> Control estricto de entradas y salidas del recinto."
+        },
+        {
+          "id": "eso_comedor_estudio",
+          "pregunta": "🍲 Comedor Escolar y Aula de Estudio en ESO",
+          "keywords": [
+            "comedor eso",
+            "comer secundaria",
+            "aula estudio eso"
+          ],
+          "respuesta": "Los alumnos de Secundaria pueden hacer uso del comedor al finalizar su jornada lectiva (14:30 a 15:30 h), disponiendo de instalaciones de biblioteca y aula de estudio supervisada."
+        },
+        {
+          "id": "eso_justificar_faltas",
+          "pregunta": "📝 Justificar Faltas y Notificación de Ausencias",
+          "keywords": [
+            "faltas eso",
+            "justificante medico eso",
+            "ausencias secundaria"
+          ],
+          "respuesta": "El registro de asistencia se efectúa hora a hora. Los tutores legales deben comunicar y justificar cualquier falta o retraso mediante la plataforma oficial del centro en un plazo no superior a 48 horas."
+        },
+        {
+          "id": "eso_pagos_salidas",
+          "pregunta": "💳 Pagos de Actividades y Excursiones de ESO",
+          "keywords": [
+            "pagos eso",
+            "viaje estudios",
+            "excursiones eso",
+            "recibos eso"
+          ],
+          "respuesta": "Las salidas pedagógicas, intercambios y viajes de fin de etapa se tramitan y abonan digitalmente desde la plataforma escolar. Para información sobre becas o facilidades de pago, consulta en Secretaría."
+        }
+      ],
+      "ambito": "etapa"
+    },
+    {
+      "id": "bachillerato",
+      "icono": "🏛️",
+      "titulo": "Bachillerato (1º y 2º)",
+      "descripcion": "Modalidades de Bachillerato, orientación universitaria, EvAU, horarios y faltas.",
+      "preguntas": [
+        {
+          "id": "bach_modalidades",
+          "pregunta": "📚 Modalidades e Itinerarios de Bachillerato",
+          "keywords": [
+            "modalidades bachillerato",
+            "ciencias",
+            "humanidades",
+            "artes",
+            "general",
+            "itinerarios"
+          ],
+          "respuesta": "Impartimos las modalidades oficiales de Bachillerato adaptadas a todas las vocaciones de futuro:<br><br>• <strong>Ciencias y Tecnología:</strong> Itinerarios de Ingeniería, Ciencias de la Salud y Tecnología.<br>• <strong>Humanidades y Ciencias Sociales:</strong> Derecho, ADE, Economía, Humanidades y Comunicación.<br>• <strong>Bachillerato General y Artes:</strong> Itinerarios multidisciplinares y creativos."
+        },
+        {
+          "id": "bach_evau",
+          "pregunta": "🎯 Preparación EvAU / PAU y Orientación Universitaria",
+          "keywords": [
+            "evau",
+            "selectividad",
+            "pau",
+            "universidad",
+            "notas de corte",
+            "orientacion"
+          ],
+          "respuesta": "Contamos con un programa específico de preparación para las pruebas de acceso a la Universidad (EvAU / PAU):<br><br>• Simulacros periódicos de examen con criterios oficiales de corrección.<br>• Talleres de ponderaciones, notas de corte y becas universitarias.<br>• Acompañamiento individual por el Departamento de Orientación."
+        },
+        {
+          "id": "bach_horarios",
+          "pregunta": "⏰ Horarios de Clases y Tutorías",
+          "keywords": [
+            "horarios bachillerato",
+            "tutorias bachillerato",
+            "clases"
+          ],
+          "respuesta": "• <strong>Horario lectivo:</strong> De 08:15 a 14:45 h en turno matinal.<br>• <strong>Tutorías académicas:</strong> Sesiones individualizadas de seguimiento de rendimiento y preparación de pruebas."
+        },
+        {
+          "id": "bach_faltas",
+          "pregunta": "📝 Justificar Faltas de Asistencia en Bachillerato",
+          "keywords": [
+            "faltas bachillerato",
+            "asistencia bachillerato",
+            "justificante"
+          ],
+          "respuesta": "Debido a la importancia de la evaluación continua, las ausencias deben justificarse con documento oficial (médico, deber inexcusable) en un plazo de 48 horas a través del portal de gestión escolar."
+        },
+        {
+          "id": "bach_pagos",
+          "pregunta": "💳 Pagos de Tasas y Salidas Pedagógicas",
+          "keywords": [
+            "pagos bachillerato",
+            "tasas bachillerato",
+            "excursiones"
+          ],
+          "respuesta": "La gestión de salidas académicas, visitas universitarias y tasas de gestión se realiza de forma centralizada mediante la plataforma digital del centro."
+        }
+      ],
+      "ambito": "etapa"
+    },
+    {
+      "id": "fp",
+      "icono": "💼",
+      "titulo": "Formación Profesional (FP)",
+      "descripcion": "Ciclos oficiales, FP Dual remunerada, convenios con empresas, tasas y convalidaciones.",
+      "preguntas": [
+        {
+          "id": "fp_ciclos",
+          "pregunta": "💼 Ciclos Formativos Impartidos (Básica, Medio y Superior)",
+          "keywords": [
+            "ciclos fp",
+            "grados fp",
+            "fp basica",
+            "grado medio",
+            "grado superior"
+          ],
+          "respuesta": "Ofrecemos títulos oficiales de Formación Profesional con alta inserción laboral:<br><br>• <strong>FP Básica:</strong> 2 cursos lectivos con titulación profesional y graduado en ESO.<br>• <strong>FP Grado Medio:</strong> 2 cursos lectivos con prácticas FCT y opción bilingüe.<br>• <strong>FP Grado Superior:</strong> Modalidades presencial, FP Dual y semipresencial / online con acceso directo a la Universidad."
+        },
+        {
+          "id": "fp_dual_practicas",
+          "pregunta": "🤝 FP Dual y Prácticas en Empresa (FCT)",
+          "keywords": [
+            "fp dual",
+            "practicas fct",
+            "convenio empresas",
+            "bolsa empleo"
+          ],
+          "respuesta": "• <strong>FCT (Formación en Centros de Trabajo):</strong> Módulo obligatorio en segundo curso con estancias reales en empresas colaboradoras.<br>• <strong>FP Dual:</strong> Formación en alternancia con contrato retribuido en empresas concertadas.<br>• Bolsa de empleo activa para titulados con alta tasa de contratación."
+        },
+        {
+          "id": "fp_tasas_pagos",
+          "pregunta": "💳 Pagos de Matrícula y Tasas de Título Oficial",
+          "keywords": [
+            "tasas fp",
+            "pago matricula fp",
+            "titulo oficial fp",
+            "precio fp"
+          ],
+          "respuesta": "La expedición del <strong>Título Oficial de FP</strong> requiere la liquidación de la tasa oficial correspondiente. Las instrucciones y cartas de pago se facilitan desde la Secretaría del centro escribiendo a <strong>secretaria@centroeducativo.es</strong>."
+        },
+        {
+          "id": "fp_convalidaciones",
+          "pregunta": "📋 Convalidaciones y Exención de Prácticas FCT",
+          "keywords": [
+            "convalidar fp",
+            "exencion fct",
+            "experiencia laboral fp"
+          ],
+          "respuesta": "• <strong>Convalidación de módulos:</strong> Se solicita en el primer mes de curso aportando certificado oficial de estudios cursados.<br>• <strong>Exención de FCT:</strong> Requiere acreditar al menos 1 año de experiencia laboral afín a jornada completa mediante certificado de vida laboral y contratos."
+        },
+        {
+          "id": "fp_horarios_secretaria",
+          "pregunta": "⏰ Horarios de Clases y Secretaría de FP",
+          "keywords": [
+            "horario fp",
+            "secretaria fp",
+            "atencion fp"
+          ],
+          "respuesta": "• <strong>Horario lectivo FP:</strong> Turno matinal de 08:30 a 14:30 h.<br>• <strong>Atención de Secretaría FP:</strong> Lunes a viernes de 09:00 a 14:00 h.<br>Teléfono: <strong>900 123 456</strong> | Email: <strong>secretaria@centroeducativo.es</strong>."
+        }
+      ],
+      "ambito": "etapa"
+    },
+    {
+      "id": "calendario",
+      "titulo": "📅 Calendario Escolar y Días Festivos",
+      "descripcion": "Vacaciones, días no lectivos, fiestas del centro y cuándo es obligatorio asistir.",
+      "ambito": "servicio",
+      "preguntas": [
+        {
+          "id": "cal_vacaciones",
+          "pregunta": "📅 Calendario escolar: vacaciones, festivos y días no lectivos",
+          "keywords": [
+            "vacaciones",
+            "navidad",
+            "semana santa",
+            "verano",
+            "dias no lectivos",
+            "no lectivo",
+            "festivos",
+            "calendario",
+            "cuando no hay clase",
+            "puente",
+            "libre disposicion",
+            "cuando empiezan las clases",
+            "inicio de curso",
+            "fin de curso",
+            "calendario escolar",
+            "calendario del curso",
+            "ver calendario",
+            "dias festivos",
+            "festivos del centro"
+          ],
+          "accion": "mostrar_calendario",
+          "respuesta": "Aquí tienes el <strong>calendario escolar completo</strong> del curso, con las vacaciones, los días no lectivos y las jornadas especiales del centro marcadas por colores."
+        },
+        {
+          "id": "cal_fiesta_centro_asistencia",
+          "pregunta": "🎉 Los días de fiesta del centro, ¿hay que venir a clase?",
+          "keywords": [
+            "fiesta del colegio",
+            "fiesta del centro",
+            "hay que ir",
+            "hay que venir",
+            "es obligatorio",
+            "asistencia obligatoria",
+            "se puede faltar",
+            "jornada cultural",
+            "convivencias",
+            "dia del fundador",
+            "puedo faltar",
+            "cuenta como falta"
+          ],
+          "respuesta": "Es la duda más habitual, y conviene distinguir <strong>tres tipos de día</strong> muy diferentes:<br><br>• <strong>🟢 Días no lectivos y vacaciones:</strong> no hay clase y <strong>no hay que acudir</strong> al centro.<br>• <strong>🔴 Festivos oficiales:</strong> el centro permanece cerrado.<br>• <strong>🟠 Jornadas especiales del centro</strong> (fiesta del centro, jornada cultural, convivencias): <strong>no hay clases ordinarias, pero la asistencia sigue siendo obligatoria.</strong><br><br>Este último caso es el que más confusión genera: aunque se llamen «fiestas», son <strong>días lectivos a todos los efectos</strong>. El alumnado debe asistir, se pasa lista con normalidad y las ausencias se registran y deben justificarse igual que cualquier otro día de clase.<br><br>En el calendario del asistente aparecen marcadas en <strong>naranja</strong> para que se distingan de un vistazo."
+        },
+        {
+          "id": "cal_hoy_hay_clase",
+          "pregunta": "❓ ¿Hoy hay clase?",
+          "keywords": [
+            "hoy hay clase",
+            "manana hay clase",
+            "hay clase",
+            "es lectivo",
+            "esta abierto",
+            "abre el colegio",
+            "hoy",
+            "hoy es lectivo",
+            "manana es lectivo"
+          ],
+          "accion": "mostrar_calendario",
+          "respuesta": "Te lo compruebo en el calendario oficial del curso."
+        }
+      ]
+    },
+    {
+      "id": "comedor",
+      "titulo": "🍲 Comedor Escolar",
+      "descripcion": "Altas y bajas, menús, alergias, horarios y actividades del mediodía.",
+      "ambito": "servicio",
+      "preguntas": [
+        {
+          "id": "com_alta_baja",
+          "pregunta": "📝 ¿Cómo doy de alta o de baja a mi hijo/a en el comedor?",
+          "keywords": [
+            "alta comedor",
+            "baja comedor",
+            "apuntar comedor",
+            "quitar comedor",
+            "darse de alta",
+            "darse de baja",
+            "inscribir comedor",
+            "dejar el comedor"
+          ],
+          "respuesta": "El alta y la baja en el servicio de comedor se tramitan mediante el formulario correspondiente, disponible en secretaría y en el portal de familias.<br><br>• <strong>Plazo:</strong> el documento firmado debe entregarse <strong>antes del día 25 del mes anterior</strong> al que se quiere aplicar el cambio.<br>• <strong>Uso esporádico:</strong> también existe la modalidad de días sueltos, avisando en secretaría con antelación.<br><br>Si necesitas el formulario o tienes dudas sobre el plazo, escríbenos y te lo facilitamos."
+        },
+        {
+          "id": "com_menus_alergias",
+          "pregunta": "🥗 ¿Quién elabora los menús y cómo se gestionan las alergias?",
+          "keywords": [
+            "menu",
+            "menus",
+            "comida",
+            "alergias",
+            "intolerancias",
+            "celiaco",
+            "celiaquia",
+            "dieta",
+            "nutricionista",
+            "cocina propia",
+            "vegetariano"
+          ],
+          "respuesta": "El centro dispone de <strong>cocina propia</strong> y los menús están diseñados y supervisados por dietistas-nutricionistas.<br><br>• <strong>Dietas especiales:</strong> se adaptan a alergias, intolerancias, celiaquía y dietas por motivos religiosos o éticos, siempre previa acreditación mediante informe médico cuando corresponda.<br>• <strong>Consulta del menú:</strong> el menú mensual se publica en el portal de familias y en el tablón del comedor.<br>• <strong>Dietas blandas puntuales:</strong> se solicitan avisando a primera hora de la mañana."
+        },
+        {
+          "id": "com_horario_actividades",
+          "pregunta": "⏰ ¿Qué horario tiene el comedor y qué se hace después de comer?",
+          "keywords": [
+            "horario comedor",
+            "hora comedor",
+            "actividades comedor",
+            "siesta",
+            "ludoteca",
+            "patio",
+            "monitoras",
+            "despues de comer",
+            "aula estudio"
+          ],
+          "respuesta": "El servicio de comedor funciona de <strong>12:30 a 15:30 h</strong> con supervisión continua de monitoras especializadas.<br><br>El tiempo posterior a la comida se organiza según la edad:<br>• <strong>Educación Infantil:</strong> siesta y descanso guiado en aula adaptada.<br>• <strong>Primeros cursos de Primaria:</strong> ludoteca, juego dirigido y biblioteca.<br>• <strong>Últimos cursos de Primaria y Secundaria:</strong> aula de estudio dirigido y actividades deportivas."
+        }
+      ]
+    },
+    {
+      "id": "pagos",
+      "titulo": "💳 Pagos, Cuotas y Recibos",
+      "descripcion": "Domiciliaciones, recibos devueltos, excursiones y actividades extraescolares.",
+      "ambito": "servicio",
+      "preguntas": [
+        {
+          "id": "pag_recibo_devuelto",
+          "pregunta": "⚠️ Se me ha devuelto un recibo, ¿qué hago?",
+          "keywords": [
+            "recibo devuelto",
+            "devolucion recibo",
+            "impago",
+            "comision devolucion",
+            "no se ha pagado",
+            "domiciliacion rechazada",
+            "banco ha devuelto"
+          ],
+          "respuesta": "Si un recibo domiciliado resulta devuelto, la entidad bancaria aplica una <strong>comisión de devolución</strong> que se repercute en el siguiente cargo.<br><br>Para regularizar la situación:<br>1. Ponte en contacto con secretaría por teléfono o correo electrónico.<br>2. Se te indicará el procedimiento de pago alternativo (habitualmente transferencia o pago con tarjeta).<br>3. Si el motivo ha sido un cambio de cuenta, comunica el nuevo número IBAN para actualizar la domiciliación.<br><br>Si atraviesas una <strong>dificultad económica puntual</strong>, díselo a secretaría: el centro estudia cada caso de forma confidencial y puede fraccionar el pago."
+        },
+        {
+          "id": "pag_excursiones",
+          "pregunta": "🚌 ¿Cómo se pagan las excursiones y salidas?",
+          "keywords": [
+            "pagar excursion",
+            "salidas",
+            "viaje",
+            "autorizacion",
+            "excursiones",
+            "pago salidas",
+            "tpv",
+            "viaje fin de curso"
+          ],
+          "respuesta": "Las excursiones y salidas culturales se autorizan y abonan <strong>de forma digital</strong> desde el portal de familias, mediante pasarela de pago segura.<br><br>• Recibirás un aviso con el detalle de la actividad, el importe y el plazo.<br>• La <strong>autorización firmada digitalmente es obligatoria</strong>: sin ella el alumno no puede participar en la salida.<br>• Los importes de las salidas ya incluyen transporte y entradas salvo que se indique lo contrario."
+        },
+        {
+          "id": "pag_extraescolares",
+          "pregunta": "🎨 ¿Cómo se pagan las actividades extraescolares?",
+          "keywords": [
+            "extraescolares",
+            "actividades",
+            "pagar extraescolares",
+            "baja extraescolar",
+            "ampa",
+            "deportes",
+            "robotica",
+            "musica",
+            "cuota mensual"
+          ],
+          "respuesta": "Las actividades extraescolares se abonan mediante <strong>recibo domiciliado mensual</strong>, gestionado en colaboración con el AMPA y las empresas coordinadoras.<br><br>• <strong>Altas y bajas:</strong> deben comunicarse <strong>antes del día 25 del mes anterior</strong>; en caso contrario se factura el mes completo.<br>• <strong>Interrupciones:</strong> las actividades no se prorratean por ausencias puntuales del alumno.<br>• La oferta de actividades se publica al inicio de cada curso."
+        }
+      ]
+    },
+    {
+      "id": "secretaria",
+      "titulo": "🏫 Secretaría y Trámites",
+      "descripcion": "Horarios de atención, certificados oficiales y acceso al portal de familias.",
+      "ambito": "servicio",
+      "preguntas": [
+        {
+          "id": "sec_horario_contacto",
+          "pregunta": "⏰ ¿Cuál es el horario y el contacto de Secretaría?",
+          "keywords": [
+            "horario secretaria",
+            "telefono",
+            "contacto",
+            "email",
+            "cuando abre",
+            "atencion al publico",
+            "hablar con secretaria",
+            "llamar"
+          ],
+          "accion": "mostrar_contacto",
+          "respuesta": "Estos son los datos de contacto y el horario de atención de la secretaría del centro:"
+        },
+        {
+          "id": "sec_certificados",
+          "pregunta": "📄 ¿Cómo solicito un certificado de estudios o de matrícula?",
+          "keywords": [
+            "certificado",
+            "certificado estudios",
+            "certificado matricula",
+            "titulo",
+            "expediente",
+            "notas",
+            "documento oficial",
+            "papeles"
+          ],
+          "respuesta": "Los certificados oficiales se solicitan por correo electrónico o presencialmente en secretaría, indicando:<br><br>• Nombre completo del alumno/a y DNI.<br>• Curso actual o año de finalización de los estudios.<br>• Tipo de certificado que necesitas (matrícula, estudios cursados, notas, expediente completo).<br>• Finalidad del documento, si se requiere un formato concreto.<br><br><strong>Plazo de emisión:</strong> entre 48 y 72 horas laborables. Se recoge presencialmente en secretaría o se remite firmado digitalmente, según el tipo de documento.<br><br>Los certificados de un alumno mayor de edad solo se entregan al propio interesado o a quien él autorice por escrito."
+        },
+        {
+          "id": "sec_acceso_portal",
+          "pregunta": "🔑 He perdido el acceso al portal de familias, ¿cómo lo recupero?",
+          "keywords": [
+            "contrasena",
+            "clave",
+            "acceso",
+            "portal",
+            "no puedo entrar",
+            "usuario bloqueado",
+            "recuperar contrasena",
+            "app del centro",
+            "olvidado"
+          ],
+          "respuesta": "En la pantalla de acceso del portal de familias puedes pulsar <strong>«He olvidado mi contraseña»</strong> para recibir un enlace de restablecimiento en el correo electrónico registrado.<br><br>Si el correo no llega o el usuario está bloqueado:<br>1. Revisa la carpeta de spam o correo no deseado.<br>2. Comprueba que consultas el correo que facilitaste en la matrícula.<br>3. Si sigue sin funcionar, escribe a secretaría desde ese mismo correo indicando el nombre del alumno y te restableceremos las credenciales.<br><br>Por seguridad, las credenciales <strong>nunca se facilitan por teléfono</strong> ni se envían a una dirección de correo distinta de la registrada."
+        },
+        {
+          "id": "sec_justificar_faltas",
+          "pregunta": "📝 ¿Cómo justifico una falta de asistencia?",
+          "keywords": [
+            "justificar falta",
+            "ausencia",
+            "justificante",
+            "no ha ido",
+            "enfermo",
+            "medico",
+            "falta injustificada",
+            "retraso",
+            "llegar tarde",
+            "enferma",
+            "fiebre",
+            "malo",
+            "no puede ir",
+            "se ha puesto malo",
+            "hijo enfermo",
+            "esta malo",
+            "no puede ir a clase",
+            "no ha podido ir"
+          ],
+          "respuesta": "Toda ausencia debe justificarse ante el tutor/a en un <strong>plazo máximo de 48 horas</strong> desde la incorporación del alumno.<br><br>• <strong>Vía preferente:</strong> el portal de familias, adjuntando el justificante en formato digital.<br>• <strong>Alternativa:</strong> entregar el justificante médico o el escrito firmado por los tutores legales directamente al tutor/a.<br>• <strong>Ausencias previsibles</strong> (consulta médica, trámite oficial): conviene comunicarlas con antelación.<br><br>Recuerda que la <strong>asistencia es obligatoria</strong> en toda la enseñanza básica. La acumulación de faltas sin justificar activa el protocolo de absentismo escolar, que el centro está legalmente obligado a comunicar a la administración educativa."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Propuesta Comercial - Asistente Digital Salesianas</title>
+  <style>
+    /* Estilos Premium orientados a Presentación Comercial e Impresión a PDF */
+    @media print {
+      body {
+        background-color: #ffffff;
+        color: #000000;
+        font-size: 12pt;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+      .no-print {
+        display: none;
+      }
+      a {
+        text-decoration: none;
+        color: #000000;
+      }
+    }
+    
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #334155;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background-color: #f8fafc;
+    }
+    
+    .document-card {
+      background-color: #ffffff;
+      padding: 50px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+    }
+    
+    /* Encabezado */
+    header {
+      border-bottom: 2px solid #3490b0;
+      padding-bottom: 24px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    
+    h1 {
+      font-size: 26px;
+      color: #0f172a;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    
+    .subtitle {
+      font-size: 13px;
+      color: #b6bc00;
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+    }
+    
+    /* Secciones */
+    h2 {
+      font-size: 18px;
+      color: #3490b0;
+      margin-top: 36px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 8px;
+      font-weight: 700;
+    }
+    
+    p {
+      margin-top: 8px;
+      margin-bottom: 16px;
+      text-align: justify;
+      color: #475569;
+    }
+    
+    /* Cuadrículas de Beneficios */
+    .grid-benefits {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 20px;
+      margin: 24px 0;
+    }
+    
+    .card-benefit {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+    }
+    
+    .card-benefit h3 {
+      margin: 0 0 10px 0;
+      font-size: 15px;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .card-benefit p {
+      margin: 0;
+      font-size: 13.5px;
+      color: #64748b;
+    }
+    
+    /* Destacados */
+    .highlight-box {
+      background-color: #f0fdf4;
+      border-left: 4px solid #b6bc00;
+      padding: 20px;
+      border-radius: 0 12px 12px 0;
+      margin: 24px 0;
+    }
+    
+    .highlight-box h4 {
+      margin: 0 0 8px 0;
+      color: #14532d;
+      font-size: 15px;
+    }
+    
+    .highlight-box p {
+      margin: 0;
+      font-size: 13.5px;
+      color: #15803d;
+    }
+
+    /* Tabla comercial */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 13.5px;
+    }
+    
+    th, td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+    }
+    
+    th {
+      background-color: #f1f5f9;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .badge-price {
+      background-color: #eff6ff;
+      color: #1e40af;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+    
+    /* Botón flotante para imprimir */
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #3490b0;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      z-index: 1000;
+      transition: background 0.2s;
+    }
+    
+    .print-btn:hover {
+      background-color: #27748f;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Botón no imprimible para exportar -->
+  <button class="print-btn no-print" onclick="window.print()">🖨️ Guardar / Imprimir PDF</button>
+
+  <div class="document-card">
+    <header>
+      <h1>Propuesta de Servicio: Asistente Virtual Inteligente</h1>
+      <div class="subtitle">Secretaría Digital 24/7 para el Colegio María Auxiliadora</div>
+    </header>
+
+    <h2>1. ¿Qué es el Asistente Virtual y qué problema resuelve?</h2>
+    <p>La secretaría de un centro escolar atiende a diario cientos de llamadas y correos repetitivos: consultar el menú del comedor, preguntar horarios de oficina, solicitar certificados o gestionar bajas. Durante las épocas de matriculación o inicio de curso, el personal se satura, lo que provoca llamadas no atendidas y retrasos en gestiones de mayor valor.</p>
+    
+    <p>El **Asistente Virtual** es una ventanita de chat inteligente que se instala directamente en la esquina de la web oficial del colegio. Funciona de forma ininterrumpida las 24 horas del día, los 7 días de la semana, respondiendo al instante a las dudas de las familias de forma amable, clara y precisa.</p>
+
+    <div class="highlight-box">
+      <h4>El Retorno de la Inversión (ROI) para el Centro:</h4>
+      <p>Si la secretaría del colegio dedica una media de 1 hora al día a responder las mismas dudas básicas sobre plazos, comedor y secretaría, eso equivale a <strong>20 horas al mes de trabajo administrativo manual</strong>. Al automatizar el 80% de estas consultas, el personal queda libre para tareas complejas y se reduce la presión del teléfono en secretaría.</p>
+    </div>
+
+    <h2>2. Funciones Clave del Asistente</h2>
+    
+    <div class="grid-benefits">
+      <div class="card-benefit">
+        <h3>🎯 Menú Guiado por Botones</h3>
+        <p>Facilita a las familias el acceso a la información en solo dos toques en su móvil. Agrupa las dudas en 4 secciones clave: Comedor y Servicios, Pagos y Facturación, Prácticas en Empresa (FP) y Gestiones de Secretaría.</p>
+      </div>
+      
+      <div class="card-benefit">
+        <h3>🧠 Entendimiento con Inteligencia Artificial</h3>
+        <p>Si un tutor prefiere escribir su duda con sus propias palabras (ej. <em>"¿Cómo puedo dar de baja el comedor a mi hijo Lucas?"</em>), la IA comprende la intención exacta y redacta la respuesta adecuada basándose solo en los datos del centro.</p>
+      </div>
+
+      <div class="card-benefit">
+        <h3>📝 Solicitud Digital (Buzón Google Sheets)</h3>
+        <p>En lugar de que las familias escriban correos con información incompleta, el bot abre un formulario en el chat. Los datos (Nombre, Curso y Solicitud) se guardan automáticamente en una hoja de Google Sheets compartida en secretaría.</p>
+      </div>
+
+      <div class="card-benefit">
+        <h3>⚖️ Cumplimiento Legal y Privacidad (RGPD)</h3>
+        <p>El bot es 100% respetuoso con la privacidad de los menores y las familias. No rastrea datos personales y está programado para borrar y ocultar automáticamente números de teléfono o correos de los historiales de búsqueda.</p>
+      </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>3. ¿Cómo funciona la gestión de Trámites en Secretaría?</h2>
+    <p>Conectar los formularios del chat con Google Sheets simplifica el trabajo de la secretaria del centro (Susana) de forma radical:</p>
+    <ol>
+      <li><strong>El padre rellena la solicitud:</strong> Introduce el nombre del alumno, curso y el mensaje (ej. baja comedor) en el chat móvil.</li>
+      <li><strong>Registro automático:</strong> Al pulsar enviar, se crea una fila ordenada en la hoja de cálculo de Google Drive del colegio.</li>
+      <li><strong>Organización fácil:</strong> Secretaría puede ver las solicitudes pendientes al instante, tramitarlas en el sistema y cambiar su estado a "Procesado" con un clic, eliminando la bandeja de entrada del correo caótica.</li>
+    </ol>
+
+    <h2>4. Propuesta Comercial Especial "Cliente Piloto"</h2>
+    <p>Queremos que el Colegio María Auxiliadora sea nuestro primer caso de éxito. Para ello, proponemos unas condiciones de lanzamiento excepcionales y de muy bajo coste para el centro:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Concepto</th>
+          <th>Plan de Botones Guía (Básico)</th>
+          <th>Plan de IA Gemini (Avanzado)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Fase de Lanzamiento (Prueba)</strong></td>
+          <td><span class="badge-price">Gratis (30-45 días)</span></td>
+          <td><span class="badge-price">Gratis (30-45 días)</span></td>
+        </tr>
+        <tr>
+          <td><strong>Instalación y Configuración</strong></td>
+          <td>150€ (pago único)</td>
+          <td>300€ (pago único)</td>
+        </tr>
+        <tr>
+          <td><strong>Suscripción Mensual</strong></td>
+          <td><strong>29€ / mes</strong></td>
+          <td><strong>79€ / mes</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Mantenimiento y Soporte</strong></td>
+          <td>Incluido (Modificación de textos)</td>
+          <td>Incluido (Métricas + Actualización de IA)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="font-size: 13px; color: var(--text-muted);">* La fase de prueba gratuita permite al centro valorar la reducción del volumen de llamadas reales antes de realizar ningún pago por suscripción.</p>
+
+    <h2>5. Requisitos para la Puesta en Marcha</h2>
+    <p>Para poner en marcha el asistente en la web oficial del colegio solo necesitamos:</p>
+    <ul>
+      <li>Que la dirección apruebe el periodo de prueba piloto gratuito de 30 días.</li>
+      <li>Una reunión de 10 minutos con secretaría para validar que los horarios y correos cargados son correctos.</li>
+      <li>Dar acceso a vuestro responsable informático para que pegue el fragmento de código visual en la web (proceso que requiere menos de 10 minutos).</li>
+    </ul>
+
+  </div>
+
+</body>
+</html>

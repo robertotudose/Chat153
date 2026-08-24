@@ -1,0 +1,222 @@
+{
+  "centro": {
+    "nombre": "Centro Educativo Modelo",
+    "direccion": "Av. de la Educación, 24",
+    "telefono": "900 123 456",
+    "email": "secretaria@centroeducativo.es",
+    "horario_secretaria": "Lunes a Viernes: 09:00 - 14:00 | Tardes: 16:00 - 18:00"
+  },
+  "categorias": [
+    {
+      "id": "admisiones",
+      "icono": "🏫",
+      "titulo": "Buscamos plaza (Admisiones y Visitas)",
+      "descripcion": "Jornadas de puertas abiertas, escolarización y solicitud de entrevista personalizada.",
+      "preguntas": [
+        {
+          "id": "adm_fechas",
+          "pregunta": "¿Cuándo son las jornadas de puertas abiertas y admisiones?",
+          "keywords": ["puertas abiertas", "visita", "conocer el centro", "admision", "plazas", "preinscripcion", "fechas", "cuando"],
+          "respuesta": "Las <strong>Jornadas de Puertas Abiertas</strong> se organizan periódicamente antes del proceso oficial de escolarización. Si deseas una visita personalizada con el equipo directivo, puedes solicitar cita directamente a través de nuestro formulario o escribiendo a <strong>secretaria@centroeducativo.es</strong>."
+        },
+        {
+          "id": "adm_etapas",
+          "pregunta": "¿Qué etapas educativas se imparten en el centro?",
+          "keywords": ["etapas", "cursos", "infantil", "primaria", "secundaria", "eso", "bachillerato", "fp", "grados", "edad"],
+          "respuesta": "Ofrecemos un itinerario pedagógico completo y continuo:<br>• <strong>Educación Infantil:</strong> 3 a 6 años.<br>• <strong>Educación Primaria:</strong> 6 a 12 años.<br>• <strong>Educación Secundaria Obligatoria (ESO):</strong> 12 a 16 años.<br>• <strong>Bachillerato:</strong> Modalidades de Ciencias y Tecnología, Humanidades y Ciencias Sociales, Artes y General.<br>• <strong>Formación Profesional:</strong> Grado Básico, Medio y Superior."
+        },
+        {
+          "id": "adm_criterios",
+          "pregunta": "¿Cómo funciona el baremo de puntos y criterios de admisión?",
+          "keywords": ["puntos", "baremo", "criterios", "hermanos", "proximidad", "domicilio", "renta"],
+          "respuesta": "El proceso de admisión escolar se rige por el baremo normativo oficial. Se otorgan puntuaciones por:<br>1. Existencia de hermanos matriculados en el centro.<br>2. Proximidad del domicilio familiar o del lugar de trabajo.<br>3. Rentas de la unidad familiar, familias numerosas o monoparentales.<br>4. Criterio complementario aprobado por el Consejo Escolar."
+        },
+        {
+          "id": "adm_solicitar_visita",
+          "pregunta": "¿Cómo concertar una entrevista o visita personalizada?",
+          "keywords": ["visita", "entrevista", "cita previa", "reunion", "conocer"],
+          "respuesta": "Puedes concertar una visita guiada a nuestras instalaciones y una reunión informativa con Dirección completando este breve formulario:",
+          "accion": "formulario_admisiones"
+        }
+      ]
+    },
+    {
+      "id": "infantil",
+      "icono": "🧸",
+      "titulo": "Educación Infantil (3 a 6 años)",
+      "descripcion": "Comedor con siesta, horarios, aula de madrugadores, cuotas y justificación de faltas.",
+      "preguntas": [
+        {
+          "id": "inf_comedor_siesta",
+          "pregunta": "🍲 Comedor Escolar y Siesta Asistida",
+          "keywords": ["comedor infantil", "siesta", "comida", "alergias", "intolerancias", "celiacos", "menu infantil"],
+          "respuesta": "En <strong>Educación Infantil</strong> disponemos de cocina propia con menús diarios adaptados por nutricionistas para todo tipo de alergias e intolerancias.<br><br>• <strong>Horario:</strong> De 12:30 a 15:30 h con monitoras especializadas.<br>• <strong>Siesta supervisada:</strong> Espacio de descanso adaptado con camas individuales para 1º y 2º de Infantil (13:30 a 14:30 h).<br>• <strong>Altas y bajas:</strong> Se gestionan antes del día 25 del mes anterior."
+        },
+        {
+          "id": "inf_horarios_madrugadores",
+          "pregunta": "⏰ Horarios, Entradas y Aula Madrugadores",
+          "keywords": ["horario infantil", "madrugadores", "entrada", "salida", "recogida"],
+          "respuesta": "• <strong>Horario lectivo:</strong> De 09:00 a 12:30 h y de 15:30 a 17:00 h (jornada intensiva según calendario oficial).<br>• <strong>Aula de Madrugadores:</strong> Servicio matinal disponible desde las 07:30 / 07:45 h con opción de desayuno supervisado.<br>• <strong>Entradas y salidas:</strong> Accesos adaptados con recepción directa por el equipo docente."
+        },
+        {
+          "id": "inf_pagos_recibos",
+          "pregunta": "💳 Pagos, Cuotas y Recibos Bancarios",
+          "keywords": ["pagos infantil", "cuotas", "recibos", "banco", "domiciliacion", "portal"],
+          "respuesta": "Los recibos de servicios complementarios (comedor, madrugadores y actividades) se domicilian mensualmente a primeros de mes.<br><br>Las familias pueden consultar el detalle de facturación desde la plataforma escolar. Para incidencias, contacta con administración en <strong>secretaria@centroeducativo.es</strong>."
+        },
+        {
+          "id": "inf_justificar_faltas",
+          "pregunta": "📝 Justificar Ausencias y Faltas de Asistencia",
+          "keywords": ["falta infantil", "ausencia", "justificar", "medico", "enfermo"],
+          "respuesta": "Las ausencias se notifican y justifican preferentemente a través de la aplicación del centro o informando a la tutora a la entrada. Si la ausencia se debe a motivos médicos, se recomienda comunicarlo para coordinar la vuelta a clase."
+        }
+      ]
+    },
+    {
+      "id": "primaria",
+      "icono": "📚",
+      "titulo": "Educación Primaria (6 a 12 años)",
+      "descripcion": "Comedor con estudio dirigido, horarios, banco de libros, pagos y faltas.",
+      "preguntas": [
+        {
+          "id": "pri_comedor_estudio",
+          "pregunta": "🍲 Comedor Escolar y Estudio Dirigido",
+          "keywords": ["comedor primaria", "estudio dirigido", "patio", "ludoteca", "menu"],
+          "respuesta": "El servicio de comedor en <strong>Primaria</strong> cuenta con supervisión pedagógica continua.<br><br>• <strong>Horario:</strong> 12:30 a 15:30 h.<br>• <strong>Aula de Estudio Dirigido:</strong> Espacio silencioso supervisado para realización de tareas y fomento de la lectura.<br>• <strong>Actividades de recreo:</strong> Dinamización deportiva y talleres en patio."
+        },
+        {
+          "id": "pri_horarios",
+          "pregunta": "⏰ Horarios de Clases y Calendario Escolar",
+          "keywords": ["horario primaria", "entradas primaria", "calendario escolar"],
+          "respuesta": "• <strong>Horario lectivo ordinario:</strong> De 09:00 a 12:30 h y de 15:30 a 17:00 h.<br>• <strong>Atención a familias:</strong> Tutorías individuales concertadas con cita previa a través del portal de familias.<br>• <strong>Puntualidad:</strong> Se ruega máxima puntualidad en las franjas de entrada y salida."
+        },
+        {
+          "id": "pri_libros",
+          "pregunta": "🎒 Banco de Libros y Material Escolar",
+          "keywords": ["banco de libros", "libros primaria", "becas libros", "material escolar"],
+          "respuesta": "El centro participa en el <strong>Programa de Banco de Libros y Gratuidad</strong>:<br><br>• <strong>Adhesión y renovación:</strong> Convocatoria anual al finalizar el curso lectivo.<br>• <strong>Lotes de libros:</strong> Entrega organizada al inicio del curso en septiembre.<br>• El material fungible y cuadernillos de actividades se gestionan según las indicaciones del equipo docente."
+        },
+        {
+          "id": "pri_pagos_actividades",
+          "pregunta": "💳 Pagos de Actividades y Salidas Culturales",
+          "keywords": ["pagos primaria", "excursiones primaria", "salidas", "recibos"],
+          "respuesta": "Las excursiones, salidas culturales y talleres se autorizan y abonan digitalmente a través del portal escolar de forma segura mediante pasarela TPV."
+        },
+        {
+          "id": "pri_justificar_faltas",
+          "pregunta": "📝 Justificar Falta de Asistencia",
+          "keywords": ["falta primaria", "justificante medico", "ausencia primaria"],
+          "respuesta": "Toda falta debe justificarse mediante la app escolar o aportando el volante o justificante médico correspondiente a la tutora en un plazo máximo de 48 horas desde la reincorporación."
+        }
+      ]
+    },
+    {
+      "id": "eso",
+      "icono": "🎓",
+      "titulo": "Educación Secundaria (ESO)",
+      "descripcion": "Horarios matinales, comedor, tutorías, pagos de salidas y justificación de faltas.",
+      "preguntas": [
+        {
+          "id": "eso_horarios_tutorias",
+          "pregunta": "⏰ Horarios de Clases y Atención a Familias",
+          "keywords": ["horario eso", "clases secundaria", "tutorias eso"],
+          "respuesta": "• <strong>Horario lectivo ESO:</strong> De 08:30 a 14:30 h (jornada continua de mañanas).<br>• <strong>Atención a familias:</strong> Horas de atención de tutoría semanal con cita previa concertada por la plataforma escolar.<br>• <strong>Guardias y permanencia:</strong> Control estricto de entradas y salidas del recinto."
+        },
+        {
+          "id": "eso_comedor_estudio",
+          "pregunta": "🍲 Comedor Escolar y Aula de Estudio en ESO",
+          "keywords": ["comedor eso", "comer secundaria", "aula estudio eso"],
+          "respuesta": "Los alumnos de Secundaria pueden hacer uso del comedor al finalizar su jornada lectiva (14:30 a 15:30 h), disponiendo de instalaciones de biblioteca y aula de estudio supervisada."
+        },
+        {
+          "id": "eso_justificar_faltas",
+          "pregunta": "📝 Justificar Faltas y Notificación de Ausencias",
+          "keywords": ["faltas eso", "justificante medico eso", "ausencias secundaria"],
+          "respuesta": "El registro de asistencia se efectúa hora a hora. Los tutores legales deben comunicar y justificar cualquier falta o retraso mediante la plataforma oficial del centro en un plazo no superior a 48 horas."
+        },
+        {
+          "id": "eso_pagos_salidas",
+          "pregunta": "💳 Pagos de Actividades y Excursiones de ESO",
+          "keywords": ["pagos eso", "viaje estudios", "excursiones eso", "recibos eso"],
+          "respuesta": "Las salidas pedagógicas, intercambios y viajes de fin de etapa se tramitan y abonan digitalmente desde la plataforma escolar. Para información sobre becas o facilidades de pago, consulta en Secretaría."
+        }
+      ]
+    },
+    {
+      "id": "bachillerato",
+      "icono": "🏛️",
+      "titulo": "Bachillerato (1º y 2º)",
+      "descripcion": "Modalidades de Bachillerato, orientación universitaria, EvAU, horarios y faltas.",
+      "preguntas": [
+        {
+          "id": "bach_modalidades",
+          "pregunta": "📚 Modalidades e Itinerarios de Bachillerato",
+          "keywords": ["modalidades bachillerato", "ciencias", "humanidades", "artes", "general", "itinerarios"],
+          "respuesta": "Impartimos las modalidades oficiales de Bachillerato adaptadas a todas las vocaciones de futuro:<br><br>• <strong>Ciencias y Tecnología:</strong> Itinerarios de Ingeniería, Ciencias de la Salud y Tecnología.<br>• <strong>Humanidades y Ciencias Sociales:</strong> Derecho, ADE, Economía, Humanidades y Comunicación.<br>• <strong>Bachillerato General y Artes:</strong> Itinerarios multidisciplinares y creativos."
+        },
+        {
+          "id": "bach_evau",
+          "pregunta": "🎯 Preparación EvAU / PAU y Orientación Universitaria",
+          "keywords": ["evau", "selectividad", "pau", "universidad", "notas de corte", "orientacion"],
+          "respuesta": "Contamos con un programa específico de preparación para las pruebas de acceso a la Universidad (EvAU / PAU):<br><br>• Simulacros periódicos de examen con criterios oficiales de corrección.<br>• Talleres de ponderaciones, notas de corte y becas universitarias.<br>• Acompañamiento individual por el Departamento de Orientación."
+        },
+        {
+          "id": "bach_horarios",
+          "pregunta": "⏰ Horarios de Clases y Tutorías",
+          "keywords": ["horarios bachillerato", "tutorias bachillerato", "clases"],
+          "respuesta": "• <strong>Horario lectivo:</strong> De 08:15 a 14:45 h en turno matinal.<br>• <strong>Tutorías académicas:</strong> Sesiones individualizadas de seguimiento de rendimiento y preparación de pruebas."
+        },
+        {
+          "id": "bach_faltas",
+          "pregunta": "📝 Justificar Faltas de Asistencia en Bachillerato",
+          "keywords": ["faltas bachillerato", "asistencia bachillerato", "justificante"],
+          "respuesta": "Debido a la importancia de la evaluación continua, las ausencias deben justificarse con documento oficial (médico, deber inexcusable) en un plazo de 48 horas a través del portal de gestión escolar."
+        },
+        {
+          "id": "bach_pagos",
+          "pregunta": "💳 Pagos de Tasas y Salidas Pedagógicas",
+          "keywords": ["pagos bachillerato", "tasas bachillerato", "excursiones"],
+          "respuesta": "La gestión de salidas académicas, visitas universitarias y tasas de gestión se realiza de forma centralizada mediante la plataforma digital del centro."
+        }
+      ]
+    },
+    {
+      "id": "fp",
+      "icono": "💼",
+      "titulo": "Formación Profesional (FP)",
+      "descripcion": "Ciclos oficiales, FP Dual remunerada, convenios con empresas, tasas y convalidaciones.",
+      "preguntas": [
+        {
+          "id": "fp_ciclos",
+          "pregunta": "💼 Ciclos Formativos Impartidos (Básica, Medio y Superior)",
+          "keywords": ["ciclos fp", "grados fp", "fp basica", "grado medio", "grado superior"],
+          "respuesta": "Ofrecemos títulos oficiales de Formación Profesional con alta inserción laboral:<br><br>• <strong>FP Básica:</strong> 2 cursos lectivos con titulación profesional y graduado en ESO.<br>• <strong>FP Grado Medio:</strong> 2 cursos lectivos con prácticas FCT y opción bilingüe.<br>• <strong>FP Grado Superior:</strong> Modalidades presencial, FP Dual y semipresencial / online con acceso directo a la Universidad."
+        },
+        {
+          "id": "fp_dual_practicas",
+          "pregunta": "🤝 FP Dual y Prácticas en Empresa (FCT)",
+          "keywords": ["fp dual", "practicas fct", "convenio empresas", "bolsa empleo"],
+          "respuesta": "• <strong>FCT (Formación en Centros de Trabajo):</strong> Módulo obligatorio en segundo curso con estancias reales en empresas colaboradoras.<br>• <strong>FP Dual:</strong> Formación en alternancia con contrato retribuido en empresas concertadas.<br>• Bolsa de empleo activa para titulados con alta tasa de contratación."
+        },
+        {
+          "id": "fp_tasas_pagos",
+          "pregunta": "💳 Pagos de Matrícula y Tasas de Título Oficial",
+          "keywords": ["tasas fp", "pago matricula fp", "titulo oficial fp", "precio fp"],
+          "respuesta": "La expedición del <strong>Título Oficial de FP</strong> requiere la liquidación de la tasa oficial correspondiente. Las instrucciones y cartas de pago se facilitan desde la Secretaría del centro escribiendo a <strong>secretaria@centroeducativo.es</strong>."
+        },
+        {
+          "id": "fp_convalidaciones",
+          "pregunta": "📋 Convalidaciones y Exención de Prácticas FCT",
+          "keywords": ["convalidar fp", "exencion fct", "experiencia laboral fp"],
+          "respuesta": "• <strong>Convalidación de módulos:</strong> Se solicita en el primer mes de curso aportando certificado oficial de estudios cursados.<br>• <strong>Exención de FCT:</strong> Requiere acreditar al menos 1 año de experiencia laboral afín a jornada completa mediante certificado de vida laboral y contratos."
+        },
+        {
+          "id": "fp_horarios_secretaria",
+          "pregunta": "⏰ Horarios de Clases y Secretaría de FP",
+          "keywords": ["horario fp", "secretaria fp", "atencion fp"],
+          "respuesta": "• <strong>Horario lectivo FP:</strong> Turno matinal de 08:30 a 14:30 h.<br>• <strong>Atención de Secretaría FP:</strong> Lunes a viernes de 09:00 a 14:00 h.<br>Teléfono: <strong>900 123 456</strong> | Email: <strong>secretaria@centroeducativo.es</strong>."
+        }
+      ]
+    }
+  ]
+}

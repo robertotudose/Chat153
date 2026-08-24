@@ -1,0 +1,17 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno: NUNCA deben subirse (contienen claves y contraseñas)
+.env
+
+# Base de datos: contiene datos personales de familias (RGPD)
+datos.db
+datos.db-journal
+datos.db-wal
+datos.db-shm
+
+# Registros antiguos del sistema anterior
+logs_consultas.json
+
+# Basura del sistema operativo
+.DS_Store
