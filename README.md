@@ -10,9 +10,10 @@ Asistentes virtuales de secretaría y orientación para centros educativos. Dos 
 | :--- | :--- | :--- |
 | **`01 - Chatbot Sin IA`** | Asistente 100% determinista. Sin servidor, sin IA, sin coste | Centros que quieren coste cero absoluto y respuestas totalmente predecibles |
 | **`02 - Chatbot Con IA`** | Producto principal. Motor híbrido de tres niveles con IA generativa y degradación automática | Producto de referencia. Incluye todo lo del anterior y además IA, calendario, test de orientación y panel |
-| **`03 - Web SCHOLAIA`** | Web comercial de la marca. `landing-estatica` (HTML) y `landing-react` (Vite + React) | Presentación comercial ante centros |
+| **`03 - Web SCHOLAIA`** | Web comercial de la marca: `index.html` autocontenido más `assets` y `marca` | Presentación comercial ante centros |
 | **`04 - Documentacion`** | Guía técnica, mapa legal, infraestructura y costes, protocolo de incidentes y puntos pendientes de ingeniería | Documentación de proyecto y material para licitaciones |
-| **`05 - Archivo`** | Histórico de versiones retiradas y contexto acumulado | Consulta puntual. No se trabaja aquí |
+| **`05 - Archivo`** | Histórico: landings anteriores, handoff de diseño, capturas y zips | Consulta puntual. No se trabaja aquí |
+| **`06 - Negocio`** | Herramientas internas: panel de negocio y cifras (`datos-negocio.json`) | Uso interno. No se enseña a los centros |
 
 ---
 
