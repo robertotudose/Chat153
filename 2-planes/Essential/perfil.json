@@ -1,0 +1,20 @@
+{
+  "_lee_esto_primero": "Bloque de plan para un centro con Essential. Copia 'plan' y 'funcionalidades' dentro del configuracion_centro.json de ese centro. No es un archivo que lea el producto: es la plantilla que evita tener que acordarse de qué interruptor va en cada plan.",
+  "plan": "essential",
+  "funcionalidades": {
+    "ia_generativa": false,
+    "busqueda_libre": false,
+    "test_orientacion_4eso": false,
+    "calendario_escolar": true,
+    "formularios": true,
+    "modo_oscuro": false,
+    "streaming_respuestas": false
+  },
+  "_notas_de_instalacion": [
+    "Sin servidor: se sirven los archivos estáticos y el widget lee configuracion_centro.json y preguntas_frecuentes.json de la propia carpeta.",
+    "El widget se instala apuntando al recolector de preguntas con data-servidor en la etiqueta script. El colegio sigue sin mantener servidor —solo sirve archivos estáticos—, pero el botón «Escribir mi pregunta» necesita una dirección a la que mandar lo que escribe la familia. Sin ella el botón no aparece, y el centro se queda sin saber qué le preguntan.",
+    "Como el archivo de configuración queda a la vista del navegador, en esta instalación hay que quitarle los bloques que no debe ver nadie: webhook, email_destino y el bloque de privacidad interno.",
+    "Las preguntas frecuentes son las que nos pase el centro. Son botones, así que pasadas unas 40 el menú deja de ser navegable: ahí es donde empieza Centro.",
+    "No hay panel, así que cada cambio de fecha o de respuesta vuelve a nosotros. Es el coste real de este plan y hay que acotarlo por contrato."
+  ]
+}

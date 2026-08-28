@@ -1,0 +1,19 @@
+{
+  "_lee_esto_primero": "Bloque de plan para un grupo con Infinito. Copia 'plan' y 'funcionalidades' dentro del configuracion_centro.json de CADA sede.",
+  "plan": "infinito",
+  "funcionalidades": {
+    "ia_generativa": true,
+    "busqueda_libre": true,
+    "test_orientacion_4eso": true,
+    "calendario_escolar": true,
+    "formularios": true,
+    "modo_oscuro": false,
+    "streaming_respuestas": true
+  },
+  "_notas_de_instalacion": [
+    "Es lo de Centro más el test de orientación de 4º de ESO.",
+    "La categoría orientacion_4eso de preguntas_frecuentes.json lleva plan_minimo: infinito, así que solo aparece aquí.",
+    "El test trata datos de menores sobre sus intereses. Antes de encenderlo en un centro real hace falta la EIPD, que sigue pendiente en el mapa legal.",
+    "«Centros sin límite» son HOY despliegues separados: la configuración se carga una vez por proceso, así que cada sede necesita el suyo. Está pendiente decidir si se implementa multi-sede de verdad o se redacta la web como lo que es."
+  ]
+}

@@ -1,0 +1,177 @@
+{
+  "_lee_esto_primero": "Este es el ÚNICO archivo que hay que tocar para adaptar el asistente a un centro educativo nuevo. No hace falta saber programar: cambia los valores de la derecha y guarda. Los campos marcados como (obligatorio) deben rellenarse siempre.",
+  "centro": {
+    "id": "centro-modelo",
+    "nombre": "Centro Educativo Modelo",
+    "nombre_corto": "Centro Modelo",
+    "direccion": "Av. de la Educación, 24",
+    "localidad": "Zaragoza",
+    "codigo_postal": "50001",
+    "telefono": "900 123 456",
+    "email": "secretaria@centroeducativo.es",
+    "web": "",
+    "horario_secretaria": "Lunes a viernes: 09:00 - 14:00 | Tardes: 16:00 - 18:00",
+    "_ayuda": "id (obligatorio): identificador interno sin espacios ni acentos. Se usa para separar los datos de cada centro en la base de datos."
+  },
+  "marca": {
+    "color_primario": "#1f6f8b",
+    "color_primario_oscuro": "#18586f",
+    "color_primario_claro": "#e0f2fe",
+    "color_acento": "#b6bc00",
+    "logo_url": "",
+    "titulo_widget": "Secretaría Virtual",
+    "subtitulo_widget": "Secretaría y Orientación",
+    "mensaje_burbuja": "¿Dudas de secretaría u orientación? 💬",
+    "_ayuda": "Los colores admiten cualquier valor hexadecimal. Comprueba que el color primario tenga contraste suficiente sobre blanco (ratio mínimo 4.5:1, WCAG AA). logo_url puede quedar vacío: en ese caso se muestra el icono por defecto."
+  },
+  "plan": "infinito",
+  "_ayuda_plan": "Plan contratado por el centro: essential, centro o infinito. Es lo que el centro ha pagado, y manda sobre los interruptores de abajo: el servidor no atiende nada que el plan no incluya, aunque alguien ponga el interruptor a true. Para dejarlo cuadrado de una vez, copia el bloque de 2-planes/<plan>/perfil.json.",
+  "funcionalidades": {
+    "ia_generativa": true,
+    "busqueda_libre": true,
+    "test_orientacion_4eso": true,
+    "calendario_escolar": true,
+    "formularios": true,
+    "modo_oscuro": false,
+    "streaming_respuestas": true,
+    "_ayuda": "Interruptores de encendido/apagado DENTRO de lo que permite el plan. Sirven para que un centro apague algo que sí tiene contratado, nunca para encender algo que no. Si ia_generativa es false, el asistente funciona en modo 100% determinista (el plan Essential) sin llamar a ninguna API ni generar coste."
+  },
+  "ia": {
+    "modelo": "gemini-flash-latest",
+    "modelo_orientacion": "gemini-3.6-flash",
+    "modelos_respaldo": [
+      "gemini-flash-lite-latest",
+      "gemini-2.0-flash"
+    ],
+    "temperatura": 0.3,
+    "max_tokens_respuesta": 2000,
+    "presupuesto_razonamiento": 128,
+    "umbral_busqueda_local": 4,
+    "limite_llamadas_dia": 1500,
+    "_ayuda": "modelos_respaldo: si el modelo principal devuelve un 503 ('high demand', saturación temporal de Google), el servidor reintenta dos veces y después prueba con estos, por orden. OJO: un 503 NO significa quedarse sin cuota, solo que ese modelo está congestionado en ese momento. · modelo: se usa para las preguntas normales del día a día (secretaría, calendario, etc.); gemini-flash-lite-latest tiene un cupo gratuito más alto, ideal para volumen. modelo_orientacion: se usa SOLO en el test de orientación 4º ESO, una conversación más larga y decisiva para el alumno que merece un modelo más capaz; si se deja vacío se usa el mismo que 'modelo'. Si Google retira alguno, el servidor lo avisa en consola y el asistente sigue funcionando en modo básico. · max_tokens_respuesta: CUIDADO, los modelos Gemini 3 razonan antes de responder y ese razonamiento consume el mismo presupuesto. Con 800 la respuesta llegaba cortada a media frase. No bajar de 1500. · presupuesto_razonamiento: limita los tokens de razonamiento (menos coste y menos latencia). Ponlo a null para no limitarlo. · umbral_busqueda_local: puntuación mínima para responder en local SIN llamar a la IA. Subirlo da más precisión y más coste; bajarlo, lo contrario. · entradas_contexto: cuántas preguntas de la base se envían al modelo en cada consulta. Enviarlas todas encarecía y retrasaba mucho la respuesta; 8 es un buen equilibrio. Súbelo si notas que a la IA le falta información. · limite_llamadas_dia: tope de seguridad, no de uso. Un centro normal hace unas 27 llamadas al día; 1500 deja 50 veces de margen y a la vez impide que un script o un bucle disparen la factura. Al pasarse, el asistente sigue respondiendo con botones y buscador, que es gratis.",
+    "entradas_contexto": 8
+  },
+  "privacidad": {
+    "url_aviso_privacidad": "PENDIENTE-poner-aqui-la-url-del-aviso-del-centro",
+    "retencion_solicitudes_dias": 365,
+    "retencion_logs_dias": 365,
+    "retencion_preguntas_sugeridas_dias": 365,
+    "avisar_que_es_una_ia": true,
+    "_ayuda": "Obligaciones legales: url_aviso_privacidad debe apuntar al aviso de privacidad del centro (art. 13 RGPD: hay que informar en el momento de recoger el dato). Mientras diga 'PENDIENTE-poner-aqui-la-url-del-aviso-del-centro' NO está resuelto, es un valor de aviso a propósito para que salte a la vista en cualquier revisión: sin la URL real del aviso publicado por el centro, el asistente le pide el correo y el teléfono a una familia sin decirle qué se hace con ellos, y eso no cumple el artículo 13. No lanzar el asistente en un centro real con este campo así. retencion_preguntas_sugeridas_dias: cuánto se conservan las preguntas que una familia marca como no resueltas (ver aviso_privacidad_widget.md); sigue el mismo criterio que los otros dos plazos. avisar_que_es_una_ia debe permanecer en true (art. 50 del Reglamento Europeo de IA 2024/1689: el usuario tiene derecho a saber que habla con una máquina). Los datos se borran automáticamente al superar los días de retención indicados."
+  },
+  "solicitudes": {
+    "destino": "sqlite",
+    "email_destino": "",
+    "webhook_url": "",
+    "_ayuda": "Dónde acaban las solicitudes de visita, citas y trámites que rellenan las familias. Opciones: 'sqlite' (se guardan en la base de datos del servidor y se consultan desde el panel de administración), 'email' (se envían a email_destino), 'webhook' (se envían por POST a webhook_url, para conectar con el sistema propio del centro) o 'mailto' (abre el cliente de correo de la familia, sin servidor y sin almacenar nada)."
+  },
+  "enlaces_oficiales": {
+    "mostrar": true,
+    "enlaces": [
+      {
+        "id": "admision_autonomica",
+        "titulo": "Escolarización Oficial (Gobierno de Aragón)",
+        "descripcion": "Plazos, normativa y solicitud de plaza en el portal oficial de admisión.",
+        "url": "https://educa.aragon.es/-/admision-erg-ere",
+        "icono": "🏛️",
+        "mostrar_en": [
+          "admisiones"
+        ]
+      }
+    ],
+    "_ayuda": "Solo enlaces a administraciones públicas (consejería, portal de admisión). No se enlazan plataformas privadas de gestión escolar. Pon mostrar en false para ocultarlos todos."
+  },
+  "comunidad_autonoma": {
+    "codigo": "aragon",
+    "nombre": "Aragón",
+    "programa_libros": "Banco de Libros de Aragón",
+    "prueba_acceso_universidad": "EvAU",
+    "_ayuda": "La base de conocimiento está escrita en términos válidos para toda España. Estos campos adaptan los nombres que cambian de una comunidad a otra (en Aragón el programa es 'Banco de Libros de Aragón' y la prueba es 'EvAU'; en otras comunidades cambia a 'PAU', 'PBAU', etc.)."
+  },
+  "calendario": {
+    "curso_academico": "2026-2027",
+    "inicio_curso": "2026-09-07",
+    "fin_curso": "2027-06-22",
+    "calcular_semana_santa_automaticamente": true,
+    "vacaciones": [
+      {
+        "nombre": "Vacaciones de Navidad",
+        "inicio": "2026-12-23",
+        "fin": "2027-01-07",
+        "id": "fcfd2727"
+      },
+      {
+        "nombre": "Vacaciones de Verano",
+        "inicio": "2027-06-23",
+        "fin": "2027-08-31",
+        "id": "0589f5eb"
+      }
+    ],
+    "festivos_oficiales": [
+      {
+        "fecha": "2026-10-12",
+        "nombre": "Fiesta Nacional de España",
+        "id": "bba08cff"
+      },
+      {
+        "fecha": "2026-11-02",
+        "nombre": "Todos los Santos (traslado)",
+        "id": "003aebef"
+      },
+      {
+        "fecha": "2026-12-07",
+        "nombre": "Día de la Constitución (traslado)",
+        "id": "aa660f52"
+      },
+      {
+        "fecha": "2026-12-08",
+        "nombre": "Inmaculada Concepción",
+        "id": "d9f967ed"
+      },
+      {
+        "fecha": "2027-04-23",
+        "nombre": "Día de Aragón (San Jorge)",
+        "id": "75aaf7ac"
+      },
+      {
+        "fecha": "2027-05-01",
+        "nombre": "Día del Trabajo",
+        "id": "d34ea68d"
+      }
+    ],
+    "dias_no_lectivos": [
+      {
+        "fecha": "2026-12-21",
+        "nombre": "Día de libre disposición",
+        "id": "a6871fda"
+      },
+      {
+        "fecha": "2027-02-15",
+        "nombre": "Día de libre disposición",
+        "id": "64f49b8c"
+      },
+      {
+        "fecha": "2027-03-01",
+        "nombre": "Día de libre disposición",
+        "id": "044750c0"
+      }
+    ],
+    "jornadas_especiales": [
+      {
+        "fecha": "2027-01-31",
+        "nombre": "Fiesta del Centro",
+        "asistencia_obligatoria": true,
+        "descripcion": "Jornada festiva con actividades, convivencias y celebraciones. NO es un día no lectivo: la asistencia del alumnado es obligatoria y las faltas se registran igual que un día de clase normal.",
+        "id": "5a980a50"
+      },
+      {
+        "fecha": "2027-04-22",
+        "nombre": "Jornada Cultural y Deportiva",
+        "asistencia_obligatoria": true,
+        "descripcion": "Jornada sin clases lectivas ordinarias dedicada a talleres, competiciones y actividades culturales. La asistencia es obligatoria para todo el alumnado.",
+        "id": "5eb8eeff"
+      }
+    ],
+    "_ayuda": "IMPORTANTE - distingue tres cosas distintas: 'dias_no_lectivos' y 'vacaciones' son días SIN clase y SIN obligación de acudir. 'festivos_oficiales' son festivos del calendario laboral. 'jornadas_especiales' son días de fiesta del centro en los que NO hay clase ordinaria pero SÍ hay que asistir (fiesta del fundador, jornadas culturales, convivencias): es la duda más frecuente de las familias en centros concertados y el asistente la responde de forma explícita. Si calcular_semana_santa_automaticamente es true, no hace falta añadir la Semana Santa a mano: se calcula sola cada año."
+  }
+}

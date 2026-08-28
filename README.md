@@ -8,48 +8,57 @@ Asistentes virtuales de secretaría y orientación para centros educativos. Dos 
 
 | Carpeta | Qué es | Cuándo se usa |
 | :--- | :--- | :--- |
-| **`01 - Chatbot Sin IA`** | Asistente 100% determinista. Sin servidor, sin IA, sin coste | Centros que quieren coste cero absoluto y respuestas totalmente predecibles |
-| **`02 - Chatbot Con IA`** | Producto principal. Motor híbrido de tres niveles con IA generativa y degradación automática | Producto de referencia. Incluye todo lo del anterior y además IA, calendario, test de orientación y panel |
-| **`03 - Web SCHOLAIA`** | Web comercial de la marca: `index.html` autocontenido más `assets` y `marca` | Presentación comercial ante centros |
-| **`04 - Documentacion`** | Guía técnica, mapa legal, infraestructura y costes, protocolo de incidentes y puntos pendientes de ingeniería | Documentación de proyecto y material para licitaciones |
-| **`05 - Archivo`** | Histórico: landings anteriores, handoff de diseño, capturas y zips | Consulta puntual. No se trabaja aquí |
-| **`06 - Negocio`** | Herramientas internas: panel de negocio y cifras (`datos-negocio.json`) | Uso interno. No se enseña a los centros |
+| **`1-producto`** | Producto principal. Motor híbrido de tres niveles con IA generativa y degradación automática | Producto de referencia. Incluye todo lo del anterior y además IA, calendario, test de orientación y panel |
+| **`3-web`** | Web comercial de la marca: `index.html` autocontenido más `assets` y `marca` | Presentación comercial ante centros |
+| **`5-documentacion`** | Guía técnica, mapa legal, infraestructura y costes, protocolo de incidentes y puntos pendientes de ingeniería | Documentación de proyecto y material para licitaciones |
+| **`6-para-ensenar`** | Guiones de reunión y material de demostración, listo para enseñar | Antes de una reunión o una demostración |
+| **`7-archivo`** | Histórico: el chatbot sin IA, paneles y landings anteriores | Consulta puntual. No se trabaja aquí |
+| **`4-negocio`** | Herramientas internas: panel de negocio y cifras (`datos-negocio.json`) | Uso interno. No se enseña a los centros |
+| **`1-producto/panel`** | El panel diario de la secretaría (`panel.html`), servido en `/panel` | Lo usa el colegio todos los días |
+| **`2-planes`** | Los tres planes que se venden: su `perfil.json` y su ficha | Al preparar la instalación de un centro |
 
 ---
 
-## 🔍 Diferencia entre los dos productos
+## 🔍 Los tres planes
 
-|  | Sin IA | Con IA |
-| :--- | :--- | :--- |
-| Navegación por botones | ✅ | ✅ |
-| Buscador local por palabras clave | ✅ | ✅ con erratas y sinónimos |
-| Respuestas de IA generativa | ❌ | ✅ |
-| Sigue funcionando si la IA cae | — | ✅ pasa a modo determinista |
-| Calendario escolar | ✅ dos tipos de día | ✅ tres tipos, incluidas jornadas con asistencia obligatoria |
-| Test de orientación de 4º de ESO | ❌ | ✅ con informe descargable |
-| Panel de administración | ❌ | ✅ |
-| Instalación con una línea en webs ajenas | ❌ | ✅ con Shadow DOM |
-| Servidor | No necesita | Node.js 22.5+ |
-| Coste mensual | 0 € | Servidor + céntimos de IA |
+Son **un solo producto**. Lo que cambia es el campo `plan` de
+`configuracion_centro.json`, y lo hace cumplir el servidor: apagar algo solo
+en el navegador no separa nada.
 
-Ambos comparten el sistema de diseño: misma tipografía, misma paleta y mismos componentes. **Si se cambia el diseño en uno, hay que llevarlo al otro.**
+|  | Essential | Centro | Infinito |
+| :--- | :---: | :---: | :---: |
+| Sus preguntas frecuentes, por botones | ✅ | ✅ | ✅ |
+| Calendario escolar del centro | ✅ | ✅ | ✅ |
+| Escribir con sus propias palabras | ❌ | ✅ | ✅ |
+| Respuestas de IA sobre lo del centro | ❌ | ✅ | ✅ |
+| Panel: lo cambian ellos y ven qué se pregunta | ❌ | ✅ | ✅ |
+| Test de orientación de 4.º de ESO | ❌ | ❌ | ✅ |
+| Servidor | No necesita | Node.js 22.5+ | Node.js 22.5+ |
+
+Las preguntas las pone el propio colegio en los tres planes: cada centro
+recibe llamadas distintas. Lo que se compra al subir de plan no es más
+contenido, son capacidades — escribir, cambiarlo uno mismo y saber qué se
+pregunta.
+
+Cada plan tiene su ficha y su `perfil.json` en
+[`2-planes/`](2-planes/README.md).
 
 ---
 
 ## 🚀 Por dónde empezar
 
 ```bash
-cd "02 - Chatbot Con IA"
+cd "producto"
 npm install
 npm start
 ```
 
 Después, `http://localhost:3000`. Arranca aunque no haya clave de IA: en ese caso funciona en modo determinista.
 
-Para adaptar el asistente a un centro nuevo se toca **un único archivo**: `02 - Chatbot Con IA/configuracion_centro.json`. No hace falta programar.
+Para adaptar el asistente a un centro nuevo se toca **un único archivo**: `1-producto/configuracion_centro.json`. No hace falta programar.
 
 ---
 
 ## 📌 Antes de pasar a producción
 
-Leer **[`04 - Documentacion/revision_ingenieria.md`](04%20-%20Documentacion/revision_ingenieria.md)**: recoge lo que queda pendiente de revisar, ordenado por gravedad, y lo ya corregido para no revisarlo dos veces.
+Leer **[`5-documentacion/revision_ingenieria.md`](5-documentacion/revision_ingenieria.md)**: recoge lo que queda pendiente de revisar, ordenado por gravedad, y lo ya corregido para no revisarlo dos veces.

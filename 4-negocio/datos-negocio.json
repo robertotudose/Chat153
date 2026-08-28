@@ -1,0 +1,414 @@
+{
+  "_lee_esto_primero": "Cifras del plan de negocio de SCHOLAIA, extraídas del documento 'Las cuentas del asistente escolar' (agosto 2026). Este archivo es la fuente de datos del panel de negocio. Cada bloque lleva un campo 'fiabilidad' que indica si es MEDIDO (comprobado sobre el sistema real), MERCADO (dato externo investigado) o HIPOTESIS (suposición del equipo, sin verificar). El panel DEBE distinguir visualmente los tres.",
+  "consumo_api": {
+    "fiabilidad": "MEDIDO",
+    "nota": "Medido sobre el sistema real, no estimado. Reproducible con `npm run coste` en producto. La entrada subió de 964 a 1.524 tokens al añadir al contexto las respuestas que escribe el propio centro desde su panel; ya está recortado el calendario (solo fechas por venir) y las respuestas se eligen por relevancia. Volver a medirlo cada vez que se le añada algo al prompt.",
+    "tokens_entrada_por_consulta": 1524,
+    "tokens_salida_por_consulta": 328,
+    "conversaciones_mes_por_centro": 2000,
+    "porcentaje_que_llega_a_ia": 40,
+    "llamadas_ia_mes": 800,
+    "comentario_arquitectura": "El 60% restante lo resuelven los botones y el buscador local, sin coste. Esa arquitectura es lo que hace irrelevante el coste de API.",
+    "modelos": [
+      {
+        "nombre": "Gemini 2.5 Flash-Lite",
+        "entrada_usd_millon": 0.1,
+        "salida_usd_millon": 0.4,
+        "coste_mes_eur": 0.21
+      },
+      {
+        "nombre": "Gemini 3.5 Flash-Lite",
+        "entrada_usd_millon": 0.15,
+        "salida_usd_millon": 1.25,
+        "coste_mes_eur": 0.47
+      },
+      {
+        "nombre": "Gemini 3.7 Flash",
+        "entrada_usd_millon": 0.38,
+        "salida_usd_millon": 1.88,
+        "coste_mes_eur": 0.88
+      },
+      {
+        "nombre": "Gemini 3.6 Flash",
+        "entrada_usd_millon": 0.75,
+        "salida_usd_millon": 3.75,
+        "coste_mes_eur": 1.75,
+        "nota": "El caro. Se usa solo en el test de orientación."
+      }
+    ],
+    "tests_orientacion_mes": 60,
+    "coste_tests_orientacion_eur": 0.21,
+    "presupuesto_con_margen_eur": 3.0,
+    "aviso": "El nivel gratuito de Google devuelve 503 'high demand' sin prioridad de servicio. No se puede sostener un producto comercial encima. Hay que activar facturación antes del primer piloto.",
+    "tope_llamadas_dia": 1500,
+    "nota_tope": "Tope de seguridad en configuracion_centro.json (ia.limite_llamadas_dia). Un centro normal hace unas 27 llamadas al día. El tope no está para ahorrar en el uso normal —que cuesta céntimos— sino para que un script o un bucle no conviertan esos céntimos en una factura. Al pasarse, el asistente sigue respondiendo con botones y buscador."
+  },
+  "gastos_fijos_mes": {
+    "fiabilidad": "MERCADO",
+    "nota": "Un socio de alta como autónomo. Cuota según Orden PJC/297/2026.",
+    "partidas": [
+      {
+        "concepto": "Cuota de autónomo",
+        "anio_1": 80,
+        "anio_2": 300,
+        "nota": "Tarifa plana 12 meses; luego por tramo de rendimiento"
+      },
+      {
+        "concepto": "Gestoría",
+        "anio_1": 60,
+        "anio_2": 85,
+        "nota": "Imprescindible con facturación recurrente"
+      },
+      {
+        "concepto": "Claude Code (desarrollo)",
+        "anio_1": 100,
+        "anio_2": 100,
+        "nota": "Plan Max; es vuestra capacidad de producto"
+      },
+      {
+        "concepto": "Servidor + dominio",
+        "anio_1": 10,
+        "anio_2": 25,
+        "nota": "Node + SQLite es ligerísimo; un VPS aguanta decenas de centros"
+      },
+      {
+        "concepto": "Seguro de RC profesional",
+        "anio_1": 20,
+        "anio_2": 20,
+        "nota": "Tratáis datos de menores. No es opcional"
+      },
+      {
+        "concepto": "Varios (correo, herramientas)",
+        "anio_1": 20,
+        "anio_2": 20,
+        "nota": ""
+      }
+    ],
+    "total_anio_1": 290,
+    "total_anio_2": 550,
+    "coste_variable_api_por_instituto": 2,
+    "segundo_autonomo_anio_3": 300,
+    "coste_oculto": "Hora y media de soporte al mes por instituto. Con 25 clientes son 38 horas mensuales, casi media jornada. Es el techo real del negocio, no el servidor."
+  },
+  "precios": {
+    "fiabilidad": "MERCADO",
+    "nota_nombres": "Los nombres y el reparto los fija web (index-libros.html, sección planes), que es lo último acordado por el equipo. Antes este archivo decía Esencial/Completo/Centro+ y colocaba el test de 4º ESO en el plan objetivo; se ha alineado con la web, donde el test es de Infinito.",
+    "nota_tramos": "Los precios se publican en la web por tramo de número de alumnos y ya no se negocian caso a caso. Para calcular la cuota de un centro: buscar en `tramos` el único intervalo donde `alumnos_desde <= número de alumnos` y (`alumnos_hasta` es null o número de alumnos <= `alumnos_hasta`), y leer ahí el precio del plan. El último tramo (1201+) no tiene techo, por eso su `alumnos_hasta` es null.",
+    "tramos": [
+      {
+        "id": "0-300",
+        "alumnos_desde": 0,
+        "alumnos_hasta": 300,
+        "mensual": {
+          "Essential": 99,
+          "Centro": 179,
+          "Infinito": 259
+        }
+      },
+      {
+        "id": "301-500",
+        "alumnos_desde": 301,
+        "alumnos_hasta": 500,
+        "mensual": {
+          "Essential": 139,
+          "Centro": 219,
+          "Infinito": 299
+        }
+      },
+      {
+        "id": "501-700",
+        "alumnos_desde": 501,
+        "alumnos_hasta": 700,
+        "mensual": {
+          "Essential": 179,
+          "Centro": 259,
+          "Infinito": 339
+        }
+      },
+      {
+        "id": "701-1000",
+        "alumnos_desde": 701,
+        "alumnos_hasta": 1000,
+        "mensual": {
+          "Essential": 219,
+          "Centro": 299,
+          "Infinito": 379
+        }
+      },
+      {
+        "id": "1001-1200",
+        "alumnos_desde": 1001,
+        "alumnos_hasta": 1200,
+        "mensual": {
+          "Essential": 259,
+          "Centro": 339,
+          "Infinito": 419
+        }
+      },
+      {
+        "id": "1201+",
+        "alumnos_desde": 1201,
+        "alumnos_hasta": null,
+        "mensual": {
+          "Essential": 299,
+          "Centro": 379,
+          "Infinito": 459
+        }
+      }
+    ],
+    "origen_tramos": {
+      "fiabilidad": "MERCADO",
+      "nota": "En la provincia de Zaragoza hay unos 560 centros de infantil y primaria y 179 de secundaria. La media global ronda los 200 alumnos por centro, pero la distribución tiene dos jorobas: los públicos rurales, muy pequeños, y los concertados de ciudad, de 500 a 1.200 alumnos. El cliente objetivo es el concertado de Zaragoza capital, que cae en los tramos 501-700 y 701-1000; los tramos por debajo cubren al resto del mercado y los de arriba, a los centros grandes y grupos de varias sedes."
+    },
+    "instalacion": {
+      "nota": "Pago único, plano por plan y sin tramos por alumnos: el trabajo de instalar depende de cuánta información nos pasa el centro, no de cuántos alumnos tenga.",
+      "Essential": 220,
+      "Centro": 320,
+      "Infinito": 420
+    },
+    "niveles": [
+      {
+        "nombre": "Essential",
+        "papel": "señuelo",
+        "incluye": [
+          "Sus preguntas frecuentes, por botones",
+          "Calendario escolar",
+          "Sin escribir: solo se pulsa",
+          "Sin panel ni IA generativa"
+        ],
+        "nota": "Deliberadamente NO se quiere vender, pero tiene que servir de verdad: un cliente decepcionado envenena el boca a boca, que es el canal de venta. Lleva las preguntas que nos pase el propio centro. Sin panel, cada cambio vuelve a nosotros: hay que acotar por contrato cuántos van incluidos o este plan pierde dinero."
+      },
+      {
+        "nombre": "Centro",
+        "papel": "objetivo",
+        "destacado": true,
+        "incluye": [
+          "Todo lo del Essential",
+          "La familia escribe con sus palabras",
+          "IA generativa con respuestas del centro",
+          "Panel: lo cambian ellos y ven qué se pregunta",
+          "Degradación sin caídas"
+        ],
+        "nota": "El salto no es más contenido, son tres capacidades que Essential no puede tener: escribir, cambiarlo uno mismo y saber qué preguntan las familias."
+      },
+      {
+        "nombre": "Infinito",
+        "papel": "ancla superior",
+        "incluye": [
+          "Todo lo del Centro",
+          "Test de orientación de 4º ESO",
+          "Varias sedes, cada una con su calendario",
+          "Personalización por sede",
+          "Soporte prioritario"
+        ],
+        "descuento_sede_adicional_eur": 80,
+        "nota": "Su público es otro comprador (fundación, congregación, grupo), no el mismo colegio pagando más. Decidido: no hay multi-sede como producto único, cada sede es un despliegue independiente con su propia configuración y calendario. Se vende precio por sede: cada sede paga el precio de su propio tramo de alumnos, y cada sede adicional a la primera tiene 80 € de descuento al mes sobre el precio de su tramo."
+      }
+    ],
+    "pago_anual_curso": {
+      "periodo": "septiembre a agosto, por adelantado",
+      "descuento_porcentaje": 10,
+      "tramo_base": "501-700 alumnos, plan Centro (259 €/mes) — el tramo de entrada del cliente objetivo (concertado de Zaragoza capital). Para otro tramo o plan, la cifra cambia proporcionalmente.",
+      "mensual_referencia": 259,
+      "precio_anual_sin_descuento": 3108,
+      "precio_anual_con_descuento": 2797,
+      "razon": "Los colegios presupuestan por curso escolar, no por año natural."
+    },
+    "efecto_senuelo": "Subir el precio del nivel que no se quiere vender reduce el salto percibido a Centro y lo convierte en la opción del medio, que es donde cae la mayoría de compradores. Ahora que los tramos se publican en la web, el anclaje ya está en marcha: los tres precios de cada tramo se ven juntos, que es justo la condición que antes faltaba y que dejaba el efecto reducido a la demostración, de uno en uno.",
+    "iva": {
+      "porcentaje": 21,
+      "incluido_en_los_precios": true,
+      "nota": "Los precios publicados en la web llevan el IVA dentro, como exige la normativa española para un precio anunciado al público. Un asistente para un colegio es un servicio digital al 21 %, no una enseñanza exenta. Consecuencia que hay que tener presente al leer cualquier cifra de ingresos: de cada 100 € cobrados entran 82,64 € en la empresa, así que la facturación neta es un 17,4 % menor que la cobrada. El panel ya lo descuenta antes de calcular el beneficio.",
+      "ejemplos_netos": {
+        "Essential 0-300": {
+          "cobrado": 99,
+          "neto": 81.82
+        },
+        "Centro 501-700": {
+          "cobrado": 259,
+          "neto": 214.05
+        },
+        "Infinito 701-1000": {
+          "cobrado": 379,
+          "neto": 313.22
+        }
+      }
+    }
+  },
+  "proyeccion": {
+    "fiabilidad": "HIPOTESIS",
+    "aviso": "Son escenarios, NO previsiones. Dependen de cuántos centros se consigan cerrar, que es la variable que la tecnología no controla.",
+    "modelo_de_calculo": "Recalculado tras retirar el precio de lanzamiento y el suelo negociable (los precios ya se publican fijos en la web). Cada escenario asume que TODOS los institutos son plan Centro en el tramo 501-700 alumnos (259 €/mes, instalación 320 €) — el cliente objetivo, concertado de Zaragoza capital. Es una simplificación optimista: una cohorte real mezclará Essential (más barato) y otros tramos de alumnos, así que la cifra real de una cohorte mixta será más baja que esto. La instalación se prorratea a 12 meses y solo cuenta la de los centros NUEVOS respecto al escenario anterior (columna 'nuevos'). Los costes son los fijos del año correspondiente más 2 €/mes por instituto.",
+    "escenarios": [
+      {
+        "etiqueta": "Año 1 · primeros institutos",
+        "institutos": 4,
+        "nuevos": 4,
+        "ingresos_mes": 1143,
+        "costes_mes": 298,
+        "beneficio_mes": 845,
+        "beneficio_anio": 10136
+      },
+      {
+        "etiqueta": "Año 1 · consolidación",
+        "institutos": 8,
+        "nuevos": 4,
+        "ingresos_mes": 2179,
+        "costes_mes": 306,
+        "beneficio_mes": 1873,
+        "beneficio_anio": 22472
+      },
+      {
+        "etiqueta": "Año 2 · crecimiento",
+        "institutos": 15,
+        "nuevos": 7,
+        "ingresos_mes": 4072,
+        "costes_mes": 580,
+        "beneficio_mes": 3492,
+        "beneficio_anio": 41900
+      },
+      {
+        "etiqueta": "Año 2-3 · masa crítica",
+        "institutos": 25,
+        "nuevos": 10,
+        "ingresos_mes": 6742,
+        "costes_mes": 600,
+        "beneficio_mes": 6142,
+        "beneficio_anio": 73700
+      },
+      {
+        "etiqueta": "Año 3 · dos socios a jornada",
+        "institutos": 40,
+        "nuevos": 15,
+        "ingresos_mes": 10760,
+        "costes_mes": 930,
+        "beneficio_mes": 9830,
+        "beneficio_anio": 117960,
+        "_nota": "El salto de coste incluye un segundo autónomo (300 €/mes)."
+      }
+    ]
+  },
+  "rentabilidad": {
+    "fiabilidad": "MEDIDO",
+    "umbral_institutos_anio_1": 2,
+    "umbral_institutos_anio_2": 3,
+    "margen_bruto_porcentaje": 98,
+    "ltv_eur": 9451,
+    "ltv_calculo": "259 € × 36 meses + 320 € de instalación, al 98 % de margen — tramo 501-700 alumnos, plan Centro (el cliente objetivo)",
+    "cac_eur": 500,
+    "cac_calculo": "Unas 15 horas entre demos, visitas y seguimiento",
+    "ltv_cac_ratio": 19,
+    "referencia_sana": "Por encima de 3× ya se considera sano"
+  },
+  "roi_cliente": {
+    "fiabilidad": "HIPOTESIS",
+    "aviso": "El ahorro depende del 80 % de llamadas evitadas, que TODAVÍA NO ESTÁ MEDIDO con ningún cliente real. Es el argumento de venta central y a la vez el dato más débil del plan.",
+    "coste_primer_anio": 3428,
+    "coste_desglose": "259 € × 12 meses + 320 € de instalación — tramo 501-700 alumnos, plan Centro",
+    "ahorro_estimado": 4500,
+    "ahorro_calculo": "1,5 h/día × 200 días lectivos × ~15 €/h de coste laboral",
+    "retorno_neto": 1072,
+    "multiplo": 1.31,
+    "como_venderlo": "No como despedir a nadie. El argumento honesto: en plena campaña de admisión la administrativa deja de repetir cuarenta veces el mismo horario, y las familias tienen respuesta a las diez de la noche y en fin de semana.",
+    "que_falta": "Medir el porcentaje real en el primer piloto y convertirlo en un caso con nombre del centro. El panel de métricas ya registra las consultas. Con el precio nuevo (259 € frente a los 149 € del documento original) el múltiplo baja de 2,5× a 1,3×: el argumento de venta se sostiene mucho más justo y depende todavía más de confirmar el 80 % con datos reales."
+  },
+  "subvenciones": {
+    "fiabilidad": "MERCADO",
+    "kit_digital_ia": {
+      "importe_maximo": 12000,
+      "nota": "El Kit Digital incorporó la categoría de Inteligencia Artificial en 2026."
+    },
+    "ticket_innova": {
+      "importe_maximo": 7000
+    },
+    "aviso_elegibilidad": "Verificar antes de usarlo como argumento: el programa está diseñado para pymes y autónomos, y muchos concertados son fundaciones o congregaciones. Confirmar con la gestoría."
+  },
+  "riesgos": [
+    {
+      "severidad": "alta",
+      "titulo": "Datos de menores: sois encargados del tratamiento",
+      "detalle": "El mayor riesgo legal, por encima de cualquier tema técnico. Hace falta contrato de encargado de tratamiento (art. 28 RGPD) firmado con cada centro antes de empezar, registro de actividades de tratamiento y seguro de responsabilidad civil. Puede ser obligatorio un delegado de protección de datos. La arquitectura ayuda (conversación en memoria, sin cookies, anonimización antes de registrar), pero el papeleo no lo sustituye el código."
+    },
+    {
+      "severidad": "alta",
+      "titulo": "Vender es más difícil que construir",
+      "detalle": "El ciclo de venta en un colegio son de 3 a 6 meses, concentrado en primavera (para el curso siguiente) y septiembre. Si se pierde la ventana de primavera, se espera un año. Los institutos públicos compran por contratación administrativa, mucho más lenta: empezar por concertados y privados, donde decide el director o el titular."
+    },
+    {
+      "severidad": "media",
+      "titulo": "Dependencia de Google",
+      "detalle": "Ya ha pasado dos veces en este proyecto: un modelo retirado y saturación del nivel gratuito. Mitigado con modelos de respaldo y degradación a modo local. La capa de IA está aislada en un único archivo, así que cambiar de proveedor es asumible."
+    },
+    {
+      "severidad": "media",
+      "titulo": "El soporte crece con los clientes",
+      "detalle": "Los servidores escalan solos; el tiempo no. A partir de 25-30 centros el soporte come media jornada. Hace falta documentación de autoservicio y que cada centro edite su propia base de preguntas."
+    },
+    {
+      "severidad": "media",
+      "titulo": "Alexia o Educamos pueden añadir un chatbot",
+      "detalle": "Las plataformas grandes de gestión escolar podrían incorporar algo parecido. La ventaja no es la tecnología, que es replicable: es la base de conocimiento específica de cada centro y la cercanía."
+    }
+  ],
+  "pasos": [
+    {
+      "orden": 1,
+      "que": "Activar facturación en la API de Google",
+      "por_que": "Unos 3 € al mes por centro. Sin esto no hay producto vendible: el nivel gratuito se cae cuando le da la gana."
+    },
+    {
+      "orden": 2,
+      "que": "Contrato de encargado de tratamiento",
+      "por_que": "Antes del primer piloto real, no después. Que lo revise un abogado especializado en protección de datos."
+    },
+    {
+      "orden": 3,
+      "que": "Un piloto gratuito de tres meses en un solo centro",
+      "por_que": "A cambio de dos cosas por escrito: los datos de uso reales y permiso para usarlos como caso de éxito con nombre."
+    },
+    {
+      "orden": 4,
+      "que": "Medir el porcentaje real de consultas resueltas",
+      "por_que": "Para sustituir el 80 % estimado por una cifra defendible. El panel ya lo registra; solo hay que dejarlo correr un trimestre."
+    },
+    {
+      "orden": 5,
+      "que": "Cerrar los primeros centros al precio de tarifa publicado",
+      "por_que": "Los precios ya están fijados por tramo de alumnos en la web y no se negocian caso a caso: ya no hay precio de lanzamiento que blindar con permanencia, así que la prioridad es cerrar, no descontar."
+    },
+    {
+      "orden": 6,
+      "que": "Alta como autónomo con tarifa plana",
+      "por_que": "80 €/mes el primer año. La SL tiene sentido más adelante, cuando el volumen o el riesgo con datos de menores justifiquen limitar la responsabilidad."
+    }
+  ],
+  "estado_comercial": {
+    "fiabilidad": "MEDIDO",
+    "institutos_firmados": 0,
+    "nota": "Fase de preparación comercial. Todavía no hay ningún centro facturando."
+  },
+  "clientes": [],
+  "_estructura": {
+    "nota": "El array 'clientes' de arriba va vacío a propósito: hoy no hay ningún centro firmado. Se añade a mano, cliente a cliente, según avanza por el embudo — este archivo no se genera solo. El panel de negocio tiene un interruptor 've con datos de ejemplo' que rellena el tablero con centros ficticios SOLO en memoria, para poder ver cómo se vería; esos ejemplos nunca se escriben aquí. Forma de cada objeto del array:",
+    "campos": {
+      "id": "identificador corto y estable, en minúsculas y sin espacios (se usa para enlazar con preguntas_recogidas[].centro_id)",
+      "nombre": "nombre del centro",
+      "plan": "'Essential' | 'Centro' | 'Infinito'",
+      "alumnos": "número de alumnos de la sede principal; junto con el plan determina el tramo de precios.tramos",
+      "sedes": "número de sedes con despliegue propio (solo Infinito puede tener más de una)",
+      "precio_mensual_eur": "cuota mensual acordada; se calcula una vez desde precios.tramos según plan y alumnos en el momento de firmar, y se guarda aquí — no se recalcula solo si los precios de tarifa cambian después",
+      "instalacion_cobrada_eur": "pago único de alta ya cobrado, según precios.instalacion del plan contratado",
+      "fecha_alta": "AAAA-MM-DD en que empezó a facturar, o null si todavía no ha firmado",
+      "fecha_renovacion": "AAAA-MM-DD de fin de curso contratado; los colegios presupuestan de septiembre a agosto",
+      "renovacion_confirmada": "true/false — si sigue en false pasado mayo, ese curso se puede perder",
+      "estado_embudo": "'contactado' | 'demo_hecha' | 'propuesta_enviada' | 'firmado' | 'en_marcha'",
+      "siguiente_accion": "qué hay que hacer a continuación con este centro",
+      "siguiente_accion_fecha": "AAAA-MM-DD en que toca hacerlo",
+      "actualizaciones_usadas": "solo tiene sentido en Essential: 0, 1 o 2 actualizaciones de contenido gratis al año; la 3ª y siguientes son 45 € cada una",
+      "horas_soporte_mes": "horas de soporte dedicadas este mes; el techo asumido es 1,5 h/mes por centro",
+      "notas": "texto libre"
+    }
+  },
+  "preguntas_recogidas": [],
+  "_preguntas_recogidas_nota": "Va vacío porque todavía no se ha exportado ninguna. Se rellena a mano desde el servidor recolector: GET /api/admin/preguntas-sugeridas?centro=<id> (solo los centros del plan Essential llevan el botón de 'escribe lo que no encuentras' que las genera). No se actualiza sola — cada vez que se quiera ver la cola al día hay que volver a pedirla y pegarla aquí. Cada entrada: { \"centro_id\": id del cliente en 'clientes', \"texto\": la pregunta tal cual la escribió la familia, \"fecha\": AAAA-MM-DD }."
+}

@@ -1,0 +1,1215 @@
+<!-- SCHOLAIA · Panel de negocio: qué hay hoy y qué toca hacer esta semana. -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Panel de negocio · SCHOLAIA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F3F1EA">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ================================================================
+   TOKENS — el mismo sistema visual de 3-web/index-libros.html
+   (papel y tinta, azul de bolígrafo como único acento) adaptado a
+   una pantalla de trabajo: sin cursor de lápiz, sin aperturas
+   animadas. Paleta clara en :root; el bloque oscuro SOLO redefine
+   variables, nunca introduce un color que no exista ya arriba.
+   ================================================================ */
+:root {
+  color-scheme: light;
+
+  --papel:  #F3F1EA;
+  --banda:  #EAE7DE;
+  --hoja:   #FFFFFF;
+  --tinta:  #15171B;
+  --grafito:#484A4F;
+  --filete: #DCD8CD;
+  --filete-banda: #D3CFC2;
+  --linea-suave:  #A5A093;
+
+  --boli:        #1B4B8F;
+  --boli-suave:  rgba(27, 75, 143, .10);
+
+  /* Estado — información, no decoración: conviven con el papel en vez
+     de gritar sobre él. */
+  --bien:        #2E6B3E;
+  --bien-suave:  rgba(46, 107, 62, .12);
+  --atencion:       #8A5A12;
+  --atencion-suave: rgba(138, 90, 18, .13);
+  --critico:        #8C2F22;
+  --critico-suave:  rgba(140, 47, 34, .12);
+
+  --display: 'Schibsted Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --cuerpo:  'Literata', Georgia, 'Times New Roman', serif;
+  --r: 4px;
+  --e-out: cubic-bezier(.23,1,.32,1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --papel:  #1B1C1F;
+    --banda:  #232427;
+    --hoja:   #2A2B2F;
+    --tinta:  #F3F1EA;
+    --grafito:#B7B3A8;
+    --filete: #38393D;
+    --filete-banda: #404146;
+    --linea-suave:  #6E6A5F;
+
+    --boli:        #7CA6E6;
+    --boli-suave:  rgba(124, 166, 230, .16);
+
+    --bien:        #6FBE83;
+    --bien-suave:  rgba(111, 190, 131, .15);
+    --atencion:       #E0AA55;
+    --atencion-suave: rgba(224, 170, 85, .15);
+    --critico:        #E38676;
+    --critico-suave:  rgba(227, 134, 118, .15);
+  }
+}
+
+/* ================================================================
+   BASE
+   ================================================================ */
+* { box-sizing: border-box; margin: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--papel);
+  color: var(--tinta);
+  font: 400 15px/1.55 var(--display);
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+img { max-width: 100%; display: block; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { background: none; border: 0; padding: 0; cursor: pointer; }
+[hidden] { display: none !important; }
+
+::selection { background: var(--boli); color: var(--papel); }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--boli); outline-offset: 2px; border-radius: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+
+h1, h2, h3, h4 { font-family: var(--display); letter-spacing: -.015em; line-height: 1.18; text-wrap: balance; }
+h1 { font-size: clamp(23px, 2.6vw, 29px); font-weight: 800; letter-spacing: -.025em; }
+h2 { font-size: 17px; font-weight: 700; }
+h3 { font-size: 14.5px; font-weight: 700; }
+p  { text-wrap: pretty; }
+a  { color: var(--boli); }
+.gris { color: var(--grafito); }
+.num { font-variant-numeric: tabular-nums; }
+.cita { font-family: var(--cuerpo); font-style: italic; }
+
+.scroll-x { overflow-x: auto; }
+
+/* ================================================================
+   SHELL
+   ================================================================ */
+.marco { max-width: 1180px; margin-inline: auto; padding: 0 clamp(16px, 3vw, 32px) 80px; }
+
+.cabecera-app {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--papel);
+  border-bottom: 1.5px solid var(--filete);
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding: 16px 0;
+  margin-bottom: 4px;
+}
+.marca-app { display: flex; align-items: baseline; gap: 10px; }
+.marca-app .nombre { font-weight: 800; font-size: 17px; letter-spacing: -.01em; }
+.marca-app .sub { font-size: 13px; color: var(--grafito); }
+
+.switch-ejemplo { display: flex; align-items: center; gap: 9px; font-size: 13.5px; color: var(--grafito); font-weight: 500; }
+.switch-ejemplo input { width: 34px; height: 20px; appearance: none; background: var(--filete-banda); border-radius: 999px; position: relative; cursor: pointer; transition: background-color .15s ease; flex: none; }
+.switch-ejemplo input::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--hoja); transition: transform .15s var(--e-out); box-shadow: 0 1px 2px rgba(0,0,0,.2); }
+.switch-ejemplo input:checked { background: var(--atencion); }
+.switch-ejemplo input:checked::after { transform: translateX(14px); }
+
+.banner-ejemplo {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--atencion-suave); border: 1.5px solid var(--atencion);
+  color: var(--tinta); border-radius: var(--r);
+  padding: 11px 16px; font-size: 13.5px; font-weight: 500; margin-bottom: 22px;
+}
+.banner-ejemplo b { color: var(--atencion); }
+.marca-ejemplo {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10.5px; font-weight: 700; color: var(--atencion);
+  background: var(--atencion-suave); border: 1px solid var(--atencion);
+  border-radius: var(--r); padding: 2px 7px; white-space: nowrap;
+}
+
+section.bloque { margin: 40px 0; }
+section.bloque:first-of-type { margin-top: 12px; }
+.bloque-cab { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+.bloque-cab .sub { font-size: 13px; color: var(--grafito); margin-top: 3px; max-width: 62ch; }
+
+.tarjeta {
+  background: var(--hoja); border: 1.5px solid var(--filete); border-radius: var(--r);
+  padding: 20px 22px;
+}
+
+/* ---- badges de fiabilidad ---- */
+.badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; padding: 3px 9px 3px 7px; border-radius: 999px; border: 1px solid transparent; white-space: nowrap; }
+.badge .p { width: 6px; height: 6px; border-radius: 50%; flex: none; }
+.badge.medido    { color: var(--bien);    background: var(--bien-suave);    border-color: var(--bien); }
+.badge.medido .p    { background: var(--bien); }
+.badge.mercado   { color: var(--atencion); background: var(--atencion-suave); border-color: var(--atencion); }
+.badge.mercado .p   { background: var(--atencion); }
+.badge.hipotesis { color: var(--critico); background: var(--critico-suave); border-color: var(--critico); }
+.badge.hipotesis .p { background: var(--critico); }
+
+/* ---- badges de plan ---- */
+.plan-badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: var(--r); white-space: nowrap; }
+.plan-badge.Essential { color: var(--grafito); background: var(--banda); border: 1px solid var(--filete-banda); }
+.plan-badge.Centro    { color: #fff; background: var(--boli); }
+.plan-badge.Infinito  { color: var(--tinta); background: transparent; border: 1.5px solid var(--tinta); }
+
+/* ---- badges de estado del embudo ---- */
+.estado-badge { display: inline-block; font-size: 11.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+.estado-badge.contactado, .estado-badge.demo_hecha { color: var(--grafito); background: var(--banda); }
+.estado-badge.propuesta_enviada { color: var(--atencion); background: var(--atencion-suave); }
+.estado-badge.firmado { color: var(--bien); background: var(--bien-suave); }
+.estado-badge.en_marcha { color: var(--boli); background: var(--boli-suave); }
+
+/* ---- KPIs ---- */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+@media (max-width: 900px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .kpi-grid { grid-template-columns: 1fr; } }
+.kpi { background: var(--hoja); border: 1.5px solid var(--filete); border-radius: var(--r); padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+.kpi .etq { font-size: 12px; font-weight: 600; color: var(--grafito); }
+.kpi .val { font-family: var(--display); font-size: 25px; font-weight: 800; letter-spacing: -.015em; }
+.kpi .val.bien { color: var(--bien); }
+.kpi .val.critico { color: var(--critico); }
+.kpi .pie { font-size: 12px; color: var(--grafito); }
+
+.banner {
+  display: flex; gap: 11px; align-items: flex-start;
+  padding: 13px 15px; border-radius: var(--r); border: 1.5px solid;
+  font-size: 13px; line-height: 1.55; margin-bottom: 14px;
+}
+.banner.hipotesis { background: var(--critico-suave); border-color: var(--critico); }
+.banner.hipotesis strong { color: var(--critico); }
+.banner.atencion { background: var(--atencion-suave); border-color: var(--atencion); }
+.banner.atencion strong { color: var(--atencion); }
+.banner-ic { font-size: 15px; line-height: 1; flex: none; }
+
+/* ---- tablas ---- */
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.tabla-ancha { min-width: 760px; }
+thead th { text-align: left; font-size: 11.5px; font-weight: 700; color: var(--grafito); padding: 8px 10px; border-bottom: 1.5px solid var(--filete-banda); white-space: nowrap; }
+tbody td { padding: 10px 10px; border-bottom: 1px solid var(--filete); color: var(--tinta); vertical-align: top; }
+tbody tr:last-child td { border-bottom: none; }
+td.num-cell { font-family: var(--display); text-align: right; white-space: nowrap; }
+td.gris { color: var(--grafito); }
+.fila-vacia td { padding: 26px 10px; text-align: center; color: var(--grafito); }
+
+.chip-mini { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 1px 6px; border-radius: 999px; }
+.chip-mini.bien { color: var(--bien); background: var(--bien-suave); }
+.chip-mini.atencion { color: var(--atencion); background: var(--atencion-suave); }
+.chip-mini.critico { color: var(--critico); background: var(--critico-suave); }
+
+details.preguntas { margin-top: 2px; }
+details.preguntas summary { cursor: pointer; color: var(--boli); font-size: 12.5px; font-weight: 600; list-style: none; }
+details.preguntas summary::-webkit-details-marker { display: none; }
+details.preguntas summary::before { content: '▸ '; }
+details.preguntas[open] summary::before { content: '▾ '; }
+.pregunta-item { font-family: var(--cuerpo); font-style: italic; font-size: 13.5px; line-height: 1.5; padding: 8px 0 8px 14px; border-left: 2px solid var(--filete-banda); margin-top: 8px; }
+.pregunta-item .fecha { display: block; font-family: var(--display); font-style: normal; font-size: 11px; color: var(--grafito); margin-top: 3px; }
+
+/* ---- estado vacío ---- */
+.vacio { text-align: center; padding: 40px 20px; color: var(--grafito); }
+.vacio .grande { font-size: 15px; color: var(--tinta); font-weight: 600; margin-bottom: 6px; }
+.vacio p { font-size: 13.5px; max-width: 46ch; margin-inline: auto; }
+
+/* ---- embudo (kanban) ---- */
+.embudo-grid { display: grid; grid-template-columns: repeat(5, minmax(190px, 1fr)); gap: 12px; }
+.embudo-col { background: var(--banda); border: 1.5px solid var(--filete-banda); border-radius: var(--r); padding: 12px; display: flex; flex-direction: column; gap: 9px; min-height: 90px; }
+.embudo-col-head { display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; font-weight: 700; padding-bottom: 6px; border-bottom: 1.5px solid var(--filete-banda); }
+.embudo-col-head .n { font-family: var(--display); color: var(--grafito); }
+.embudo-card { background: var(--hoja); border: 1.5px solid var(--filete); border-radius: var(--r); padding: 10px 11px; display: flex; flex-direction: column; gap: 6px; }
+.embudo-card .nombre { font-size: 13px; font-weight: 700; line-height: 1.3; }
+.embudo-card .accion { font-size: 12px; color: var(--grafito); line-height: 1.4; }
+.embudo-card .fecha-accion { font-size: 11.5px; font-weight: 700; }
+.embudo-card .fecha-accion.critico { color: var(--critico); }
+.embudo-card .fecha-accion.atencion { color: var(--atencion); }
+.embudo-vacio-col { font-size: 12px; color: var(--grafito); padding: 6px 2px; }
+
+/* ---- riesgos ---- */
+.riesgo { border: 1.5px solid var(--filete); border-left-width: 4px; border-radius: var(--r); padding: 14px 16px; background: var(--hoja); margin-bottom: 10px; }
+.riesgo.alta { border-left-color: var(--critico); }
+.riesgo.media { border-left-color: var(--atencion); }
+.riesgo-cab { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+.sev { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+.sev.alta { color: var(--critico); background: var(--critico-suave); }
+.sev.media { color: var(--atencion); background: var(--atencion-suave); }
+.riesgo p { font-size: 13px; color: var(--grafito); line-height: 1.55; margin: 0; }
+
+.pasos-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+.pasos-list li { display: flex; gap: 10px; font-size: 13px; color: var(--grafito); align-items: baseline; }
+.pasos-list .n { font-family: var(--display); font-weight: 700; color: var(--boli); flex: none; width: 20px; }
+
+.grid-2 { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+@media (max-width: 980px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* ---- calculadora plegada ---- */
+details.calculadora { border: 1.5px solid var(--filete); border-radius: var(--r); background: var(--hoja); }
+details.calculadora > summary { cursor: pointer; list-style: none; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+details.calculadora > summary::-webkit-details-marker { display: none; }
+details.calculadora > summary h2 { margin: 0; }
+details.calculadora > summary::after { content: '▾'; color: var(--grafito); transition: transform .15s ease; flex: none; }
+details.calculadora[open] > summary::after { transform: rotate(180deg); }
+.calc-cuerpo { padding: 4px 20px 24px; border-top: 1.5px solid var(--filete); }
+
+.calc-controles { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin: 16px 0 22px; }
+.campo { display: flex; flex-direction: column; gap: 6px; }
+.campo-cab { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; }
+.campo-cab .etq { color: var(--grafito); font-weight: 600; }
+.campo-cab .val { font-weight: 700; color: var(--boli); }
+.campo-hint { font-size: 10.5px; color: var(--grafito); line-height: 1.4; }
+input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 2px; background: var(--filete-banda); }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 15px; height: 15px; border-radius: 50%; background: var(--boli); border: 2px solid var(--hoja); box-shadow: 0 0 0 1px var(--boli); cursor: pointer; margin-top: -5.5px; }
+input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; border-radius: 50%; background: var(--boli); border: 2px solid var(--hoja); box-shadow: 0 0 0 1px var(--boli); cursor: pointer; }
+select, input[type="number"] { width: 100%; padding: 7px 9px; border-radius: var(--r); border: 1.5px solid var(--filete-banda); background: var(--hoja); color: var(--tinta); font-size: 12.5px; }
+.partida-row { display: grid; grid-template-columns: 1fr 68px; gap: 8px; align-items: center; }
+.partida-row label { font-size: 11.5px; color: var(--grafito); }
+.segmented { display: inline-flex; border: 1.5px solid var(--filete-banda); border-radius: var(--r); overflow: hidden; }
+.segmented button { font-size: 12px; font-weight: 700; padding: 6px 11px; background: var(--hoja); color: var(--grafito); }
+.segmented button.active { background: var(--boli); color: #fff; }
+.segmented button + button { border-left: 1.5px solid var(--filete-banda); }
+
+.chart-wrap svg { display: block; width: 100%; height: auto; overflow: visible; }
+.legend-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; font-size: 12px; color: var(--grafito); }
+.legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.legend-line { width: 14px; height: 2px; border-radius: 2px; flex: none; }
+.tooltip-box {
+  position: absolute; pointer-events: none; z-index: 20;
+  background: var(--tinta); color: var(--papel); border-radius: 6px;
+  padding: 8px 11px; font-size: 11.5px; line-height: 1.5; opacity: 0; transition: opacity .1s ease; min-width: 150px;
+}
+.tooltip-box.show { opacity: 1; }
+.tooltip-row { display: flex; justify-content: space-between; gap: 10px; }
+.tooltip-row .k { opacity: .65; }
+.tooltip-row .v { font-variant-numeric: tabular-nums; }
+
+.mini-table { width: 100%; font-size: 12px; border-collapse: collapse; }
+.mini-table th { text-align: left; color: var(--grafito); font-weight: 700; padding: 5px 6px; border-bottom: 1.5px solid var(--filete-banda); font-size: 10.5px; }
+.mini-table td { padding: 6px 6px; border-bottom: 1px solid var(--filete); }
+.mini-table td.num-cell { font-family: var(--display); text-align: right; }
+.mini-table tr.destacada td { background: var(--boli-suave); font-weight: 700; }
+.reset-link { color: var(--boli); font-size: 11.5px; font-weight: 700; }
+.reset-link:hover { text-decoration: underline; }
+
+.pie-app { font-size: 11.5px; color: var(--grafito); margin-top: 44px; padding-top: 16px; border-top: 1.5px solid var(--filete); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="marco">
+  <header class="cabecera-app">
+    <div class="marca-app">
+      <span class="nombre">SCHOLAIA</span>
+      <span class="sub">panel de negocio</span>
+    </div>
+    <label class="switch-ejemplo">
+      <input type="checkbox" id="chk-ejemplo">
+      <span>ver con datos de ejemplo</span>
+    </label>
+  </header>
+
+  <div class="banner-ejemplo" id="banner-ejemplo" hidden>
+    <span><b>Datos de ejemplo.</b> Estos centros son ficticios, solo para ver el tablero en funcionamiento. Ningún centro real está firmado todavía — apaga el interruptor para volver al estado real.</span>
+  </div>
+
+  <main id="contenido"><!-- inyectado por JS --></main>
+
+  <p class="pie-app" id="pie-app"></p>
+</div>
+
+<div class="tooltip-box" id="tooltip"></div>
+
+<script>
+'use strict';
+
+/* ================================================================
+   DATOS — copia embebida de datos-negocio.json como respaldo. Si el
+   archivo se sirve por HTTP se refresca por fetch; en file:// se usa
+   este respaldo, que tiene que ser idéntico al JSON fuente.
+   ================================================================ */
+const DATA_EMBEBIDA = {
+  "consumo_api": {
+    "fiabilidad": "MEDIDO",
+    "tokens_entrada_por_consulta": 1524,
+    "tokens_salida_por_consulta": 328,
+    "conversaciones_mes_por_centro": 2000,
+    "porcentaje_que_llega_a_ia": 40,
+    "llamadas_ia_mes": 800,
+    "comentario_arquitectura": "El 60% restante lo resuelven los botones y el buscador local, sin coste. Esa arquitectura es lo que hace irrelevante el coste de API.",
+    "modelos": [
+      { "nombre": "Gemini 2.5 Flash-Lite", "coste_mes_eur": 0.21 },
+      { "nombre": "Gemini 3.5 Flash-Lite", "coste_mes_eur": 0.47 },
+      { "nombre": "Gemini 3.7 Flash", "coste_mes_eur": 0.88 },
+      { "nombre": "Gemini 3.6 Flash", "coste_mes_eur": 1.75, "nota": "El caro. Se usa solo en el test de orientación." }
+    ],
+    "tests_orientacion_mes": 60,
+    "coste_tests_orientacion_eur": 0.21,
+    "presupuesto_con_margen_eur": 3.0,
+    "aviso": "El nivel gratuito de Google devuelve 503 'high demand' sin prioridad de servicio. No se puede sostener un producto comercial encima. Hay que activar facturación antes del primer piloto."
+  },
+  "gastos_fijos_mes": {
+    "fiabilidad": "MERCADO",
+    "partidas": [
+      { "concepto": "Cuota de autónomo", "anio_1": 80, "anio_2": 300 },
+      { "concepto": "Gestoría", "anio_1": 60, "anio_2": 85 },
+      { "concepto": "Claude Code (desarrollo)", "anio_1": 100, "anio_2": 100 },
+      { "concepto": "Servidor + dominio", "anio_1": 10, "anio_2": 25 },
+      { "concepto": "Seguro de RC profesional", "anio_1": 20, "anio_2": 20 },
+      { "concepto": "Varios (correo, herramientas)", "anio_1": 20, "anio_2": 20 }
+    ],
+    "total_anio_1": 290,
+    "total_anio_2": 550,
+    "coste_variable_api_por_instituto": 2,
+    "segundo_autonomo_anio_3": 300,
+    "coste_oculto": "Hora y media de soporte al mes por instituto. Con 25 clientes son 38 horas mensuales, casi media jornada. Es el techo real del negocio, no el servidor."
+  },
+  "precios": {
+    "fiabilidad": "MERCADO",
+    "tramos": [
+      { "id": "0-300",    "alumnos_desde": 0,    "alumnos_hasta": 300,  "mensual": { "Essential": 99,  "Centro": 179, "Infinito": 259 } },
+      { "id": "301-500",  "alumnos_desde": 301,  "alumnos_hasta": 500,  "mensual": { "Essential": 139, "Centro": 219, "Infinito": 299 } },
+      { "id": "501-700",  "alumnos_desde": 501,  "alumnos_hasta": 700,  "mensual": { "Essential": 179, "Centro": 259, "Infinito": 339 } },
+      { "id": "701-1000", "alumnos_desde": 701,  "alumnos_hasta": 1000, "mensual": { "Essential": 219, "Centro": 299, "Infinito": 379 } },
+      { "id": "1001-1200","alumnos_desde": 1001, "alumnos_hasta": 1200, "mensual": { "Essential": 259, "Centro": 339, "Infinito": 419 } },
+      { "id": "1201+",    "alumnos_desde": 1201, "alumnos_hasta": null, "mensual": { "Essential": 299, "Centro": 379, "Infinito": 459 } }
+    ],
+    "instalacion": { "Essential": 220, "Centro": 320, "Infinito": 420 },
+    "pago_anual_curso": { "descuento_porcentaje": 10, "mensual_referencia": 259, "precio_anual_sin_descuento": 3108, "precio_anual_con_descuento": 2797 }
+  },
+  "proyeccion": {
+    "fiabilidad": "HIPOTESIS",
+    "modelo_de_calculo": "Cada escenario asume que TODOS los institutos son plan Centro en el tramo 501-700 alumnos (259 €/mes, instalación 320 €) — el cliente objetivo. Es optimista: una cohorte real mezclará Essential y otros tramos, así que la cifra real será más baja. La instalación se prorratea a 12 meses y solo cuenta la de los centros nuevos respecto al escenario anterior.",
+    "escenarios": [
+      { "etiqueta": "Año 1 · primeros institutos", "institutos": 4, "nuevos": 4, "ingresos_mes": 1143, "costes_mes": 298, "beneficio_mes": 845, "beneficio_anio": 10136 },
+      { "etiqueta": "Año 1 · consolidación", "institutos": 8, "nuevos": 4, "ingresos_mes": 2179, "costes_mes": 306, "beneficio_mes": 1873, "beneficio_anio": 22472 },
+      { "etiqueta": "Año 2 · crecimiento", "institutos": 15, "nuevos": 7, "ingresos_mes": 4072, "costes_mes": 580, "beneficio_mes": 3492, "beneficio_anio": 41900 },
+      { "etiqueta": "Año 2-3 · masa crítica", "institutos": 25, "nuevos": 10, "ingresos_mes": 6742, "costes_mes": 600, "beneficio_mes": 6142, "beneficio_anio": 73700 },
+      { "etiqueta": "Año 3 · dos socios a jornada", "institutos": 40, "nuevos": 15, "ingresos_mes": 10760, "costes_mes": 930, "beneficio_mes": 9830, "beneficio_anio": 117960, "nota": "El salto de coste incluye un segundo autónomo (300 €/mes)." }
+    ]
+  },
+  "rentabilidad": {
+    "fiabilidad": "MEDIDO",
+    "umbral_institutos_anio_1": 2,
+    "umbral_institutos_anio_2": 3,
+    "margen_bruto_porcentaje": 98,
+    "ltv_eur": 9451,
+    "ltv_calculo": "259 € × 36 meses + 320 € de instalación, al 98 % de margen — tramo 501-700, plan Centro",
+    "cac_eur": 500,
+    "ltv_cac_ratio": 19
+  },
+  "roi_cliente": {
+    "fiabilidad": "HIPOTESIS",
+    "aviso": "El ahorro depende del 80 % de llamadas evitadas, que TODAVÍA NO ESTÁ MEDIDO con ningún cliente real.",
+    "coste_primer_anio": 3428,
+    "coste_desglose": "259 € × 12 meses + 320 € de instalación — tramo 501-700, plan Centro",
+    "ahorro_estimado": 4500,
+    "ahorro_calculo": "1,5 h/día × 200 días lectivos × ~15 €/h de coste laboral",
+    "retorno_neto": 1072,
+    "multiplo": 1.31,
+    "como_venderlo": "No como despedir a nadie. El argumento honesto: en plena campaña de admisión la administrativa deja de repetir cuarenta veces el mismo horario, y las familias tienen respuesta a las diez de la noche y en fin de semana."
+  },
+  "subvenciones": {
+    "fiabilidad": "MERCADO",
+    "kit_digital_ia": { "importe_maximo": 12000 },
+    "ticket_innova": { "importe_maximo": 7000 },
+    "aviso_elegibilidad": "Verificar antes de usarlo como argumento: el programa está diseñado para pymes y autónomos, y muchos concertados son fundaciones o congregaciones."
+  },
+  "riesgos": [
+    { "severidad": "alta", "titulo": "Datos de menores: sois encargados del tratamiento", "detalle": "El mayor riesgo legal, por encima de cualquier tema técnico. Hace falta contrato de encargado de tratamiento (art. 28 RGPD) firmado con cada centro antes de empezar, registro de actividades de tratamiento y seguro de responsabilidad civil." },
+    { "severidad": "alta", "titulo": "Vender es más difícil que construir", "detalle": "El ciclo de venta en un colegio son de 3 a 6 meses, concentrado en primavera y septiembre. Si se pierde la ventana de primavera, se espera un año." },
+    { "severidad": "media", "titulo": "Dependencia de Google", "detalle": "Ya ha pasado dos veces: un modelo retirado y saturación del nivel gratuito. Mitigado con modelos de respaldo y degradación a modo local." },
+    { "severidad": "media", "titulo": "El soporte crece con los clientes", "detalle": "A partir de 25-30 centros el soporte come media jornada. Hace falta documentación de autoservicio." },
+    { "severidad": "media", "titulo": "Alexia o Educamos pueden añadir un chatbot", "detalle": "La ventaja no es la tecnología, que es replicable: es la base de conocimiento específica de cada centro y la cercanía." }
+  ],
+  "pasos": [
+    { "orden": 1, "que": "Activar facturación en la API de Google", "por_que": "Unos 3 € al mes por centro. Sin esto no hay producto vendible." },
+    { "orden": 2, "que": "Contrato de encargado de tratamiento", "por_que": "Antes del primer piloto real, no después." },
+    { "orden": 3, "que": "Un piloto gratuito de tres meses en un solo centro", "por_que": "A cambio de los datos de uso reales y permiso para usarlos como caso de éxito." },
+    { "orden": 4, "que": "Medir el porcentaje real de consultas resueltas", "por_que": "Para sustituir el 80 % estimado por una cifra defendible." },
+    { "orden": 5, "que": "Cerrar los primeros centros", "por_que": "Los precios ya están fijados y publicados: no hay tarifa de lanzamiento que negociar." },
+    { "orden": 6, "que": "Alta como autónomo con tarifa plana", "por_que": "80 €/mes el primer año." }
+  ],
+  "estado_comercial": { "fiabilidad": "MEDIDO", "institutos_firmados": 0, "nota": "Fase de preparación comercial. Todavía no hay ningún centro facturando." },
+  "clientes": [],
+  "preguntas_recogidas": []
+};
+
+let DATA = DATA_EMBEBIDA;
+fetch('./datos-negocio.json').then(r => r.ok ? r.json() : null).then(json => {
+  if (json && json.precios && json.gastos_fijos_mes) { DATA = json; renderAll(); }
+}).catch(() => { /* respaldo embebido, esperado en file:// */ });
+
+/* ================================================================
+   DATOS DE EJEMPLO — solo en memoria. Nunca se leen del JSON ni se
+   escriben en él: el interruptor los añade y los quita sin tocar la
+   fuente de datos real. Así no se pueden mezclar con clientes reales.
+   ================================================================ */
+const CLIENTES_EJEMPLO = [
+  {
+    id: "ejemplo-ies-centro", nombre: "IES Ejemplo (Zaragoza)", plan: "Centro",
+    alumnos: 620, sedes: 1, precio_mensual_eur: 259, instalacion_cobrada_eur: 320,
+    fecha_alta: "2026-09-01", fecha_renovacion: "2027-08-31", renovacion_confirmada: false,
+    estado_embudo: "en_marcha",
+    siguiente_accion: "Llamada trimestral de seguimiento", siguiente_accion_fecha: "2026-12-01",
+    actualizaciones_usadas: 0, horas_soporte_mes: 1.2,
+    notas: "Primer piloto. Referencia para el resto de concertados de la zona."
+  },
+  {
+    id: "ejemplo-colegio-essential", nombre: "Colegio Ejemplo (Essential)", plan: "Essential",
+    alumnos: 280, sedes: 1, precio_mensual_eur: 99, instalacion_cobrada_eur: 220,
+    fecha_alta: "2026-06-01", fecha_renovacion: "2027-08-31", renovacion_confirmada: false,
+    estado_embudo: "en_marcha",
+    siguiente_accion: "Llamar para subir a Centro: hay preguntas recogidas", siguiente_accion_fecha: "2026-09-10",
+    actualizaciones_usadas: 1, horas_soporte_mes: 0.3,
+    notas: "Candidato claro a upsell — familias ya están escribiendo lo que el botón no resuelve."
+  },
+  {
+    id: "ejemplo-grupo-infinito", nombre: "Grupo Escolar Ejemplo (2 sedes)", plan: "Infinito",
+    alumnos: 950, sedes: 2, precio_mensual_eur: 379, instalacion_cobrada_eur: 420,
+    fecha_alta: null, fecha_renovacion: null, renovacion_confirmada: false,
+    estado_embudo: "propuesta_enviada",
+    siguiente_accion: "Enviar el contrato con el descuento de segunda sede", siguiente_accion_fecha: "2026-09-05",
+    actualizaciones_usadas: 0, horas_soporte_mes: 0,
+    notas: "Decide la fundación, no el director de una sola sede."
+  },
+  {
+    id: "ejemplo-instituto-demo", nombre: "Instituto Demo Sur", plan: "Centro",
+    alumnos: null, sedes: 1, precio_mensual_eur: null, instalacion_cobrada_eur: null,
+    fecha_alta: null, fecha_renovacion: null, renovacion_confirmada: false,
+    estado_embudo: "contactado",
+    siguiente_accion: "Primera llamada de toma de contacto", siguiente_accion_fecha: "2026-09-15",
+    actualizaciones_usadas: 0, horas_soporte_mes: 0,
+    notas: "Vino por recomendación del IES Ejemplo."
+  },
+  {
+    id: "ejemplo-colegio-demo", nombre: "Colegio Ejemplo Norte", plan: "Centro",
+    alumnos: 410, sedes: 1, precio_mensual_eur: null, instalacion_cobrada_eur: null,
+    fecha_alta: null, fecha_renovacion: null, renovacion_confirmada: false,
+    estado_embudo: "demo_hecha",
+    siguiente_accion: "Enviar propuesta con el tramo 301-500", siguiente_accion_fecha: "2026-08-20",
+    actualizaciones_usadas: 0, horas_soporte_mes: 0,
+    notas: "La demostración fue bien; falta que dirección lo confirme con titularidad."
+  }
+];
+
+const PREGUNTAS_EJEMPLO = [
+  { centro_id: "ejemplo-colegio-essential", texto: "¿Hay beca de comedor para familias numerosas y cómo se pide?", fecha: "2026-08-14" },
+  { centro_id: "ejemplo-colegio-essential", texto: "Mi hijo empieza en el edificio de infantil, ¿en qué calle está exactamente?", fecha: "2026-08-19" },
+  { centro_id: "ejemplo-colegio-essential", texto: "¿El uniforme de educación física es obligatorio desde el primer día?", fecha: "2026-08-22" }
+];
+
+/* ================================================================
+   FORMATO — español: coma decimal, punto de millar, € detrás.
+   ================================================================ */
+function formatEUR(n, dec) {
+  if (n === null || n === undefined) return '—';
+  dec = dec === undefined ? 0 : dec;
+  const neg = n < 0; n = Math.abs(n);
+  let [int, frac] = n.toFixed(dec).split('.');
+  int = int.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return (neg ? '−' : '') + int + (frac !== undefined ? ',' + frac : '') + ' €';
+}
+function formatNum(n, dec) {
+  if (n === null || n === undefined) return '—';
+  dec = dec === undefined ? 0 : dec;
+  const neg = n < 0; n = Math.abs(n);
+  let [int, frac] = n.toFixed(dec).split('.');
+  int = int.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return (neg ? '−' : '') + int + (frac !== undefined ? ',' + frac : '');
+}
+function formatFecha(iso) {
+  if (!iso) return '—';
+  const [y, m, d] = iso.split('-');
+  const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return d + ' ' + meses[parseInt(m, 10) - 1] + ' ' + y;
+}
+function diasHasta(iso) {
+  if (!iso) return null;
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const obj = new Date(iso + 'T00:00:00');
+  return Math.round((obj - hoy) / 86400000);
+}
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+function esc(s) { return (s === null || s === undefined) ? '' : String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* ================================================================
+   PRECIOS — a partir de precios.tramos y precios.instalacion.
+   ================================================================ */
+function precioTramo(plan, alumnos) {
+  if (alumnos === null || alumnos === undefined) return null;
+  const t = DATA.precios.tramos.find(t => alumnos >= t.alumnos_desde && (t.alumnos_hasta === null || alumnos <= t.alumnos_hasta));
+  return t ? t.mensual[plan] : null;
+}
+function instalacionPlan(plan) { return DATA.precios.instalacion[plan] ?? null; }
+
+/* ================================================================
+   ESTADO
+   ================================================================ */
+let exampleMode = false;
+
+function clientesActuales() { return exampleMode ? CLIENTES_EJEMPLO : (DATA.clientes || []); }
+function preguntasActuales() { return exampleMode ? PREGUNTAS_EJEMPLO : (DATA.preguntas_recogidas || []); }
+function clientesFacturando() { return clientesActuales().filter(c => c.estado_embudo === 'firmado' || c.estado_embudo === 'en_marcha'); }
+
+function badge(fiab) {
+  const map = { MEDIDO: 'medido', MERCADO: 'mercado', HIPOTESIS: 'hipotesis' };
+  const txt = fiab === 'MEDIDO' ? 'Medido' : (fiab === 'MERCADO' ? 'Mercado' : 'Hipótesis');
+  return `<span class="badge ${map[fiab] || 'mercado'}"><span class="p"></span>${txt}</span>`;
+}
+function planBadge(plan) { return `<span class="plan-badge ${esc(plan)}">${esc(plan)}</span>`; }
+const ETIQUETAS_ESTADO = {
+  contactado: 'Contactado', demo_hecha: 'Demostración hecha', propuesta_enviada: 'Propuesta enviada',
+  firmado: 'Firmado', en_marcha: 'En marcha'
+};
+function estadoBadge(estado) { return `<span class="estado-badge ${esc(estado)}">${ETIQUETAS_ESTADO[estado] || estado}</span>`; }
+function marcaEjemplo() { return exampleMode ? '<span class="marca-ejemplo">Ejemplo</span>' : ''; }
+
+/* ================================================================
+   1 · KPI HERO — qué hay hoy de verdad
+   ================================================================ */
+/* IVA español para un servicio digital. Los precios publicados lo llevan
+   dentro (normativa de España), así que hay que descontarlo para saber qué
+   entra de verdad en la empresa. */
+const IVA = 0.21;
+
+function renderKPIs() {
+  const clientes = clientesActuales();
+  const facturando = clientesFacturando();
+  const mrr = facturando.reduce((a, c) => a + (c.precio_mensual_eur || 0), 0);
+  /* Los precios se publican con el IVA dentro, así que lo que cobramos NO es
+     lo que ingresamos: ese 21 % se le devuelve a Hacienda. Restarlo aquí no
+     es una floritura contable — sin hacerlo, el beneficio salía un 17 % más
+     alto de lo que es, y este panel no puede enseñar cifras que no sean
+     ciertas. */
+  const mrrNeto = mrr / (1 + IVA);
+  const gastosFijos = DATA.gastos_fijos_mes.total_anio_1;
+  const nConIA = facturando.filter(c => c.plan !== 'Essential').length;
+  const gastosVariables = nConIA * DATA.gastos_fijos_mes.coste_variable_api_por_instituto;
+  const gastosTotal = gastosFijos + gastosVariables;
+  const beneficio = mrrNeto - gastosTotal;
+  const umbral = DATA.rentabilidad.umbral_institutos_anio_1;
+
+  return `
+  <section class="bloque">
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="etq">Clientes facturando hoy</div>
+        <div class="val">${formatNum(facturando.length)}${marcaEjemplo()}</div>
+        <div class="pie">${clientes.length - facturando.length} más en el embudo de venta</div>
+      </div>
+      <div class="kpi">
+        <div class="etq">Se cobra al mes</div>
+        <div class="val">${formatEUR(mrr)}</div>
+        <div class="pie">${formatEUR(mrrNeto)} entran de verdad: el resto es IVA que se devuelve</div>
+      </div>
+      <div class="kpi">
+        <div class="etq">Gastos del mes</div>
+        <div class="val">${formatEUR(gastosTotal)}</div>
+        <div class="pie">Fijos año 1 (${formatEUR(gastosFijos)}) + variable de API (${formatEUR(gastosVariables)})</div>
+      </div>
+      <div class="kpi">
+        <div class="etq">Beneficio neto mensual</div>
+        <div class="val ${beneficio >= 0 ? 'bien' : 'critico'}">${formatEUR(beneficio)}</div>
+        <div class="pie">Umbral de rentabilidad: ${formatNum(umbral)} instituto${umbral === 1 ? '' : 's'} facturando ${badge('MEDIDO')}</div>
+      </div>
+    </div>
+  </section>`;
+}
+
+/* ================================================================
+   7 · AVISO DE CONCENTRACIÓN
+   ================================================================ */
+function renderConcentracion() {
+  const facturando = clientesFacturando();
+  const mrr = facturando.reduce((a, c) => a + (c.precio_mensual_eur || 0), 0);
+  if (mrr <= 0) return '';
+  const critico = facturando
+    .map(c => ({ c, pct: (c.precio_mensual_eur || 0) / mrr * 100 }))
+    .filter(x => x.pct > 30)
+    .sort((a, b) => b.pct - a.pct);
+  if (critico.length === 0) return '';
+  return `
+  <section class="bloque">
+    <div class="banner atencion">
+      <span class="banner-ic">⚠</span>
+      <div>
+        <strong>Concentración de facturación.</strong>
+        ${critico.map(x => `${esc(x.c.nombre)} supone <b class="num">${formatNum(x.pct, 0)} %</b> de los ingresos recurrentes`).join(' · ')}.
+        Perder ese cliente no es un contratiempo, es un agujero en las cuentas.
+      </div>
+    </div>
+  </section>`;
+}
+
+/* ================================================================
+   1-2-4-5-6 · CLIENTES FACTURANDO
+   ================================================================ */
+function renderClientes() {
+  const facturando = clientesFacturando();
+  const preguntas = preguntasActuales();
+
+  let filas;
+  if (facturando.length === 0) {
+    filas = `<tr class="fila-vacia"><td colspan="9">
+      <div class="vacio">
+        <div class="grande">Todavía no hay ningún centro firmado</div>
+        <p>En cuanto se cierre el primero, aparece aquí con su plan, su precio y su fecha de renovación. Activa «ver con datos de ejemplo» arriba para ver cómo se vería esta tabla en marcha.</p>
+      </div>
+    </td></tr>`;
+  } else {
+    filas = facturando.map(c => {
+      const dias = diasHasta(c.fecha_renovacion);
+      let renovChip = '';
+      if (c.fecha_renovacion) {
+        if (c.renovacion_confirmada) {
+          renovChip = `<span class="chip-mini bien">confirmada</span>`;
+        } else if (dias !== null && dias <= 30) {
+          renovChip = `<span class="chip-mini critico">sin confirmar</span>`;
+        } else if (dias !== null && dias <= 90) {
+          renovChip = `<span class="chip-mini atencion">sin confirmar</span>`;
+        } else {
+          renovChip = `<span class="chip-mini atencion">sin confirmar</span>`;
+        }
+      }
+
+      let colPreguntas = '<span class="gris">—</span>';
+      if (c.plan === 'Essential') {
+        const propias = preguntas.filter(p => p.centro_id === c.id);
+        if (propias.length === 0) {
+          colPreguntas = '<span class="gris">Sin preguntas exportadas</span>';
+        } else {
+          colPreguntas = `<details class="preguntas"><summary>Ver preguntas recogidas (${propias.length})</summary>` +
+            propias.map(p => `<div class="pregunta-item">${esc(p.texto)}<span class="fecha">${formatFecha(p.fecha)}</span></div>`).join('') +
+            `</details>`;
+        }
+      }
+
+      let actChip = '';
+      if (c.plan === 'Essential') {
+        const usadas = c.actualizaciones_usadas || 0;
+        const extra = Math.max(0, usadas - 2);
+        actChip = `${usadas}/2` + (extra > 0 ? ` <span class="chip-mini critico">+${extra} × 45 €</span>` : '');
+      } else {
+        actChip = '<span class="gris">no aplica</span>';
+      }
+
+      const capHoras = 1.5;
+      const horasClase = (c.horas_soporte_mes || 0) > capHoras ? 'critico' : ((c.horas_soporte_mes || 0) > capHoras * 0.8 ? 'atencion' : '');
+
+      return `<tr>
+        <td><b>${esc(c.nombre)}</b>${c.notas ? `<div class="gris" style="font-size:12px;margin-top:3px;">${esc(c.notas)}</div>` : ''}</td>
+        <td>${planBadge(c.plan)}</td>
+        <td class="gris">${c.alumnos ? formatNum(c.alumnos) : '—'} · ${formatNum(c.sedes || 1)} sede${(c.sedes || 1) === 1 ? '' : 's'}</td>
+        <td class="num-cell">${formatEUR(c.precio_mensual_eur)}/mes</td>
+        <td class="gris">${formatFecha(c.fecha_alta)}</td>
+        <td>${formatFecha(c.fecha_renovacion)} ${renovChip}</td>
+        <td>${actChip}</td>
+        <td class="num-cell ${horasClase ? 'chip-mini ' + horasClase : ''}" style="${horasClase ? 'display:table-cell;' : ''}">${formatNum(c.horas_soporte_mes || 0, 1)} h</td>
+        <td>${colPreguntas}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  return `
+  <section class="bloque">
+    <div class="bloque-cab">
+      <div><h2>Clientes${marcaEjemplo()}</h2><div class="sub">Lo que hay firmado hoy, con su plan, su precio y lo que toca vigilar de cada uno.</div></div>
+    </div>
+    <div class="tarjeta scroll-x">
+      <table class="tabla-ancha">
+        <thead><tr>
+          <th>Centro</th><th>Plan</th><th>Alumnos / sedes</th><th>Cuota</th><th>Alta</th><th>Renovación</th>
+          <th>Actualizaciones</th><th>Soporte (mes)</th><th>Preguntas recogidas</th>
+        </tr></thead>
+        <tbody>${filas}</tbody>
+      </table>
+    </div>
+    <p class="campo-hint" style="margin-top:8px;">Techo de soporte asumido: 1,5 h/mes por centro. Las preguntas recogidas de un centro Essential se exportan a mano desde el servidor: <code>GET /api/admin/preguntas-sugeridas?centro=&lt;id&gt;</code> — no se actualizan solas, hay que volver a pedirlas.</p>
+  </section>`;
+}
+
+/* ================================================================
+   3 · EMBUDO DE VENTA
+   ================================================================ */
+function renderEmbudo() {
+  const clientes = clientesActuales();
+  const columnas = ['contactado', 'demo_hecha', 'propuesta_enviada', 'firmado', 'en_marcha'];
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+
+  const cols = columnas.map(key => {
+    const items = clientes.filter(c => c.estado_embudo === key);
+    const cards = items.length === 0
+      ? `<div class="embudo-vacio-col">Vacío</div>`
+      : items.map(c => {
+          const dias = diasHasta(c.siguiente_accion_fecha);
+          let cls = '';
+          if (dias !== null) { if (dias < 0) cls = 'critico'; else if (dias <= 7) cls = 'atencion'; }
+          return `<div class="embudo-card">
+            <div class="nombre">${esc(c.nombre)}</div>
+            ${planBadge(c.plan)}
+            <div class="accion">${esc(c.siguiente_accion || 'Sin siguiente acción definida')}</div>
+            <div class="fecha-accion ${cls}">${dias !== null && dias < 0 ? 'Atrasado — ' : ''}${formatFecha(c.siguiente_accion_fecha)}</div>
+          </div>`;
+        }).join('');
+    return `<div class="embudo-col">
+      <div class="embudo-col-head"><span>${ETIQUETAS_ESTADO[key]}</span><span class="n">${items.length}</span></div>
+      ${cards}
+    </div>`;
+  }).join('');
+
+  return `
+  <section class="bloque">
+    <div class="bloque-cab">
+      <div><h2>Embudo de venta${marcaEjemplo()}</h2><div class="sub">El cuello de botella del negocio es vender, no la tecnología. Cada centro lleva su siguiente acción y su fecha.</div></div>
+    </div>
+    <div class="tarjeta scroll-x">
+      <div class="embudo-grid">${cols}</div>
+    </div>
+  </section>`;
+}
+
+/* ================================================================
+   BLOQUES ESTÁTICOS — gastos fijos, coste de API, riesgos, pasos
+   ================================================================ */
+function renderGastosYApi() {
+  const g = DATA.gastos_fijos_mes;
+  return `
+  <section class="bloque">
+    <div class="grid-2">
+      <div class="tarjeta">
+        <div class="bloque-cab"><div><h2>Gastos fijos al mes</h2><div class="sub">Año 1, tarifa plana de autónomo ${badge(g.fiabilidad)}</div></div></div>
+        <table class="mini-table">
+          <thead><tr><th>Concepto</th><th style="text-align:right">Año 1</th></tr></thead>
+          <tbody>${g.partidas.map(p => `<tr><td>${esc(p.concepto)}</td><td class="num-cell">${formatEUR(p.anio_1)}</td></tr>`).join('')}
+            <tr class="destacada"><td>Total</td><td class="num-cell">${formatEUR(g.total_anio_1)}</td></tr>
+          </tbody>
+        </table>
+        <p class="campo-hint" style="margin-top:10px;">Sube a ${formatEUR(g.total_anio_2)}/mes en el año 2, al terminar la tarifa plana. ${g.coste_oculto}</p>
+      </div>
+      <div class="tarjeta">
+        <div class="bloque-cab"><div><h2>Coste real de API</h2><div class="sub">Medido sobre el sistema, no estimado ${badge(DATA.consumo_api.fiabilidad)}</div></div></div>
+        <p style="font-size:12.5px;color:var(--grafito);margin:0 0 10px;">${DATA.consumo_api.comentario_arquitectura}</p>
+        <table class="mini-table">
+          <thead><tr><th>Modelo</th><th style="text-align:right">€/mes a 2.000 conversaciones</th></tr></thead>
+          <tbody>${DATA.consumo_api.modelos.map(m => `<tr${m.nota ? '' : ' class="destacada"'}><td>${esc(m.nombre)}${m.nota ? ` <span class="gris" style="font-weight:400;">— ${esc(m.nota)}</span>` : ''}</td><td class="num-cell">${formatEUR(m.coste_mes_eur, 2)}</td></tr>`).join('')}
+          </tbody>
+        </table>
+        <p class="campo-hint" style="margin-top:10px;">${DATA.consumo_api.aviso}</p>
+      </div>
+    </div>
+  </section>`;
+}
+
+function renderRiesgos() {
+  return `
+  <section class="bloque">
+    <div class="bloque-cab"><div><h2>Riesgos</h2><div class="sub">Lo que puede tumbar una venta, no solo lo técnico.</div></div></div>
+    ${DATA.riesgos.map(r => `
+      <div class="riesgo ${r.severidad}">
+        <div class="riesgo-cab"><span class="sev ${r.severidad}">Severidad ${r.severidad}</span><h3>${esc(r.titulo)}</h3></div>
+        <p>${esc(r.detalle)}</p>
+      </div>`).join('')}
+  </section>`;
+}
+
+function renderSubvencionesPasos() {
+  return `
+  <section class="bloque">
+    <div class="grid-2">
+      <div class="tarjeta">
+        <div class="bloque-cab"><div><h2>Subvenciones</h2><div class="sub">Verificar elegibilidad antes de usarlas como argumento ${badge(DATA.subvenciones.fiabilidad)}</div></div></div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px;">
+          <div class="kpi" style="flex:1;min-width:140px;"><div class="etq">Kit Digital IA</div><div class="val">${formatEUR(DATA.subvenciones.kit_digital_ia.importe_maximo)}</div></div>
+          <div class="kpi" style="flex:1;min-width:140px;"><div class="etq">Ticket Innova</div><div class="val">${formatEUR(DATA.subvenciones.ticket_innova.importe_maximo)}</div></div>
+        </div>
+        <p class="campo-hint">${DATA.subvenciones.aviso_elegibilidad}</p>
+      </div>
+      <div class="tarjeta">
+        <div class="bloque-cab"><div><h2>Próximos pasos</h2></div></div>
+        <ol class="pasos-list">${DATA.pasos.map(p => `<li><span class="n">${String(p.orden).padStart(2,'0')}</span><span><b style="color:var(--tinta)">${esc(p.que)}.</b> ${esc(p.por_que)}</span></li>`).join('')}</ol>
+      </div>
+    </div>
+  </section>`;
+}
+
+/* ================================================================
+   CALCULADORA — plegada al final. Motor de escenarios "qué pasaría
+   si", con el desglose de costes que ya estaba bien hecho. Ya no
+   negocia precio: elige tramo de alumnos y plan, como en la tarifa
+   publicada.
+   ================================================================ */
+const calcState = {
+  institutos: 0,
+  tramoId: '501-700',
+  plan: 'Centro',
+  mezclaEsencialPct: 0,
+  nuevos12m: 0,
+  costeVariableModelo: 2,
+  anioGastos: 1,
+  partidas: DATA_EMBEBIDA.gastos_fijos_mes.partidas.map(p => p.anio_1),
+  ritmoCaptacion: 0.5
+};
+
+function calcMRR(s) {
+  const tramo = DATA.precios.tramos.find(t => t.id === s.tramoId);
+  const precioPrincipal = tramo.mensual[s.plan];
+  const precioEsencial = tramo.mensual['Essential'];
+  const puedeMezclar = s.plan !== 'Essential';
+  const nEsencial = puedeMezclar ? Math.round(s.institutos * (s.mezclaEsencialPct / 100)) : 0;
+  const nPrincipal = s.institutos - nEsencial;
+  const mrrPrincipal = nPrincipal * precioPrincipal;
+  const mrrEsencial = nEsencial * precioEsencial;
+  const mrr = mrrPrincipal + mrrEsencial;
+
+  const nuevos = clamp(s.nuevos12m, 0, s.institutos);
+  const instalacionMes = (nuevos * DATA.precios.instalacion[s.plan]) / 12;
+
+  return { nEsencial, nPrincipal, mrrPrincipal, mrrEsencial, mrr, instalacionMes, total: mrr + instalacionMes, precioPrincipal, precioEsencial };
+}
+function calcCostes(s) {
+  const fijos = s.partidas.reduce((a, b) => a + b, 0);
+  const nConIA = s.institutos - Math.round(s.institutos * (s.plan !== 'Essential' ? s.mezclaEsencialPct / 100 : 1));
+  const variable = Math.max(nConIA, 0) * s.costeVariableModelo;
+  return { fijos, variable, nConIA: Math.max(nConIA, 0), total: fijos + Math.max(nConIA, 0) * s.costeVariableModelo };
+}
+function calcMargen(s) {
+  const ingresos = calcMRR(s);
+  const costes = calcCostes(s);
+  const beneficioNetoMes = ingresos.mrr - costes.total;
+  const margenNetoPct = ingresos.mrr > 0 ? (beneficioNetoMes / ingresos.mrr) * 100 : null;
+  return { ingresos, costes, beneficioNetoMes, margenNetoPct };
+}
+function beneficioRecurrente(s, n) {
+  const s2 = Object.assign({}, s, { institutos: n, nuevos12m: 0 });
+  const ingresos = calcMRR(s2);
+  const costes = calcCostes(s2);
+  return ingresos.mrr - costes.total;
+}
+function calcUmbral(s) {
+  for (let n = 0; n <= 200; n++) { if (beneficioRecurrente(s, n) >= 0) return n; }
+  return null;
+}
+function simulateProjection(s, meses) {
+  const out = [];
+  let n = s.institutos, acumulador = 0;
+  const cohortes = [];
+  if (s.nuevos12m > 0) cohortes.push({ mesAlta: -1, cantidad: clamp(s.nuevos12m, 0, n) });
+  for (let mes = 0; mes <= meses; mes++) {
+    if (mes > 0) {
+      acumulador += s.ritmoCaptacion;
+      const altas = Math.floor(acumulador);
+      if (altas > 0) { acumulador -= altas; n += altas; cohortes.push({ mesAlta: mes, cantidad: altas }); }
+    }
+    const sMes = Object.assign({}, s, { institutos: n, nuevos12m: 0 });
+    const ingresosMRR = calcMRR(sMes).mrr;
+    let instalacionMes = 0;
+    for (const c of cohortes) { if (mes - c.mesAlta < 12) instalacionMes += (c.cantidad * DATA.precios.instalacion[s.plan]) / 12; }
+    const fijos = mes <= 12 ? DATA.gastos_fijos_mes.total_anio_1 : (mes <= 24 ? DATA.gastos_fijos_mes.total_anio_2 : DATA.gastos_fijos_mes.total_anio_2 + DATA.gastos_fijos_mes.segundo_autonomo_anio_3);
+    const nConIA = n - Math.round(n * (s.plan !== 'Essential' ? s.mezclaEsencialPct / 100 : 1));
+    const costes = fijos + Math.max(nConIA, 0) * s.costeVariableModelo;
+    const totalMes = ingresosMRR + instalacionMes;
+    const beneficio = totalMes - costes;
+    out.push({ mes, institutos: n, ingresos: totalMes, costes, beneficio });
+  }
+  return out;
+}
+
+function calcROICliente(s) {
+  const precioMensual = calcMRR(s).precioPrincipal;
+  const costePrimerAnio = precioMensual * 12 + DATA.precios.instalacion[s.plan];
+  const ahorroEstimado = DATA.roi_cliente.ahorro_estimado;
+  const retornoNeto = ahorroEstimado - costePrimerAnio;
+  const multiplo = costePrimerAnio > 0 ? ahorroEstimado / costePrimerAnio : null;
+  return { costePrimerAnio, ahorroEstimado, retornoNeto, multiplo };
+}
+
+function renderCalculadora() {
+  return `
+  <section class="bloque">
+    <details class="calculadora" id="calc-details">
+      <summary><h2>Calculadora de escenarios («qué pasaría si»)</h2></summary>
+      <div class="calc-cuerpo">
+        <div class="banner hipotesis">
+          <span class="banner-ic">◆</span>
+          <div><strong>Esto no son los clientes reales de arriba.</strong> Es el simulador de negocio: mueve los controles para explorar hipótesis de crecimiento. ${badge('HIPOTESIS')}</div>
+        </div>
+        <div class="calc-controles" id="calc-controles"></div>
+        <div id="calc-resultado"></div>
+      </div>
+    </details>
+  </section>`;
+}
+
+function renderCalcControles() {
+  const el = document.getElementById('calc-controles');
+  if (!el) return;
+  const tramoOpts = DATA.precios.tramos.map(t => `<option value="${t.id}">${t.id.replace('-', ' – ').replace('+', '+')} alumnos</option>`).join('');
+  el.innerHTML = `
+    <div class="campo">
+      <div class="campo-cab"><span class="etq">Institutos simulados</span><span class="val" id="cv-institutos"></span></div>
+      <input type="range" id="ci-institutos" min="0" max="50" step="1">
+    </div>
+    <div class="campo">
+      <div class="campo-cab"><span class="etq">Tramo de alumnos</span></div>
+      <select id="ci-tramo">${tramoOpts}</select>
+      <div class="campo-hint">Fija el precio: ya no se negocia, se publica por tramo.</div>
+    </div>
+    <div class="campo">
+      <div class="campo-cab"><span class="etq">Plan principal</span></div>
+      <select id="ci-plan">
+        <option value="Essential">Essential</option>
+        <option value="Centro">Centro</option>
+        <option value="Infinito">Infinito</option>
+      </select>
+    </div>
+    <div class="campo">
+      <div class="campo-cab"><span class="etq">% del resto en Essential</span><span class="val" id="cv-mezcla"></span></div>
+      <input type="range" id="ci-mezcla" min="0" max="100" step="5">
+      <div class="campo-hint">Solo si el plan principal no es ya Essential. El equipo no quiere vender este plan.</div>
+    </div>
+    <div class="campo">
+      <div class="campo-cab"><span class="etq">Altas en los últimos 12 meses</span><span class="val" id="cv-nuevos"></span></div>
+      <input type="range" id="ci-nuevos" min="0" max="50" step="1">
+      <div class="campo-hint">Solo estas facturan instalación (prorrateada 12 meses).</div>
+    </div>
+    <div class="campo">
+      <div class="campo-cab"><span class="etq">Coste variable asumido</span><span class="val" id="cv-costevar"></span></div>
+      <input type="range" id="ci-costevar" min="0" max="6" step="0.5">
+      <div class="campo-hint">€/mes/instituto con IA. El coste medido real se muestra arriba, como contraste.</div>
+    </div>
+    <div class="campo">
+      <div class="campo-cab"><span class="etq">Institutos nuevos / mes (proyección)</span><span class="val" id="cv-ritmo"></span></div>
+      <input type="range" id="ci-ritmo" min="0" max="3" step="0.1">
+    </div>
+    <div class="campo">
+      <div class="campo-cab"><span class="etq">Gastos fijos — año de referencia</span></div>
+      <div class="segmented" id="calc-seg-anio">
+        <button type="button" data-anio="1">Año 1</button>
+        <button type="button" data-anio="2">Año 2</button>
+      </div>
+    </div>
+  `;
+
+  function bind(id, initial, fmt, onChange) {
+    const input = document.getElementById(id);
+    const label = document.getElementById('cv-' + id.replace('ci-', ''));
+    input.value = initial;
+    if (label) label.textContent = fmt(initial);
+    input.addEventListener('input', () => {
+      const raw = input.type === 'range' || input.type === 'number' ? parseFloat(input.value) : input.value;
+      onChange(raw);
+      if (label) label.textContent = fmt(raw);
+      renderCalcResultado();
+    });
+    return input;
+  }
+
+  bind('ci-institutos', calcState.institutos, v => formatNum(v), v => { calcState.institutos = Math.round(v); calcState.nuevos12m = clamp(calcState.nuevos12m, 0, calcState.institutos); const n = document.getElementById('ci-nuevos'); n.max = calcState.institutos; n.value = calcState.nuevos12m; document.getElementById('cv-nuevos').textContent = formatNum(calcState.nuevos12m); });
+  document.getElementById('ci-tramo').value = calcState.tramoId;
+  document.getElementById('ci-tramo').addEventListener('change', e => { calcState.tramoId = e.target.value; renderCalcResultado(); });
+  document.getElementById('ci-plan').value = calcState.plan;
+  document.getElementById('ci-plan').addEventListener('change', e => { calcState.plan = e.target.value; renderCalcResultado(); });
+  bind('ci-mezcla', calcState.mezclaEsencialPct, v => v + ' %', v => { calcState.mezclaEsencialPct = Math.round(v); });
+  const inNuevos = document.getElementById('ci-nuevos'); inNuevos.max = calcState.institutos;
+  bind('ci-nuevos', calcState.nuevos12m, v => formatNum(v), v => { calcState.nuevos12m = clamp(Math.round(v), 0, calcState.institutos); });
+  bind('ci-costevar', calcState.costeVariableModelo, v => formatEUR(v, 2), v => { calcState.costeVariableModelo = v; });
+  bind('ci-ritmo', calcState.ritmoCaptacion, v => formatNum(v, 1) + ' /mes', v => { calcState.ritmoCaptacion = v; });
+
+  const seg = document.getElementById('calc-seg-anio');
+  seg.querySelectorAll('button').forEach(btn => {
+    if (parseInt(btn.dataset.anio, 10) === calcState.anioGastos) btn.classList.add('active');
+    btn.addEventListener('click', () => {
+      calcState.anioGastos = parseInt(btn.dataset.anio, 10);
+      seg.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const key = calcState.anioGastos === 1 ? 'anio_1' : 'anio_2';
+      calcState.partidas = DATA.gastos_fijos_mes.partidas.map(p => p[key]);
+      renderCalcResultado();
+    });
+  });
+}
+
+function renderCalcResultado() {
+  const host = document.getElementById('calc-resultado');
+  if (!host) return;
+  const calc = calcMargen(calcState);
+  const umbral = calcUmbral(calcState);
+  const roi = calcROICliente(calcState);
+  const sim = simulateProjection(calcState, 36);
+  const porEncima = umbral !== null && calcState.institutos >= umbral;
+
+  host.innerHTML = `
+    <div class="kpi-grid" style="margin-top:6px;">
+      <div class="kpi"><div class="etq">MRR simulado</div><div class="val">${formatEUR(calc.ingresos.mrr)}</div><div class="pie">${calcState.institutos} institutos, tramo ${calcState.tramoId}</div></div>
+      <div class="kpi"><div class="etq">Facturación total del mes</div><div class="val">${formatEUR(calc.ingresos.total)}</div><div class="pie">Con instalaciones prorrateadas</div></div>
+      <div class="kpi"><div class="etq">Beneficio neto / mes</div><div class="val ${calc.beneficioNetoMes >= 0 ? 'bien' : 'critico'}">${formatEUR(calc.beneficioNetoMes)}</div><div class="pie">${calc.margenNetoPct === null ? '—' : formatNum(calc.margenNetoPct, 1) + ' % de margen'}</div></div>
+      <div class="kpi"><div class="etq">Umbral de rentabilidad</div><div class="val ${porEncima ? 'bien' : 'critico'}">${umbral === null ? '—' : formatNum(umbral)}</div><div class="pie">${porEncima ? 'Cubierto con estos supuestos' : 'Instituto' + (umbral - calcState.institutos === 1 ? '' : 's') + ' que faltan: ' + formatNum(umbral - calcState.institutos)}</div></div>
+    </div>
+
+    <div class="grid-2" style="margin-top:20px;">
+      <div class="tarjeta">
+        <h3 style="margin-bottom:12px;">Desglose de costes</h3>
+        <table class="mini-table">
+          <thead><tr><th>Concepto</th><th style="text-align:right">€/mes</th></tr></thead>
+          <tbody>
+            ${DATA.gastos_fijos_mes.partidas.map((p, i) => `<tr><td>${esc(p.concepto)}</td><td class="num-cell">${formatEUR(calcState.partidas[i])}</td></tr>`).join('')}
+            <tr><td>Coste variable de API (${calc.costes.nConIA} con IA × ${formatEUR(calcState.costeVariableModelo, 2)})</td><td class="num-cell">${formatEUR(calc.costes.variable)}</td></tr>
+            <tr class="destacada"><td>Total</td><td class="num-cell">${formatEUR(calc.costes.total)}</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tarjeta">
+        <h3 style="margin-bottom:12px;">ROI del cliente simulado ${badge('HIPOTESIS')}</h3>
+        <p class="campo-hint" style="margin-bottom:10px;">${DATA.roi_cliente.aviso}</p>
+        <table class="mini-table">
+          <tbody>
+            <tr><td>Coste primer año</td><td class="num-cell">${formatEUR(roi.costePrimerAnio)}</td></tr>
+            <tr><td>Ahorro estimado (hipótesis)</td><td class="num-cell">${formatEUR(roi.ahorroEstimado)}</td></tr>
+            <tr class="destacada"><td>Retorno neto</td><td class="num-cell">${formatEUR(roi.retornoNeto)}</td></tr>
+          </tbody>
+        </table>
+        <p class="campo-hint" style="margin-top:10px;">Múltiplo: ×${roi.multiplo === null ? '—' : formatNum(roi.multiplo, 2)} — si el ahorro estimado se confirma en el piloto.</p>
+      </div>
+    </div>
+
+    <div class="tarjeta" style="margin-top:16px;">
+      <h3 style="margin-bottom:6px;">Proyección a 36 meses</h3>
+      <div id="proyeccion-chart"></div>
+    </div>
+  `;
+  drawProjectionChart(sim);
+}
+
+/* ---- gráfico de proyección (SVG a mano) ---- */
+function drawProjectionChart(sim) {
+  const host = document.getElementById('proyeccion-chart');
+  if (!host) return;
+  const W = 900, H = 280, ML = 54, MR = 14, MT = 16, MB = 30;
+  const plotW = W - ML - MR, plotH = H - MT - MB;
+  const maxY = Math.max(...sim.map(d => d.ingresos), ...sim.map(d => d.costes), 1) * 1.08;
+  const minY = Math.min(0, ...sim.map(d => d.beneficio));
+  const spanY = (maxY - minY) || 1;
+  const x = mes => ML + (mes / 36) * plotW;
+  const y = v => MT + plotH - ((v - minY) / spanY) * plotH;
+  const yZero = y(0);
+  const pathFor = key => sim.map((d, i) => (i === 0 ? 'M' : 'L') + x(d.mes).toFixed(1) + ',' + y(d[key]).toFixed(1)).join(' ');
+
+  let beneficioSegs = '';
+  for (let i = 0; i < sim.length - 1; i++) {
+    const a = sim[i], b = sim[i + 1];
+    const color = (a.beneficio + b.beneficio) >= 0 ? 'var(--bien)' : 'var(--critico)';
+    const x1 = x(a.mes), x2 = x(b.mes), y1 = y(a.beneficio), y2 = y(b.beneficio);
+    beneficioSegs += `<polygon points="${x1},${yZero} ${x1},${y1} ${x2},${y2} ${x2},${yZero}" fill="${color}" fill-opacity="0.12"></polygon>`;
+    beneficioSegs += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="2" stroke-linecap="round"></line>`;
+  }
+  let gridLines = '';
+  for (let i = 0; i <= 4; i++) {
+    const v = minY + (spanY / 4) * i, yy = y(v);
+    gridLines += `<line x1="${ML}" y1="${yy.toFixed(1)}" x2="${W-MR}" y2="${yy.toFixed(1)}" stroke="var(--filete)" stroke-width="1"></line>`;
+    gridLines += `<text x="${ML-8}" y="${(yy+3.5).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--grafito)">${formatEUR(Math.round(v))}</text>`;
+  }
+  let xTicks = '';
+  [0,12,24,36].forEach(m => { xTicks += `<text x="${x(m).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="10.5" fill="var(--grafito)" font-weight="700">Mes ${m}</text>`; });
+  const cruce = sim.find(d => d.beneficio >= 0);
+  const cruceMarker = cruce ? `
+    <line x1="${x(cruce.mes).toFixed(1)}" y1="${MT}" x2="${x(cruce.mes).toFixed(1)}" y2="${MT+plotH}" stroke="var(--boli)" stroke-width="1.5" stroke-dasharray="4,3"></line>
+    <circle cx="${x(cruce.mes).toFixed(1)}" cy="${y(cruce.beneficio).toFixed(1)}" r="4" fill="var(--boli)" stroke="var(--hoja)" stroke-width="2"></circle>
+    <text x="${x(cruce.mes).toFixed(1)}" y="${MT+11}" text-anchor="${cruce.mes>30?'end':'start'}" font-size="10.5" fill="var(--boli)" font-weight="800">Mes ${cruce.mes}: cubre gastos</text>` : '';
+  let hitAreas = '';
+  sim.forEach((d,i) => { const px=x(d.mes), bw=plotW/36; hitAreas += `<rect data-i="${i}" x="${(px-bw/2).toFixed(1)}" y="${MT}" width="${bw.toFixed(1)}" height="${plotH}" fill="transparent"></rect>`; });
+
+  host.innerHTML = `
+    <div class="legend-row">
+      <span class="legend-item"><span class="legend-line" style="background:var(--boli)"></span>Ingresos</span>
+      <span class="legend-item"><span class="legend-line" style="background:var(--linea-suave)"></span>Costes</span>
+      <span class="legend-item"><span class="legend-line" style="background:var(--bien)"></span>Beneficio</span>
+    </div>
+    <div class="chart-wrap" style="position:relative;">
+      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Proyección de ingresos, costes y beneficio a 36 meses">
+        ${gridLines}
+        <line x1="${ML}" y1="${yZero.toFixed(1)}" x2="${W-MR}" y2="${yZero.toFixed(1)}" stroke="var(--linea-suave)" stroke-width="1" stroke-dasharray="3,3"></line>
+        ${beneficioSegs}
+        <path d="${pathFor('costes')}" fill="none" stroke="var(--linea-suave)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
+        <path d="${pathFor('ingresos')}" fill="none" stroke="var(--boli)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
+        ${cruceMarker}
+        ${xTicks}
+        <g id="proy-hover" style="display:none;"><line x1="0" y1="${MT}" x2="0" y2="${MT+plotH}" stroke="var(--tinta)" stroke-width="1"></line></g>
+        ${hitAreas}
+      </svg>
+    </div>`;
+
+  const svg = host.querySelector('svg');
+  const hoverLine = host.querySelector('#proy-hover');
+  const tooltip = document.getElementById('tooltip');
+  svg.querySelectorAll('rect[data-i]').forEach(rect => {
+    rect.addEventListener('mousemove', e => {
+      const d = sim[parseInt(rect.dataset.i, 10)];
+      hoverLine.style.display = '';
+      hoverLine.querySelector('line').setAttribute('x1', x(d.mes).toFixed(1));
+      hoverLine.querySelector('line').setAttribute('x2', x(d.mes).toFixed(1));
+      tooltip.innerHTML = `<div style="font-weight:700;margin-bottom:4px;">Mes ${d.mes} · ${d.institutos} institutos</div>
+        <div class="tooltip-row"><span class="k">Ingresos</span><span class="v">${formatEUR(Math.round(d.ingresos))}</span></div>
+        <div class="tooltip-row"><span class="k">Costes</span><span class="v">${formatEUR(Math.round(d.costes))}</span></div>
+        <div class="tooltip-row"><span class="k">Beneficio</span><span class="v">${formatEUR(Math.round(d.beneficio))}</span></div>`;
+      tooltip.classList.add('show');
+      const br = document.body.getBoundingClientRect();
+      tooltip.style.left = (e.clientX - br.left + 14) + 'px';
+      tooltip.style.top = (e.clientY - br.top - 10) + 'px';
+    });
+    rect.addEventListener('mouseleave', () => { tooltip.classList.remove('show'); hoverLine.style.display = 'none'; });
+  });
+}
+
+/* ================================================================
+   RENDER PRINCIPAL
+   ================================================================ */
+function renderAll() {
+  document.getElementById('contenido').innerHTML = [
+    renderKPIs(),
+    renderConcentracion(),
+    renderClientes(),
+    renderEmbudo(),
+    renderGastosYApi(),
+    renderRiesgos(),
+    renderSubvencionesPasos(),
+    renderCalculadora()
+  ].join('');
+
+  document.getElementById('banner-ejemplo').hidden = !exampleMode;
+  document.getElementById('pie-app').textContent =
+    'Fuente de datos: datos-negocio.json. Cifras Medido comprobadas sobre el sistema real; Mercado investigadas externamente; Hipótesis sin verificar, pendientes del primer piloto.';
+
+  calcState.partidas = DATA.gastos_fijos_mes.partidas.map(p => p['anio_' + calcState.anioGastos]);
+  renderCalcControles();
+  renderCalcResultado();
+}
+
+function init() {
+  document.getElementById('chk-ejemplo').addEventListener('change', e => {
+    exampleMode = e.target.checked;
+    renderAll();
+  });
+  renderAll();
+}
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "_lee_esto_primero": "Bloque de plan para un centro con Centro, que es el plan que queremos vender. Copia 'plan' y 'funcionalidades' dentro del configuracion_centro.json de ese centro.",
+  "plan": "centro",
+  "funcionalidades": {
+    "ia_generativa": true,
+    "busqueda_libre": true,
+    "test_orientacion_4eso": false,
+    "calendario_escolar": true,
+    "formularios": true,
+    "modo_oscuro": false,
+    "streaming_respuestas": true
+  },
+  "_notas_de_instalacion": [
+    "Necesita servidor: Node con servidor_ia.js, su .env con GEMINI_API_KEY y su datos.db.",
+    "El panel del centro entra en /panel. Hay que crear los usuarios uno a uno desde ahí; la contraseña de arranque solo sirve para el primero.",
+    "test_orientacion_4eso queda en false, y aunque alguien lo ponga en true el servidor lo sigue rechazando: el plan manda sobre el interruptor.",
+    "Repasar el tope de gasto (ia.limite_llamadas_dia) y el CORS del .env antes de dar la instalación por buena."
+  ]
+}

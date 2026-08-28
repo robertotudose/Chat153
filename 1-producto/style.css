@@ -1,0 +1,2346 @@
+/* ==========================================================================
+   SISTEMA DE DISENO - ASISTENTE ESCOLAR CON IA
+   Producto real: se sirve tal cual y ademas lo inyecta widget.js dentro del
+   Shadow DOM del centro, cambiando «:root» por «:host». Por eso las
+   variables tienen que seguir declaradas en un unico bloque :root.
+
+   La identidad es la misma que la web de SCHOLAIA (03 - Web SCHOLAIA):
+   papel calido y tinta, el azul de boligrafo como unico acento y solo en lo
+   que se puede pulsar o esta escrito a mano. Sin cajas grises: las secciones
+   se separan con aire, un filete fino y el peso tipografico.
+
+   Aqui no hay nada de logica: chat.js no trae ni un color ni un estilo en
+   linea, asi que todo el aspecto del producto se decide en este archivo.
+   ========================================================================== */
+
+:root {
+  /* — Superficies. El papel es el fondo, la banda separa secciones y la hoja
+       es lo que se apoya encima: una tarjeta, una burbuja, un formulario. — */
+  --papel:       #F3F1EA;
+  --banda:       #EAE7DE;
+  --hoja:        #FFFFFF;
+
+  /* — Tinta. Grafito es el texto secundario (7,8:1 sobre papel). — */
+  --tinta:       #15171B;
+  --tinta-suave: #C9C6BE;   /* sobre tinta: 10,8:1 */
+  --grafito:     #484A4F;
+  --filete:      #DCD8CD;
+  --filete-banda:#D3CFC2;
+  --linea-suave: #A5A093;   /* vinetas y canto de hojas, nunca texto */
+
+  /* — El azul de boligrafo. 7,6:1 sobre papel. — */
+  --boli:        #1B4B8F;
+  --boli-tenue:  rgba(27, 75, 143, 0.32);
+
+  /* — Correccion en rojo. Solo errores de formulario. 7,3:1 sobre hoja. — */
+  --aviso:       #9A3324;
+  --aviso-fondo: #F8EEEB;
+  --aviso-filete:#E3C9C2;
+
+  /* — Tipografias: titulares en palo seco, texto en serif, anotaciones a
+       mano. Las tres son las de la web. Ni una linea en monoespaciada. — */
+  --display: 'Schibsted Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --cuerpo:  'Literata', Georgia, "Times New Roman", serif;
+  --mano:    'Caveat', "Segoe Script", "Bradley Hand", cursive;
+
+  /* — Forma. Radios de papel cortado, no de pastilla. La tapa de libro
+       lleva el canto redondeado solo por fuera. — */
+  --r:        4px;
+  --r-tapa:   2px 7px 7px 2px;
+  --linea:    1.5px;
+
+  /* — Movimiento. Las mismas curvas de la web. — */
+  --e-out:   cubic-bezier(0.23, 1, 0.32, 1);
+  --e-inout: cubic-bezier(0.77, 0, 0.175, 1);
+  --t-rapida: 0.12s ease-out;
+  --t-suave:  0.18s ease;
+
+  /* — Tinta de noche: el tema oscuro que algunos centros activan. No es un
+       gris de interfaz, es la misma tinta con el papel invertido. — */
+  --noche:        #15171B;
+  --noche-cab:    #1B1E24;
+  --noche-alta:   #20232A;
+  --noche-filete: #31353D;
+  --noche-tenue:  #8A8D94;   /* 5,5:1 sobre noche */
+  --boli-noche:   #8FB3E8;   /* 8,6:1 sobre noche */
+
+  /* — La unica elevacion del sistema. Se reserva para lo que flota de verdad
+       encima de una pagina ajena: la ventana del chat y su boton. — */
+  --sombra-flotante: 0 18px 44px -14px rgba(21, 23, 27, 0.30);
+}
+
+/* ==================== RESET Y BASE ==================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font: 400 19px/1.72 var(--cuerpo);
+  background-color: var(--papel);
+  color: var(--tinta);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--display);
+  font-weight: 800;
+  color: var(--tinta);
+  letter-spacing: -0.028em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+p {
+  max-width: 70ch;
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: 2px solid var(--boli);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ==================== NAVEGACION SUPERIOR ==================== */
+.navbar {
+  background-color: rgba(243, 241, 234, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: var(--linea) solid var(--filete);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 16px 0;
+}
+
+.nav-container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 5vw, 56px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  min-height: 44px;
+}
+
+/* El sello del centro. Cuadrado de tinta, no un circulo de color. */
+.brand-logo {
+  width: 38px;
+  height: 38px;
+  background-color: var(--tinta);
+  color: var(--papel);
+  font-weight: 800;
+  font-family: var(--display);
+  font-size: 15px;
+  border-radius: var(--r);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--tinta);
+  line-height: 1.25;
+  letter-spacing: -0.014em;
+}
+
+.brand-tag {
+  font-family: var(--display);
+  font-size: 13px;
+  color: var(--grafito);
+  font-weight: 500;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-item {
+  font-family: var(--display);
+  color: var(--grafito);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  padding-block: 11px;
+  border-bottom: var(--linea) solid transparent;
+  transition: color var(--t-suave), border-color var(--t-suave);
+}
+
+.nav-item:hover {
+  color: var(--tinta);
+  border-bottom-color: var(--tinta);
+}
+
+.btn-primary-sm {
+  background-color: var(--tinta);
+  color: var(--papel);
+  border: none;
+  padding: 12px 20px;
+  border-radius: var(--r);
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--display);
+  line-height: 1.2;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color var(--t-suave);
+}
+
+.btn-primary-sm:hover {
+  background-color: #2B2E35;
+}
+
+.btn-primary-sm:active {
+  transform: scale(0.98);
+  transition: transform 80ms ease-out;
+}
+
+/* ==================== HERO ==================== */
+.hero {
+  padding: clamp(60px, 8vw, 96px) clamp(24px, 5vw, 56px) clamp(56px, 7vw, 80px);
+  background-color: var(--papel);
+  text-align: center;
+}
+
+.hero-container {
+  max-width: 1060px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Sin pastilla y sin mayusculas: una linea de apunte con su filete delante,
+   como lo que se anota al margen de un documento. */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--grafito);
+  margin-bottom: 26px;
+}
+
+.hero-badge::before {
+  content: "";
+  width: 22px;
+  height: var(--linea);
+  background-color: var(--linea-suave);
+  flex-shrink: 0;
+}
+
+.badge-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--boli);
+  flex-shrink: 0;
+}
+
+.hero-heading {
+  font-size: clamp(33px, 4.6vw, 54px);
+  color: var(--tinta);
+  margin-bottom: 22px;
+  max-width: 20ch;
+}
+
+.hero-subheading {
+  font-size: clamp(17.5px, 1.7vw, 19px);
+  line-height: 1.66;
+  color: var(--grafito);
+  margin-bottom: 38px;
+  max-width: 62ch;
+}
+
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(48px, 6vw, 68px);
+}
+
+.btn-hero-main {
+  background-color: var(--tinta);
+  color: var(--papel);
+  border: none;
+  padding: 18px 30px;
+  border-radius: var(--r);
+  font-size: 17px;
+  line-height: 1.2;
+  font-weight: 600;
+  font-family: var(--display);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  transition: background-color var(--t-suave);
+}
+
+.btn-hero-main:hover {
+  background-color: #2B2E35;
+}
+
+.btn-hero-main:active {
+  transform: scale(0.98);
+  transition: transform 80ms ease-out;
+}
+
+/* El secundario es el mismo boton vaciado: filete de tinta que se rellena. */
+.btn-hero-ghost {
+  background-color: transparent;
+  color: var(--tinta);
+  border: var(--linea) solid var(--tinta);
+  padding: 18px 26px;
+  border-radius: var(--r);
+  font-size: 17px;
+  line-height: 1.2;
+  font-weight: 600;
+  font-family: var(--display);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  transition: background-color var(--t-suave), color var(--t-suave);
+}
+
+.btn-hero-ghost:hover {
+  background-color: var(--tinta);
+  color: var(--papel);
+}
+
+.btn-hero-ghost:active {
+  transform: scale(0.98);
+}
+
+/* ==================== VISTA PREVIA DEL ASISTENTE ==================== */
+/* No es una ventana de navegador con sus tres luces: es una hoja con la
+   cabecera separada por un filete de tinta, como el registro de la web. */
+.hero-preview-card {
+  width: 100%;
+  max-width: 740px;
+  background: var(--hoja);
+  border: var(--linea) solid var(--filete);
+  border-radius: var(--r);
+  overflow: hidden;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--t-suave);
+}
+
+.hero-preview-card:hover {
+  border-color: var(--tinta);
+}
+
+.preview-header {
+  background-color: var(--papel);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: space-between;
+  border-bottom: var(--linea) solid var(--tinta);
+}
+
+.preview-dots {
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+/* Los tres puntos ya no son luces de ventana: son los agujeros de la hoja. */
+.preview-dots span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: var(--linea) solid var(--linea-suave);
+}
+
+.preview-title {
+  color: var(--tinta);
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--display);
+}
+
+.preview-badge {
+  font-family: var(--display);
+  color: var(--grafito);
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border: var(--linea) solid var(--filete);
+  border-radius: var(--r);
+  white-space: nowrap;
+}
+
+.preview-body {
+  padding: 26px;
+}
+
+.preview-msg {
+  background-color: var(--papel);
+  border: var(--linea) solid var(--filete);
+  border-radius: var(--r);
+  padding: 15px 18px;
+  margin-bottom: 18px;
+}
+
+.preview-msg p {
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: var(--tinta);
+}
+
+.preview-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.chip {
+  background-color: var(--hoja);
+  border: var(--linea) solid var(--filete);
+  color: var(--grafito);
+  font-family: var(--display);
+  font-size: 14.5px;
+  font-weight: 500;
+  padding: 9px 14px;
+  border-radius: var(--r);
+  transition: border-color var(--t-suave), color var(--t-suave);
+}
+
+.hero-preview-card:hover .chip {
+  border-color: var(--tinta);
+  color: var(--tinta);
+}
+
+.preview-footer {
+  background-color: var(--papel);
+  border-top: var(--linea) solid var(--filete);
+  padding: 13px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--display);
+  font-size: 14.5px;
+  color: var(--grafito);
+  font-weight: 500;
+}
+
+.preview-cta {
+  color: var(--boli);
+  font-weight: 600;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+/* ==================== ETAPAS EDUCATIVAS ==================== */
+.section-stages {
+  padding: clamp(76px, 10vw, 132px) clamp(24px, 5vw, 56px);
+  background-color: var(--banda);
+}
+
+.section-container {
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: clamp(44px, 5.5vw, 64px);
+}
+
+/* La entradilla de seccion va escrita a mano y en boligrafo, nunca en
+   mayusculas: es una nota al margen, no una etiqueta de producto. */
+.section-tag {
+  display: inline-block;
+  font-family: var(--mano);
+  font-weight: 600;
+  font-size: clamp(21px, 2vw, 25px);
+  line-height: 1.25;
+  color: var(--boli);
+  transform: rotate(-1.4deg);
+  margin-bottom: 10px;
+}
+
+.section-tag::before {
+  content: "";
+  display: inline-block;
+  width: 22px;
+  height: 1.8px;
+  background: currentColor;
+  vertical-align: 0.34em;
+  margin-right: 11px;
+  border-radius: 1px;
+}
+
+.section-title {
+  font-size: clamp(26px, 3.1vw, 38px);
+  line-height: 1.14;
+  letter-spacing: -0.024em;
+  color: var(--tinta);
+  margin-bottom: 14px;
+}
+
+.section-subtitle {
+  font-size: 17.5px;
+  line-height: 1.62;
+  color: var(--grafito);
+  max-width: 60ch;
+  margin: 0 auto;
+}
+
+.stages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(196px, 1fr));
+  gap: clamp(14px, 1.8vw, 22px);
+}
+
+/* Cada etapa es una tapa de libro: hoja, filete de tinta y el canto de las
+   paginas asomando por la derecha. Es el mismo recurso que las fichas de
+   planes de la web. */
+.stage-card {
+  position: relative;
+  background-color: var(--hoja);
+  border: 1.6px solid var(--tinta);
+  border-radius: var(--r-tapa);
+  padding: 26px 34px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform var(--t-suave);
+}
+
+.stage-card::after {
+  content: "";
+  position: absolute;
+  top: 5%;
+  bottom: 5%;
+  right: 3px;
+  width: 9px;
+  background: repeating-linear-gradient(to right, var(--linea-suave) 0 1px, transparent 1px 3.5px);
+  pointer-events: none;
+}
+
+.stage-card:hover {
+  transform: translateY(-3px);
+}
+
+.stage-card:active {
+  transform: translateY(0) scale(0.99);
+  transition: transform 80ms ease-out;
+}
+
+.stage-icon {
+  font-size: 24px;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.stage-card h3 {
+  font-size: clamp(20px, 2vw, 23px);
+  font-weight: 800;
+  letter-spacing: -0.022em;
+  color: var(--tinta);
+  margin-bottom: 6px;
+}
+
+.stage-age {
+  font-family: var(--display);
+  font-size: 14.5px;
+  color: var(--grafito);
+  font-weight: 500;
+  margin-bottom: 18px;
+}
+
+.stage-features {
+  list-style: none;
+  margin-bottom: 22px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: var(--display);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.stage-features li {
+  color: var(--grafito);
+}
+
+/* La pista de la web: un filete corto que se estira al pasar por encima. */
+.stage-link {
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--boli);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+.stage-link {
+  align-self: flex-start;
+  border-bottom: var(--linea) solid transparent;
+  transition: border-color 0.22s var(--e-out);
+}
+
+.stage-card:hover .stage-link {
+  border-bottom-color: var(--boli);
+}
+
+/* ==================== VENTAJAS ==================== */
+.section-features {
+  padding: clamp(76px, 10vw, 132px) clamp(24px, 5vw, 56px);
+  background-color: var(--papel);
+}
+
+/* Sin cajas: separa el aire, un filete fino arriba y el peso tipografico. */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(26px, 3.4vw, 44px);
+}
+
+.feature-box {
+  background: none;
+  border: 0;
+  border-top: var(--linea) solid var(--filete);
+  border-radius: 0;
+  padding: 22px 0 0;
+}
+
+.feature-box:hover {
+  border-top-color: var(--linea-suave);
+}
+
+.feature-icon {
+  font-size: 22px;
+  line-height: 1;
+  margin-bottom: 14px;
+}
+
+.feature-box h4 {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  line-height: 1.3;
+  color: var(--tinta);
+  margin-bottom: 10px;
+}
+
+.feature-box p {
+  font-size: 17px;
+  color: var(--grafito);
+  line-height: 1.62;
+}
+
+/* ==================== PIE INSTITUCIONAL ==================== */
+/* En papel, como el de la web. Un pie negro partia la pagina en dos. */
+.footer {
+  background-color: var(--papel);
+  color: var(--grafito);
+  padding: 52px clamp(24px, 5vw, 56px) 64px;
+  border-top: var(--linea) solid var(--filete);
+  font-family: var(--display);
+  font-size: 15px;
+}
+
+.footer-container {
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding-bottom: 30px;
+  border-bottom: var(--linea) solid var(--filete);
+  margin-bottom: 24px;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.footer-brand h3 {
+  color: var(--tinta);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.014em;
+  margin-bottom: 3px;
+}
+
+.footer-brand p {
+  color: var(--grafito);
+  font-size: 14.5px;
+}
+
+.footer-contact {
+  display: flex;
+  gap: 12px 24px;
+  flex-wrap: wrap;
+  color: var(--grafito);
+}
+
+.footer-contact a {
+  color: var(--boli);
+  text-decoration: none;
+  border-bottom: var(--linea) solid var(--boli-tenue);
+  display: inline-block;
+  transition: border-color var(--t-suave);
+}
+
+.footer-contact a:hover {
+  border-bottom-color: var(--boli);
+  text-decoration: none;
+}
+
+.footer-bottom {
+  text-align: center;
+  font-size: 14px;
+  color: var(--grafito);
+}
+
+.footer-bottom p {
+  margin-inline: auto;
+}
+
+/* ==========================================================================
+   WIDGET FLOTANTE Y VENTANA DE DIALOGO
+
+   La ventana es una hoja con el filete de tinta alrededor: cabecera de
+   membrete arriba, la mesa de papel debajo y las respuestas del centro en
+   hojas sueltas encima. El boligrafo solo aparece en enlaces y anotaciones.
+   ========================================================================== */
+
+.salesianas-chat-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* La llamada de atencion es una nota a mano pegada al boton, no una pastilla
+   negra: es lo que alguien habria escrito en un post-it al lado del timbre. */
+.chat-cue-bubble {
+  background-color: var(--hoja);
+  color: var(--boli);
+  font-family: var(--mano);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.2;
+  padding: 9px 15px;
+  border: var(--linea) solid var(--filete);
+  border-radius: var(--r);
+  box-shadow: var(--sombra-flotante);
+  margin-bottom: 12px;
+  white-space: nowrap;
+  transform: rotate(-1.4deg);
+  animation: floatBounce 4s ease-in-out infinite;
+  cursor: pointer;
+  user-select: none;
+}
+
+@keyframes floatBounce {
+  0%, 100% { transform: rotate(-1.4deg) translateY(0); }
+  50%      { transform: rotate(-1.4deg) translateY(-4px); }
+}
+
+.salesianas-chat-widget.chat-open .chat-trigger-btn {
+  display: none !important;
+}
+
+.salesianas-chat-widget.chat-open .chat-cue-bubble {
+  display: none !important;
+}
+
+/* El disparador es un sello de tinta, cuadrado como todo lo demas. */
+.chat-trigger-btn {
+  width: 58px;
+  height: 58px;
+  border-radius: var(--r);
+  background: var(--tinta);
+  color: var(--papel);
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--sombra-flotante);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--t-suave), transform var(--t-suave);
+  position: relative;
+}
+
+.chat-trigger-btn:hover {
+  background-color: #2B2E35;
+  transform: translateY(-2px);
+}
+
+.chat-trigger-btn:active {
+  transform: translateY(0) scale(0.96);
+  transition: transform 80ms ease-out;
+}
+
+.chat-trigger-btn::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 12px;
+  height: 12px;
+  background-color: var(--boli);
+  border: 2px solid var(--papel);
+  border-radius: 50%;
+}
+
+/* ==================== VENTANA ==================== */
+.chat-window {
+  width: 384px;
+  height: 600px;
+  max-height: calc(100dvh - 100px);
+  background: var(--hoja);
+  border: var(--linea) solid var(--tinta);
+  border-radius: var(--r);
+  box-shadow: var(--sombra-flotante);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-bottom: 0;
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
+  pointer-events: none;
+  transition: opacity 0.28s var(--e-out), transform 0.28s var(--e-out);
+}
+
+.salesianas-chat-widget.chat-open .chat-window {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Cabecera de membrete: papel en blanco y un filete de tinta que la separa. */
+.chat-header {
+  background-color: var(--hoja);
+  color: var(--tinta);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  border-bottom: var(--linea) solid var(--tinta);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.chat-header-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r);
+  background: var(--tinta);
+  color: var(--papel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  flex-shrink: 0;
+}
+
+.chat-header-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+}
+
+.chat-header-info h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--tinta);
+  letter-spacing: -0.014em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-header-info p {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--grafito);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+  min-width: 0;
+  max-width: none;
+}
+
+.chat-header-info p > span:not(.status-badge):not(.badge-tag) {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.status-badge {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--boli);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Sin mayusculas forzadas: es una etiqueta escrita, no un rotulo. */
+.badge-tag {
+  background: transparent;
+  color: var(--grafito);
+  padding: 1px 7px;
+  border: var(--linea) solid var(--filete);
+  border-radius: var(--r);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.chat-header-btn {
+  background: transparent;
+  border: none;
+  color: var(--grafito);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color var(--t-rapida), color var(--t-rapida);
+}
+
+.chat-header-btn:hover {
+  background-color: var(--papel);
+  color: var(--tinta);
+}
+
+.chat-header-btn:active {
+  transform: scale(0.94);
+  transition: transform 80ms ease-out;
+}
+
+/* Aviso de que quien contesta es el centro. Nota al pie, no alarma amarilla. */
+.chat-banner-warning {
+  background-color: var(--papel);
+  border-bottom: var(--linea) solid var(--filete);
+  color: var(--grafito);
+  font-family: var(--display);
+  font-size: 12.5px;
+  line-height: 1.4;
+  padding: 9px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.chat-banner-warning strong {
+  color: var(--tinta);
+  font-weight: 600;
+}
+
+.chat-banner-warning svg {
+  flex-shrink: 0;
+  fill: var(--boli);
+}
+
+/* ==================== CUERPO Y MENSAJES ==================== */
+.chat-body {
+  flex: 1;
+  padding: 18px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background-color: var(--papel);
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  max-width: 92%;
+  animation: messageIn 0.28s var(--e-out) forwards;
+}
+
+@keyframes messageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.message.bot {
+  align-self: flex-start;
+}
+
+.message.user {
+  align-self: flex-end;
+}
+
+.message-bubble {
+  padding: 13px 16px;
+  border-radius: var(--r);
+  font-family: var(--cuerpo);
+  font-size: 14.5px;
+  line-height: 1.62;
+  word-break: break-word;
+}
+
+/* Lo que contesta el centro va en una hoja suelta sobre la mesa. */
+.message.bot .message-bubble {
+  background-color: var(--hoja);
+  color: var(--tinta);
+  border: var(--linea) solid var(--filete);
+}
+
+.message.bot .message-bubble strong {
+  color: var(--tinta);
+  font-weight: 600;
+}
+
+.message.bot .message-bubble a {
+  color: var(--boli);
+  text-decoration: none;
+  border-bottom: var(--linea) solid var(--boli-tenue);
+  transition: border-color var(--t-suave);
+}
+
+.message.bot .message-bubble a:hover {
+  border-bottom-color: var(--boli);
+}
+
+/* Lo que pide la familia va en tinta plena, para distinguirlo de un vistazo. */
+.message.user .message-bubble {
+  background-color: var(--tinta);
+  color: var(--papel);
+  border: 1.5px solid var(--tinta);
+}
+
+.message-time {
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--grafito);
+  font-variant-numeric: tabular-nums;
+  margin-top: 5px;
+  padding: 0 2px;
+}
+
+.message.bot .message-time {
+  align-self: flex-start;
+}
+
+.message.user .message-time {
+  align-self: flex-end;
+}
+
+.typing-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background-color: var(--hoja);
+  border: var(--linea) solid var(--filete);
+  padding: 12px 14px;
+  border-radius: var(--r);
+  align-self: flex-start;
+}
+
+.typing-dot {
+  width: 5px;
+  height: 5px;
+  background-color: var(--linea-suave);
+  border-radius: 50%;
+  animation: typingBounce 1.2s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: scale(0.7); opacity: 0.4; }
+  40%           { transform: scale(1.1); opacity: 1; }
+}
+
+/* ==================== OPCIONES GUIADAS ==================== */
+/* Son la navegacion entera del asistente: hojas apiladas que se pulsan. */
+.chat-quick-options {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.quick-option-btn {
+  background: var(--hoja);
+  color: var(--tinta);
+  border: var(--linea) solid var(--filete);
+  padding: 11px 14px;
+  border-radius: var(--r);
+  font-family: var(--display);
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--t-suave), transform var(--t-suave);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.quick-option-btn:hover {
+  border-color: var(--tinta);
+  transform: translateX(2px);
+}
+
+.quick-option-btn:active {
+  transform: translateX(0) scale(0.985);
+  transition: transform 80ms ease-out;
+}
+
+.quick-option-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: var(--linea-suave);
+  flex-shrink: 0;
+  transition: fill var(--t-suave), transform var(--t-suave);
+}
+
+.quick-option-btn:hover svg {
+  fill: var(--boli);
+  transform: translateX(2px);
+}
+
+/* ==================== FORMULARIOS ==================== */
+.chat-form-card {
+  background: var(--hoja);
+  border: var(--linea) solid var(--filete);
+  border-radius: var(--r);
+  padding: 18px;
+  margin-top: 4px;
+  width: 100%;
+}
+
+.chat-form-card h4 {
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  margin-bottom: 5px;
+  color: var(--tinta);
+}
+
+.chat-form-subtitle {
+  font-family: var(--display);
+  font-size: 12.5px;
+  color: var(--grafito);
+  margin-bottom: 14px;
+}
+
+.chat-form-group {
+  margin-bottom: 12px;
+}
+
+.chat-form-group label {
+  display: block;
+  font-family: var(--display);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--tinta);
+  margin-bottom: 5px;
+}
+
+.chat-form-input,
+.chat-form-select,
+.chat-form-textarea {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: var(--linea) solid var(--filete);
+  border-radius: var(--r);
+  font-family: var(--display);
+  font-size: 14px;
+  color: var(--tinta);
+  background-color: var(--papel);
+  transition: border-color var(--t-suave);
+}
+
+.chat-form-textarea {
+  height: auto;
+  padding: 10px 12px;
+  line-height: 1.5;
+}
+
+.chat-form-input:focus,
+.chat-form-select:focus,
+.chat-form-textarea:focus {
+  outline: 2px solid var(--boli);
+  outline-offset: 1px;
+  border-color: var(--tinta);
+  background-color: var(--hoja);
+}
+
+.chat-phone-group {
+  display: flex;
+  gap: 7px;
+  align-items: stretch;
+}
+
+select.chat-prefix-select {
+  width: 92px;
+  min-width: 92px;
+  flex: 0 0 92px;
+  height: 42px;
+  padding: 0 6px;
+  border: var(--linea) solid var(--filete);
+  border-radius: var(--r);
+  font-family: var(--display);
+  font-size: 13px;
+  background-color: var(--papel);
+  color: var(--tinta);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.chat-phone-input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Lo unico rojo del sistema: la correccion sobre un campo mal puesto. */
+.chat-form-error {
+  display: none;
+  font-family: var(--display);
+  font-size: 12px;
+  color: var(--aviso);
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.chat-form-error.visible {
+  display: block;
+}
+
+.chat-form-input.input-invalid,
+.chat-form-select.input-invalid {
+  border-color: var(--aviso) !important;
+  background-color: var(--aviso-fondo);
+}
+
+.form-submit-btn {
+  width: 100%;
+  height: 44px;
+  background-color: var(--tinta);
+  color: var(--papel);
+  border: none;
+  border-radius: var(--r);
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background-color var(--t-suave);
+}
+
+.form-submit-btn:hover {
+  background-color: #2B2E35;
+}
+
+.form-submit-btn:active {
+  transform: scale(0.985);
+  transition: transform 80ms ease-out;
+}
+
+.chat-form-rgpd {
+  margin-top: 12px;
+  font-family: var(--display);
+  font-size: 11.5px;
+  color: var(--grafito);
+  line-height: 1.4;
+  display: flex;
+  gap: 6px;
+}
+
+.chat-form-rgpd svg {
+  width: 13px;
+  height: 13px;
+  fill: var(--linea-suave);
+  flex-shrink: 0;
+}
+
+/* ==================== PIE DE CONSULTA LIBRE ==================== */
+/* Aqui si hay caja de texto: la version con IA entiende lo que se le
+   escribe. En la version sin IA no existe, porque solo navega por botones. */
+.chat-footer {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 12px;
+  background-color: var(--hoja);
+  border-top: var(--linea) solid var(--filete);
+  flex-shrink: 0;
+}
+
+.chat-input-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 13px;
+  border: var(--linea) solid var(--filete);
+  border-radius: var(--r);
+  font-family: var(--display);
+  font-size: 14px;
+  color: var(--tinta);
+  background-color: var(--papel);
+  transition: border-color var(--t-suave);
+}
+
+.chat-input::placeholder {
+  color: var(--grafito);
+}
+
+.chat-input:focus {
+  outline: 2px solid var(--boli);
+  outline-offset: 1px;
+  border-color: var(--tinta);
+  background-color: var(--hoja);
+}
+
+.chat-send-btn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--r);
+  background-color: var(--tinta);
+  color: var(--papel);
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--t-suave);
+}
+
+.chat-send-btn:hover {
+  background-color: #2B2E35;
+}
+
+.chat-send-btn:active {
+  transform: scale(0.95);
+  transition: transform 80ms ease-out;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-footer {
+  padding: 14px 22px;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-input {
+  height: 48px;
+  font-size: 15.5px;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-send-btn {
+  width: 48px;
+  height: 48px;
+  font-size: 17px;
+}
+
+/* ==================== TARJETA DE ENLACE OFICIAL ==================== */
+.chat-link-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 4px;
+  padding: 14px;
+  background-color: var(--hoja);
+  border: var(--linea) solid var(--filete);
+  border-radius: var(--r);
+  text-decoration: none;
+  width: 100%;
+  transition: border-color var(--t-suave), transform var(--t-suave);
+}
+
+.chat-link-card:hover {
+  border-color: var(--tinta);
+  transform: translateY(-2px);
+}
+
+.chat-link-card:active {
+  transform: translateY(0) scale(0.99);
+  transition: transform 80ms ease-out;
+}
+
+.chat-link-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r);
+  background-color: var(--papel);
+  border: var(--linea) solid var(--filete);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.chat-link-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.chat-link-title {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--boli);
+}
+
+.chat-link-desc {
+  font-family: var(--display);
+  font-size: 12.5px;
+  color: var(--grafito);
+  line-height: 1.4;
+}
+
+.chat-link-arrow {
+  flex-shrink: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--boli);
+}
+
+.salesianas-chat-widget.chat-expanded .chat-link-card {
+  padding: 17px 19px;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-link-title {
+  font-size: 15.5px;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-link-desc {
+  font-size: 13.5px;
+}
+
+/* ==================== CALENDARIO ESCOLAR ==================== */
+/* Los tres estados se distinguen por relleno y forma, no solo por color:
+   vacaciones es una casilla sombreada, festivo lleva un punto de boligrafo
+   debajo y hoy va en tinta plena. Asi se leen tambien sin ver el color. */
+.cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 16px;
+  font-family: var(--display);
+  font-size: 12.5px;
+  color: var(--grafito);
+  font-weight: 500;
+}
+
+.cal-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cal-swatch {
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.cal-swatch-today {
+  background-color: var(--tinta);
+}
+
+.cal-swatch-vacation {
+  background-color: var(--banda);
+  border: var(--linea) solid var(--filete-banda);
+}
+
+.cal-swatch-festivo {
+  background-color: var(--boli);
+  border-radius: 50%;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.cal-month {
+  border: var(--linea) solid var(--filete);
+  border-radius: var(--r);
+  padding: 12px;
+  background-color: var(--hoja);
+}
+
+.cal-month-title {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--tinta);
+  margin-bottom: 8px;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 5px;
+}
+
+.cal-weekdays span {
+  font-family: var(--display);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--grafito);
+  text-align: center;
+}
+
+.cal-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.cal-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  font-family: var(--display);
+  font-size: 11.5px;
+  color: var(--grafito);
+  border-radius: var(--r);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.cal-day.cal-empty {
+  visibility: hidden;
+}
+
+.cal-day.cal-vacation {
+  background-color: var(--banda);
+  color: var(--tinta);
+  font-weight: 600;
+}
+
+.cal-day.cal-festivo {
+  position: relative;
+  font-weight: 700;
+  color: var(--tinta);
+}
+
+.cal-day.cal-festivo::after {
+  content: "";
+  position: absolute;
+  bottom: 1px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--boli);
+}
+
+.cal-day.cal-today {
+  background-color: var(--tinta) !important;
+  color: var(--papel) !important;
+  font-weight: 700;
+  border-radius: var(--r);
+}
+
+.salesianas-chat-widget.chat-expanded .cal-day {
+  font-size: 13px;
+}
+
+.salesianas-chat-widget.chat-expanded .cal-month-title {
+  font-size: 14.5px;
+}
+
+.salesianas-chat-widget.chat-expanded .cal-grid {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+/* ==================== PIE DEL ASISTENTE ==================== */
+.chat-credits {
+  background-color: var(--papel);
+  border-top: var(--linea) solid var(--filete);
+  padding: 9px 12px;
+  text-align: center;
+  font-family: var(--display);
+  font-size: 11.5px;
+  color: var(--grafito);
+  flex-shrink: 0;
+}
+
+.chat-credits span {
+  font-weight: 600;
+  color: var(--tinta);
+}
+
+/* ==================== MODO PANTALLA GRANDE ==================== */
+.salesianas-chat-widget.chat-expanded {
+  top: 110px !important;
+  bottom: 20px !important;
+  right: 24px !important;
+  height: auto !important;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-window {
+  width: min(980px, calc(100vw - 48px)) !important;
+  height: 100% !important;
+  max-height: calc(100dvh - 130px) !important;
+  margin-bottom: 0 !important;
+  border-radius: var(--r);
+  box-shadow: var(--sombra-flotante);
+}
+
+.salesianas-chat-widget.chat-expanded #icon-maximize {
+  display: none !important;
+}
+
+.salesianas-chat-widget.chat-expanded #icon-minimize {
+  display: block !important;
+}
+
+/* A pantalla grande el texto sube a tamano de lectura de la web. */
+.salesianas-chat-widget.chat-expanded .chat-header {
+  padding: 16px 22px;
+  min-height: 58px;
+  flex-shrink: 0;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-header-info h3 {
+  font-size: 17.5px;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-header-info p {
+  font-size: 13.5px;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-banner-warning {
+  padding: 11px 22px;
+  font-size: 13.5px;
+  flex-shrink: 0;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-body {
+  padding: 26px 28px;
+  gap: 18px;
+}
+
+.salesianas-chat-widget.chat-expanded .message {
+  width: 100%;
+  max-width: 100%;
+}
+
+.salesianas-chat-widget.chat-expanded .message.bot {
+  width: 100%;
+}
+
+.salesianas-chat-widget.chat-expanded .message.bot .message-bubble {
+  width: 100%;
+  max-width: 100%;
+  font-size: 17px;
+  line-height: 1.66;
+  padding: 18px 22px;
+  border-radius: var(--r);
+}
+
+.salesianas-chat-widget.chat-expanded .message.user {
+  align-self: flex-end;
+  width: auto;
+  max-width: 80%;
+}
+
+.salesianas-chat-widget.chat-expanded .message.user .message-bubble {
+  font-size: 17px;
+  padding: 14px 20px;
+}
+
+.salesianas-chat-widget.chat-expanded .message-time {
+  font-size: 12.5px;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-quick-options {
+  width: 100%;
+  gap: 10px;
+}
+
+.salesianas-chat-widget.chat-expanded .quick-option-btn {
+  width: 100%;
+  font-size: 16px;
+  padding: 15px 20px;
+  border-radius: var(--r);
+}
+
+.salesianas-chat-widget.chat-expanded .quick-option-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-form-card {
+  width: 100%;
+  padding: 24px;
+  border-radius: var(--r);
+}
+
+.salesianas-chat-widget.chat-expanded .chat-form-card h4 {
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-form-group label {
+  font-size: 13.5px;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-form-input,
+.salesianas-chat-widget.chat-expanded .chat-form-select {
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  line-height: 48px !important;
+  font-size: 15px !important;
+}
+
+.salesianas-chat-widget.chat-expanded .chat-phone-group select.chat-prefix-select {
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  line-height: 48px !important;
+  font-size: 14px !important;
+  width: 106px !important;
+  min-width: 106px !important;
+  flex: 0 0 106px !important;
+}
+
+.salesianas-chat-widget.chat-expanded .form-submit-btn {
+  height: 48px;
+  font-size: 16px;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+/* En pantallas estrechas la cabecera no da para el nombre del centro y el
+   boton en una linea: se aprieta el boton antes que partirlo en dos. */
+@media (max-width: 560px) {
+  .nav-container {
+    gap: 12px;
+    padding-inline: 20px;
+  }
+
+  .brand-name { font-size: 15px; }
+  .brand-tag { font-size: 12.5px; }
+
+  .btn-primary-sm {
+    font-size: 14px;
+    padding: 11px 15px;
+    white-space: nowrap;
+  }
+
+  /* Los agujeros de la hoja son decorativos: se retiran antes que el texto. */
+  .preview-dots { display: none; }
+  .preview-header { gap: 10px; }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 17.5px;
+  }
+
+  .nav-menu {
+    display: none;
+  }
+
+  .hero-subheading {
+    font-size: 17px;
+  }
+
+  .footer-top {
+    align-items: flex-start;
+  }
+
+  .salesianas-chat-widget {
+    bottom: 12px;
+    right: 12px;
+  }
+
+  .chat-window {
+    width: calc(100vw - 24px);
+    height: calc(100dvh - 90px);
+  }
+
+  .salesianas-chat-widget.chat-expanded {
+    top: 60px !important;
+    bottom: 12px !important;
+    right: 12px !important;
+  }
+
+  .salesianas-chat-widget.chat-expanded .chat-window {
+    width: calc(100vw - 24px) !important;
+  }
+}
+
+/* Menos movimiento: se queda todo donde esta, sin latidos ni entradas.
+   La nota a mano conserva su inclinacion, que es forma y no animacion. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .chat-cue-bubble {
+    animation: none;
+    transform: rotate(-1.4deg);
+  }
+
+  .stage-card:hover,
+  .quick-option-btn:hover,
+  .chat-link-card:hover,
+  .chat-trigger-btn:hover {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   LO PROPIO DE LA VERSION CON IA
+   ========================================================================== */
+
+/* — Aviso de que el asistente esta respondiendo sin modelo (modo degradado).
+     Es la unica correccion en rojo fuera de los formularios. — */
+.chat-aviso-modo {
+  display: none;
+  padding: 9px 14px;
+  background: var(--aviso-fondo);
+  border-top: var(--linea) solid var(--aviso-filete);
+  color: var(--aviso);
+  font-family: var(--display);
+  font-size: 12.5px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.chat-aviso-modo.visible {
+  display: block;
+}
+
+/* — Barra de avance del test de orientacion. Ver cuanto queda es lo que
+     evita que se abandone a mitad. — */
+.chat-progreso {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.chat-progreso-barra {
+  flex: 1;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--filete);
+  overflow: hidden;
+}
+
+.chat-progreso-relleno {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--tinta);
+  transition: width 0.35s var(--e-out);
+}
+
+.chat-progreso-texto {
+  font-family: var(--display);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--grafito);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+/* — El cursor mientras la respuesta se va escribiendo. — */
+.cursor-escritura {
+  display: inline-block;
+  width: 2px;
+  height: 0.95em;
+  background: var(--tinta);
+  vertical-align: text-bottom;
+  animation: parpadeo-cursor 1s steps(2, start) infinite;
+}
+
+@keyframes parpadeo-cursor {
+  to { visibility: hidden; }
+}
+
+/* — Tercer tipo de dia: jornada de centro a la que SI hay que acudir. Los
+     cuatro estados del calendario se distinguen por forma, no por color:
+     vacaciones va sombreado, festivo lleva punto debajo, la jornada va
+     recuadrada y hoy va en tinta plena. El recuadro es un filete interior
+     para no mover la casilla ni un pixel. — */
+.cal-swatch-jornada {
+  background: var(--hoja);
+  border: var(--linea) solid var(--tinta);
+}
+
+.cal-day.cal-jornada {
+  color: var(--tinta);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1.5px var(--linea-suave);
+}
+
+/* — Consentimiento en los formularios (art. 13 RGPD). — */
+.chat-form-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-family: var(--display);
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--grafito);
+  cursor: pointer;
+}
+
+.chat-form-check input[type="checkbox"] {
+  margin-top: 2px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  accent-color: var(--boli);
+  cursor: pointer;
+}
+
+.chat-form-check a {
+  color: var(--boli);
+  text-decoration: none;
+  border-bottom: var(--linea) solid var(--boli-tenue);
+  transition: border-color var(--t-suave);
+}
+
+.chat-form-check a:hover {
+  border-bottom-color: var(--boli);
+}
+
+/* — El distintivo de la version con IA en el hero. Sin pastilla: la linea
+     entera pasa a tinta y el punto al azul de boligrafo. — */
+.hero-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--boli);
+  flex-shrink: 0;
+}
+
+.hero-badge-ia {
+  color: var(--tinta);
+  font-weight: 600;
+}
+
+.hero-badge-ia .hero-badge-dot,
+.hero-badge-ia .badge-status-dot {
+  background-color: var(--boli);
+}
+
+/* ==========================================================================
+   TEMA OSCURO OPCIONAL, ACTIVABLE POR CENTRO
+   El papel se invierte: tinta de fondo y el texto en el tono del papel. Lo
+   que escribe la familia pasa a papel sobre tinta, que es justo el reverso
+   de lo que hace en claro.
+   ========================================================================== */
+.tema-oscuro .chat-window {
+  background: var(--noche);
+  border-color: var(--noche-filete);
+}
+
+.tema-oscuro .chat-header {
+  background: var(--noche-cab);
+  border-bottom-color: var(--papel);
+  color: var(--papel);
+}
+
+.tema-oscuro .chat-header-info h3 {
+  color: var(--papel);
+}
+
+.tema-oscuro .chat-header-info p {
+  color: var(--tinta-suave);
+}
+
+.tema-oscuro .chat-header-avatar {
+  background: var(--papel);
+  color: var(--tinta);
+}
+
+.tema-oscuro .chat-header-btn {
+  color: var(--tinta-suave);
+}
+
+.tema-oscuro .chat-header-btn:hover {
+  background: var(--noche-alta);
+  color: var(--papel);
+}
+
+.tema-oscuro .chat-banner-warning {
+  background: var(--noche-cab);
+  border-bottom-color: var(--noche-filete);
+  color: var(--tinta-suave);
+}
+
+.tema-oscuro .chat-banner-warning strong {
+  color: var(--papel);
+}
+
+.tema-oscuro .chat-banner-warning svg {
+  fill: var(--boli-noche);
+}
+
+.tema-oscuro .chat-body {
+  background: var(--noche);
+}
+
+.tema-oscuro .message.bot .message-bubble {
+  background: var(--noche-alta);
+  color: var(--tinta-suave);
+  border-color: var(--noche-filete);
+}
+
+.tema-oscuro .message.bot .message-bubble strong {
+  color: var(--papel);
+}
+
+.tema-oscuro .message.bot .message-bubble a {
+  color: var(--boli-noche);
+  border-bottom-color: rgba(143, 179, 232, 0.4);
+}
+
+.tema-oscuro .message.bot .message-bubble a:hover {
+  border-bottom-color: var(--boli-noche);
+}
+
+.tema-oscuro .message.user .message-bubble {
+  background: var(--papel);
+  color: var(--tinta);
+  border-color: var(--papel);
+}
+
+.tema-oscuro .message-time {
+  color: var(--noche-tenue);
+}
+
+.tema-oscuro .typing-indicator {
+  background: var(--noche-alta);
+  border-color: var(--noche-filete);
+}
+
+.tema-oscuro .typing-dot {
+  background: var(--noche-tenue);
+}
+
+.tema-oscuro .quick-option-btn {
+  background: var(--noche-alta);
+  border-color: var(--noche-filete);
+  color: var(--tinta-suave);
+}
+
+.tema-oscuro .quick-option-btn:hover {
+  border-color: var(--papel);
+}
+
+.tema-oscuro .quick-option-btn svg {
+  fill: var(--noche-tenue);
+}
+
+.tema-oscuro .quick-option-btn:hover svg {
+  fill: var(--boli-noche);
+}
+
+.tema-oscuro .chat-form-card,
+.tema-oscuro .chat-link-card {
+  background: var(--noche-alta);
+  border-color: var(--noche-filete);
+}
+
+.tema-oscuro .chat-link-card:hover {
+  border-color: var(--papel);
+}
+
+.tema-oscuro .chat-form-card h4 {
+  color: var(--papel);
+}
+
+.tema-oscuro .chat-link-title,
+.tema-oscuro .chat-link-arrow {
+  color: var(--boli-noche);
+}
+
+.tema-oscuro .chat-form-subtitle,
+.tema-oscuro .chat-link-desc,
+.tema-oscuro .chat-form-rgpd,
+.tema-oscuro .chat-form-check {
+  color: var(--noche-tenue);
+}
+
+.tema-oscuro .chat-form-check a {
+  color: var(--boli-noche);
+}
+
+.tema-oscuro .chat-form-group label {
+  color: var(--tinta-suave);
+}
+
+.tema-oscuro .chat-link-icon {
+  background: var(--noche);
+  border-color: var(--noche-filete);
+}
+
+.tema-oscuro .chat-form-input,
+.tema-oscuro .chat-form-select,
+.tema-oscuro .chat-form-textarea,
+.tema-oscuro select.chat-prefix-select {
+  background: var(--noche);
+  border-color: var(--noche-filete);
+  color: var(--tinta-suave);
+}
+
+.tema-oscuro .chat-form-input:focus,
+.tema-oscuro .chat-form-select:focus,
+.tema-oscuro .chat-form-textarea:focus {
+  outline-color: var(--boli-noche);
+  border-color: var(--papel);
+  background: var(--noche-cab);
+}
+
+.tema-oscuro .form-submit-btn {
+  background: var(--papel);
+  color: var(--tinta);
+}
+
+.tema-oscuro .form-submit-btn:hover {
+  background: var(--hoja);
+}
+
+.tema-oscuro .cal-month {
+  background: var(--noche-alta);
+  border-color: var(--noche-filete);
+}
+
+.tema-oscuro .cal-month-title {
+  color: var(--papel);
+}
+
+.tema-oscuro .cal-day {
+  color: var(--tinta-suave);
+}
+
+.tema-oscuro .cal-weekdays span,
+.tema-oscuro .cal-legend {
+  color: var(--noche-tenue);
+}
+
+.tema-oscuro .cal-day.cal-vacation {
+  background: var(--noche-filete);
+  color: var(--papel);
+}
+
+.tema-oscuro .cal-day.cal-festivo,
+.tema-oscuro .cal-day.cal-jornada {
+  color: var(--papel);
+}
+
+.tema-oscuro .cal-day.cal-festivo::after {
+  background: var(--boli-noche);
+}
+
+.tema-oscuro .cal-day.cal-jornada {
+  box-shadow: inset 0 0 0 1.5px #4A4F58;
+}
+
+.tema-oscuro .cal-day.cal-today {
+  background: var(--papel) !important;
+  color: var(--tinta) !important;
+}
+
+.tema-oscuro .cal-swatch-today {
+  background: var(--papel);
+}
+
+.tema-oscuro .cal-swatch-vacation {
+  background: var(--noche-filete);
+  border-color: #4A4F58;
+}
+
+.tema-oscuro .cal-swatch-festivo {
+  background: var(--boli-noche);
+}
+
+.tema-oscuro .cal-swatch-jornada {
+  background: var(--noche);
+  border-color: var(--papel);
+}
+
+.tema-oscuro .chat-footer {
+  background: var(--noche-cab);
+  border-top-color: var(--noche-filete);
+}
+
+.tema-oscuro .chat-input {
+  background: var(--noche);
+  border-color: var(--noche-filete);
+  color: var(--tinta-suave);
+}
+
+.tema-oscuro .chat-input::placeholder {
+  color: var(--noche-tenue);
+}
+
+.tema-oscuro .chat-input:focus {
+  outline-color: var(--boli-noche);
+  border-color: var(--papel);
+  background: var(--noche-cab);
+}
+
+.tema-oscuro .chat-send-btn {
+  background: var(--papel);
+  color: var(--tinta);
+}
+
+.tema-oscuro .chat-send-btn:hover {
+  background: var(--hoja);
+}
+
+.tema-oscuro .chat-credits {
+  background: var(--noche-cab);
+  border-top-color: var(--noche-filete);
+  color: var(--noche-tenue);
+}
+
+.tema-oscuro .chat-credits span {
+  color: var(--papel);
+}
+
+.tema-oscuro .cursor-escritura {
+  background: var(--papel);
+}
+
+.tema-oscuro .chat-progreso-barra {
+  background: var(--noche-filete);
+}
+
+.tema-oscuro .chat-progreso-relleno {
+  background: var(--papel);
+}
+
+.tema-oscuro .chat-progreso-texto {
+  color: var(--noche-tenue);
+}
+
+.tema-oscuro .chat-aviso-modo {
+  background: #2A1F1D;
+  border-top-color: #4A322C;
+  color: #E8A99B;
+}
+
+/* ==================== FOCO VISIBLE ==================== */
+.quick-option-btn:focus-visible,
+.chat-form-input:focus-visible,
+.form-submit-btn:focus-visible,
+.chat-header-btn:focus-visible,
+.chat-trigger-btn:focus-visible,
+.chat-link-card:focus-visible {
+  outline: 2px solid var(--boli);
+  outline-offset: 3px;
+}
+
+.tema-oscuro .quick-option-btn:focus-visible,
+.tema-oscuro .chat-form-input:focus-visible,
+.tema-oscuro .form-submit-btn:focus-visible,
+.tema-oscuro .chat-header-btn:focus-visible,
+.tema-oscuro .chat-trigger-btn:focus-visible,
+.tema-oscuro .chat-link-card:focus-visible {
+  outline-color: var(--boli-noche);
+}

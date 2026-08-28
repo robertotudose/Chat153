@@ -1,0 +1,939 @@
+<meta charset="utf-8">
+<title>Guion del 29 de agosto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+  /* Paleta heredada de 03 - Web SCHOLAIA: papel, tinta y azul de bolígrafo.
+     Se le añaden tres colores de estado, que en la landing no hacen falta
+     pero en una pantalla de trabajo son información, no decoración. */
+  :root {
+    --papel:      #F3F1EA;
+    --papel-alto: #FAF8F3;
+    --papel-hondo:#E9E5DA;
+    --tinta:      #15171B;
+    --tinta-suave:#4A4740;
+    --grafito:    #6E6A61;
+    --linea:      #D6D1C3;
+    --boli:       #1B4B8F;
+    --boli-tenue: #E2E8F3;
+    --alto:       #8E2F1E;
+    --alto-fondo: #F6E7E3;
+    --medio:      #7D5E10;
+    --medio-fondo:#F6EEDC;
+    --hecho:      #2F5D42;
+    --hecho-fondo:#E4EDE7;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --papel:      #16181C;
+      --papel-alto: #1D2026;
+      --papel-hondo:#101216;
+      --tinta:      #E8E5DC;
+      --tinta-suave:#B4AFA4;
+      --grafito:    #918B80;
+      --linea:      #32363D;
+      --boli:       #89ADE0;
+      --boli-tenue: #1B2735;
+      --alto:       #E08B76;
+      --alto-fondo: #2E1D18;
+      --medio:      #D6AE55;
+      --medio-fondo:#2B2416;
+      --hecho:      #7FB795;
+      --hecho-fondo:#182620;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --papel:      #16181C;
+    --papel-alto: #1D2026;
+    --papel-hondo:#101216;
+    --tinta:      #E8E5DC;
+    --tinta-suave:#B4AFA4;
+    --grafito:    #918B80;
+    --linea:      #32363D;
+    --boli:       #89ADE0;
+    --boli-tenue: #1B2735;
+    --alto:       #E08B76;
+    --alto-fondo: #2E1D18;
+    --medio:      #D6AE55;
+    --medio-fondo:#2B2416;
+    --hecho:      #7FB795;
+    --hecho-fondo:#182620;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--papel);
+    color: var(--tinta);
+    font-family: "Literata", Georgia, serif;
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .hoja {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 7rem;
+  }
+
+  h1, h2, h3, h4, .ui {
+    font-family: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5.5vw, 2.9rem);
+    line-height: 1.1;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 1rem;
+    text-wrap: balance;
+  }
+
+  h2 {
+    font-size: 1.55rem;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    line-height: 1.2;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-size: 1.14rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--tinta);
+  }
+
+  p { margin: 0; }
+
+  a { color: var(--boli); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--boli);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  strong { font-weight: 600; }
+
+  /* --- Cabecera ------------------------------------------------------- */
+
+  .encabezado { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  .fecha {
+    font-family: "Schibsted Grotesk", sans-serif;
+    font-size: 0.86rem;
+    color: var(--grafito);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .entradilla {
+    font-size: 1.12rem;
+    line-height: 1.55;
+    color: var(--tinta-suave);
+  }
+
+  .citas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    padding: 0.9rem 1.1rem;
+    background: var(--boli-tenue);
+    border-radius: 4px;
+    font-family: "Schibsted Grotesk", sans-serif;
+    font-size: 0.92rem;
+  }
+  .citas b { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* --- Estructura ------------------------------------------------------ */
+
+  .parte { margin-top: 4.5rem; }
+
+  .parte-cabeza {
+    border-top: 2px solid var(--tinta);
+    padding-top: 1rem;
+    margin-bottom: 2.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .parte-quien {
+    font-family: "Schibsted Grotesk", sans-serif;
+    font-size: 0.88rem;
+    color: var(--boli);
+    font-weight: 500;
+  }
+
+  .bloque { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 0.9rem; }
+
+  .bloque > p, .bloque > ul, .bloque > ol { margin: 0; }
+
+  ul, ol { padding-left: 1.15rem; display: flex; flex-direction: column; gap: 0.45rem; margin: 0; }
+  li { padding-left: 0.15rem; }
+  li::marker { color: var(--grafito); }
+
+  /* --- Puntos de la reunión -------------------------------------------- */
+
+  .punto {
+    border: 1px solid var(--linea);
+    border-radius: 4px;
+    background: var(--papel-alto);
+    padding: 1.4rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .punto-cabeza {
+    display: flex;
+    gap: 0.85rem;
+    align-items: baseline;
+  }
+
+  .punto-num {
+    font-family: "Schibsted Grotesk", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--boli);
+    font-variant-numeric: tabular-nums;
+    flex: none;
+    padding-top: 0.1rem;
+  }
+
+  .recomiendo {
+    border-left: 3px solid var(--boli);
+    padding: 0.15rem 0 0.15rem 0.95rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .recomiendo h4 { color: var(--boli); }
+
+  /* --- Etiquetas de estado --------------------------------------------- */
+
+  .chip {
+    display: inline-block;
+    font-family: "Schibsted Grotesk", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 500;
+    padding: 0.13rem 0.5rem;
+    border-radius: 3px;
+    white-space: nowrap;
+    vertical-align: 0.08em;
+  }
+  .chip--hecho  { background: var(--hecho-fondo); color: var(--hecho); }
+  .chip--medio  { background: var(--medio-fondo); color: var(--medio); }
+  .chip--alto   { background: var(--alto-fondo);  color: var(--alto); }
+
+  /* --- Tablas ----------------------------------------------------------- */
+
+  .tabla-marco { overflow-x: auto; border: 1px solid var(--linea); border-radius: 4px; }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: "Schibsted Grotesk", sans-serif;
+    font-size: 0.9rem;
+    background: var(--papel-alto);
+  }
+  th, td {
+    text-align: left;
+    padding: 0.6rem 0.85rem;
+    border-bottom: 1px solid var(--linea);
+    vertical-align: top;
+  }
+  th { font-weight: 600; background: var(--papel-hondo); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* --- Código ----------------------------------------------------------- */
+  /* La landing no lleva monoespaciada, pero aquí sí: en una ruta o en un
+     comando hace falta distinguir la ele del uno. Es función, no estilo. */
+
+  code {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 0.855em;
+    background: var(--papel-hondo);
+    padding: 0.1em 0.34em;
+    border-radius: 3px;
+  }
+
+  pre {
+    margin: 0;
+    background: var(--papel-hondo);
+    border: 1px solid var(--linea);
+    border-radius: 4px;
+    padding: 0.9rem 1.05rem;
+    overflow-x: auto;
+  }
+  pre code { background: none; padding: 0; font-size: 0.82rem; line-height: 1.65; }
+
+  /* --- Pasos numerados de instalación ----------------------------------- */
+
+  .pasos { list-style: none; padding: 0; counter-reset: paso; gap: 1.1rem; }
+  .pasos > li {
+    counter-increment: paso;
+    display: grid;
+    grid-template-columns: 1.9rem 1fr;
+    gap: 0.4rem 0.5rem;
+    padding-left: 0;
+  }
+  .pasos > li::before {
+    content: counter(paso);
+    font-family: "Schibsted Grotesk", sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--boli);
+    font-variant-numeric: tabular-nums;
+    padding-top: 0.22rem;
+  }
+  .pasos > li > * { grid-column: 2; }
+
+  /* --- Detalles plegables ------------------------------------------------ */
+
+  details {
+    border: 1px solid var(--linea);
+    border-radius: 4px;
+    background: var(--papel-alto);
+    padding: 0.85rem 1.1rem;
+  }
+  summary {
+    cursor: pointer;
+    font-family: "Schibsted Grotesk", sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+  details[open] summary { margin-bottom: 0.8rem; }
+
+  .nota {
+    font-size: 0.93rem;
+    color: var(--grafito);
+    line-height: 1.55;
+  }
+
+  .cierre {
+    margin-top: 4.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--linea);
+    font-size: 0.92rem;
+    color: var(--grafito);
+  }
+
+  @media (max-width: 34rem) {
+    body { font-size: 16px; }
+    .hoja { padding: 2.5rem 1.15rem 5rem; }
+    .punto { padding: 1.15rem 1.15rem; }
+  }
+</style>
+
+<div class="hoja">
+
+  <header class="encabezado">
+    <div class="fecha">Sábado 29 de agosto de 2026</div>
+    <h1>Qué hay que decidir mañana</h1>
+    <p class="entradilla">
+      Cuatro de las cinco decisiones se cerraron anoche y ya están construidas:
+      los precios están publicados, Essential recoge las preguntas que no
+      resuelve y el panel de negocio es un tablero. Este documento tiene dos
+      partes, una por reunión: la primera repasa lo decidido y lo que queda
+      abierto; la segunda es el traspaso para el informático.
+    </p>
+    <div class="citas">
+      <span><b>12:00</b> · call con el equipo → parte 1</span>
+      <span><b>Después</b> · informático → parte 2</span>
+    </div>
+  </header>
+
+  <div class="bloque">
+    <h3>El estado en una frase</h3>
+    <p>
+      Tenemos un producto que funciona, con 79 comprobaciones de seguridad en
+      verde, y <strong>cero institutos firmados</strong>. Nunca se ha desplegado
+      en un servidor de verdad ni lo ha usado una familia real. El cuello de
+      botella no es la tecnología: es vender, y estamos dentro de la ventana de
+      septiembre, que es una de las dos que hay al año.
+    </p>
+  </div>
+
+  <!-- ================= PARTE 1 ================= -->
+
+  <section class="parte">
+    <div class="parte-cabeza">
+      <div class="parte-quien">Parte 1 · call de las 12:00</div>
+      <h2>Lo decidido, lo construido y lo que sigue abierto</h2>
+    </div>
+
+    <div class="punto" style="border-color:var(--boli)">
+      <h3>Lo que ya está hecho, para no gastar la call en ello</h3>
+      <ul>
+        <li><b>Precios publicados</b> en la web: seis tramos por alumnos, de 99 € a 459 € al mes, más instalación de 220 / 320 / 420 €. Ya no se negocia.</li>
+        <li><b>Essential, 2 actualizaciones al año</b> incluidas y 45 € a partir de ahí. Al segundo cambio de pago, Centro sale más barato que seguir en Essential.</li>
+        <li><b>Infinito deja de prometer multi-sede</b>: cada sede es su instalación, con 80 € de descuento al mes desde la segunda.</li>
+        <li><b>Essential recoge preguntas</b>: botón para escribir lo que no encuentra, sin prometer respuesta. Esa lista es la cola de a quién llamar para subirle a Centro.</li>
+        <li><b>El panel de negocio es un tablero</b>: clientes, embudo, renovaciones, soporte y concentración, con el aspecto de la web.</li>
+      </ul>
+    </div>
+
+    <p class="nota">
+      Lo que queda por hablar va abajo, en orden de urgencia.
+    </p>
+
+    <div class="bloque">
+      <article class="punto">
+        <div class="punto-cabeza">
+          <span class="punto-num">01</span>
+          <h3>Cuánto soporte regalamos con Essential</h3>
+        </div>
+        <p>
+          Essential no lleva panel. Eso significa que <strong>cada cambio vuelve
+          a nosotros</strong>: una fecha que se mueve, la cuota del comedor, un
+          horario nuevo. El colegio nos escribe y lo tocamos nosotros.
+        </p>
+        <p>
+          El problema es de aritmética. Essential son 89 € al mes de referencia,
+          y nuestro propio plan de negocio calcula el soporte en <strong>hora y
+          media al mes por instituto</strong>. Un plan que no queremos vender,
+          que además nos come horas, es el peor de los mundos: no da ingresos y
+          sí da trabajo.
+        </p>
+        <div class="recomiendo">
+          <h4>Lo que propongo</h4>
+          <p>
+            Dos actualizaciones de contenido al año incluidas. A partir de ahí,
+            <strong>45 € por actualización</strong>.
+          </p>
+          <p class="nota">
+            El número no es al azar. Entre Essential y Centro hay 60 € al mes de
+            diferencia. Con esta tarifa, al segundo cambio de pago del año el
+            colegio ya está pagando más de lo que le costaría tener el panel y
+            hacerlo él en dos minutos. La subida a Centro se argumenta sola, con
+            su propia factura delante.
+          </p>
+        </div>
+        <details>
+          <summary>La alternativa más agresiva, por si la queréis discutir</summary>
+          <p>
+            Que la prueba gratuita sea <strong>Centro, no Essential</strong>. El
+            colegio pasa treinta días escribiendo con sus palabras, cambiando
+            cosas él mismo y viendo en su panel qué le preguntan las familias.
+            Si no contrata, cae a Essential y lo pierde.
+          </p>
+          <p class="nota">
+            Perder algo que ya se tenía pesa más que ganar algo que no se conoce.
+            Con Essential de entrada, el colegio nunca llega a echar de menos lo
+            que no ha probado.
+          </p>
+        </details>
+      </article>
+
+      <article class="punto">
+        <div class="punto-cabeza">
+          <span class="punto-num">02</span>
+          <h3>Qué hacemos con el panel de negocio</h3>
+        </div>
+        <p>
+          Lo he abierto y revisado entero antes de opinar. <strong>No es
+          inservible</strong>: el desglose de costes es correcto, distingue
+          honestamente lo medido de lo supuesto, y marca como hipótesis sin
+          verificar justo el dato que más se usaría para vender (el 80 % de
+          llamadas evitadas). Eso está bien hecho y no hay que tirarlo.
+        </p>
+        <p>Lo que sí falla son dos cosas concretas:</p>
+        <ul>
+          <li>
+            <strong>Es una calculadora para un negocio de cero clientes.</strong>
+            Todo sale de deslizadores, y con cero institutos todo marca 0 €.
+            Responde a «qué pasaría si», cuando lo que hace falta es «qué hago
+            esta semana». Y mide la parte que no es el problema —los gastos son
+            290 € al mes y ya los sabemos— mientras que la parte que sí lo es,
+            conseguir reuniones, no aparece por ningún lado.
+          </li>
+          <li>
+            <strong>No sigue el sistema visual del proyecto.</strong> Fondo
+            oscuro, azul distinto, números en monoespaciada. Parece de otra
+            empresa. La regla del proyecto es que todo herede la paleta de la
+            web, y este panel es de antes de esa regla.
+          </li>
+        </ul>
+        <div class="recomiendo">
+          <h4>Lo que propongo</h4>
+          <p>
+            Que deje de ser un simulador y pase a ser <strong>el tablero de
+            quién va a comprar</strong>: qué colegios hemos contactado, en qué
+            punto está cada uno, cuál es la siguiente acción y qué día, y cuánto
+            queda de la ventana de septiembre. Debajo, una lista corta de lo que
+            bloquea la primera venta. La calculadora se queda, plegada, en una
+            sección al final.
+          </p>
+          <p class="nota">
+            Es media jornada de trabajo. Puedo tenerlo hecho para la semana que
+            viene si en la call se aprueba.
+          </p>
+        </div>
+      </article>
+
+      <article class="punto">
+        <div class="punto-cabeza">
+          <span class="punto-num">03</span>
+          <h3>«Centros sin límite» de Infinito: lo construimos o lo reescribimos</h3>
+        </div>
+        <p>
+          La web promete, en la ficha de Infinito, «centros sin límite, cada uno
+          con su calendario». <strong>Hoy eso no existe así.</strong> El servidor
+          carga la configuración de un centro al arrancar, así que cada sede
+          necesita su propia instalación. Funciona, pero no es lo que la frase
+          da a entender.
+        </p>
+        <p>
+          Si mañana una fundación con cinco colegios dice que sí, tendremos que
+          explicarlo en mitad de la venta. Es la peor conversación posible.
+        </p>
+        <div class="recomiendo">
+          <h4>Lo que propongo</h4>
+          <p>
+            Reescribir la frase ahora —«cada sede con su instalación y su
+            calendario», que es verdad y suena igual de bien— y dejar el
+            multi-sede de verdad para cuando haya un grupo interesado que lo
+            pague. Construirlo ahora, sin cliente, es trabajo a ciegas.
+          </p>
+        </div>
+      </article>
+
+      <article class="punto">
+        <div class="punto-cabeza">
+          <span class="punto-num">04</span>
+          <h3>Los precios no se publican: hay que anclarlos a mano</h3>
+        </div>
+        <p>
+          Quedó decidido que el precio se negocia según el tamaño del centro y no
+          se publica, porque no se le puede cobrar lo mismo a un instituto de 200
+          alumnos que a uno de 1.000. De acuerdo, pero tiene una consecuencia que
+          conviene tener presente en la call.
+        </p>
+        <p>
+          La estrategia de los tres planes —Essential como señuelo, Centro como
+          objetivo, Infinito como ancla— <strong>funciona porque se comparan tres
+          números</strong>. Si en la web no hay ninguno, esa comparación no
+          ocurre sola: solo pasa si nosotros la provocamos en la demostración.
+        </p>
+        <div class="recomiendo">
+          <h4>Lo que propongo</h4>
+          <p>
+            Que en la demostración los tres precios se digan <strong>siempre
+            juntos y en este orden</strong>: Infinito primero, Essential después,
+            Centro al final. Es un guion, no una improvisación. Si cada uno dice
+            un precio suelto según le pregunten, la escalera no se ve y acabamos
+            defendiendo una cifra aislada.
+          </p>
+        </div>
+      </article>
+
+      <article class="punto">
+        <div class="punto-cabeza">
+          <span class="punto-num">05</span>
+          <h3>Repasar lo que explican las páginas que verá un piloto</h3>
+        </div>
+        <p>
+          Antes de poner esto delante de un colegio de prueba hay que revisar
+          los textos que va a leer una familia de verdad. He mirado la
+          configuración de hoy y hay cosas que no pueden salir así.
+        </p>
+        <div class="tabla-marco">
+          <table>
+            <thead>
+              <tr><th>Qué dice hoy</th><th>Por qué no puede quedarse así</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>El enlace al aviso de privacidad está <strong>vacío</strong></td>
+                <td>Es lo primero que hay que arreglar. Se le pide el correo y el teléfono a una familia sin enlazarle dónde se explica qué se hace con ellos. El aviso está redactado, pero el centro tiene que publicarlo y nosotros apuntar aquí.</td>
+              </tr>
+              <tr>
+                <td>«Centro Educativo Modelo» y <span class="chip chip--medio">secretaria@centroeducativo.es</span></td>
+                <td>Son los datos de ejemplo. Si nadie los cambia, el piloto arranca con el nombre y el correo de un centro que no existe.</td>
+              </tr>
+              <tr>
+                <td>«Estás hablando con un sistema de inteligencia artificial, no con una persona»</td>
+                <td>Está bien y es obligatorio (art. 50 del Reglamento de IA). Solo hay que decidir si se deja tal cual o se suaviza para que no asuste en la primera frase.</td>
+              </tr>
+              <tr>
+                <td>Se conservan las solicitudes 365 días</td>
+                <td>Es un número que pusimos nosotros. Lo tiene que confirmar el centro, porque el responsable del tratamiento es él.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="recomiendo">
+          <h4>Lo que propongo</h4>
+          <p>
+            Que en la call se reparta esto con nombre y apellidos, porque no es
+            trabajo de programar: hay que <strong>pedirle al colegio piloto sus
+            datos reales, su aviso de privacidad publicado y su plazo de
+            conservación</strong>, y hasta que no lleguen no se enciende nada.
+          </p>
+        </div>
+      </article>
+
+      <article class="punto">
+        <div class="punto-cabeza">
+          <span class="punto-num">06</span>
+          <h3>Qué bloquea cobrar la primera factura</h3>
+        </div>
+        <p>
+          Esto no se decide, se reparte. Nada de la lista es programar: es
+          gestión, y por eso lleva parado.
+        </p>
+        <div class="tabla-marco">
+          <table>
+            <thead>
+              <tr><th>Qué falta</th><th>Por qué bloquea</th><th>Estado</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Servidor y dominio</td>
+                <td>Sin esto no hay nada que enseñar a un colegio. El dominio no está comprado.</td>
+                <td><span class="chip chip--alto">bloquea</span></td>
+              </tr>
+              <tr>
+                <td>Contrato de encargado del tratamiento</td>
+                <td>Art. 28 del RGPD. Tratamos datos de menores: no se puede empezar sin firmarlo con cada centro.</td>
+                <td><span class="chip chip--alto">bloquea</span></td>
+              </tr>
+              <tr>
+                <td>Facturación activada en Google</td>
+                <td>El nivel gratuito devuelve errores por saturación sin prioridad. No sostiene un producto de pago.</td>
+                <td><span class="chip chip--alto">bloquea</span></td>
+              </tr>
+              <tr>
+                <td>Aviso de privacidad publicado</td>
+                <td>Redactado y verificado contra el código. Falta que cada centro lo publique en su web.</td>
+                <td><span class="chip chip--medio">a medias</span></td>
+              </tr>
+              <tr>
+                <td>EIPD del test de orientación</td>
+                <td>Solo bloquea Infinito. Perfila intereses de menores: hace falta evaluación de impacto.</td>
+                <td><span class="chip chip--medio">pendiente</span></td>
+              </tr>
+              <tr>
+                <td>Medir el ahorro real</td>
+                <td>El «80 % de llamadas evitadas» es el argumento central de venta y <strong>nadie lo ha medido</strong>. Sale del primer piloto.</td>
+                <td><span class="chip chip--medio">pendiente</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="nota">
+          Mi lectura sobre el objetivo de tener clientes en octubre: <strong>un
+          piloto funcionando, sí; una factura cobrada, difícil</strong>. El ciclo
+          de venta de un colegio son de tres a seis meses. Lo realista para
+          octubre es tener uno o dos centros usándolo de verdad y midiendo el
+          ahorro, que es justo lo que hace vendibles a todos los demás.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= PARTE 2 ================= -->
+
+  <section class="parte">
+    <div class="parte-cabeza">
+      <div class="parte-quien">Parte 2 · para el informático</div>
+      <h2>Qué hay construido y cómo se instala en un centro</h2>
+    </div>
+
+    <div class="bloque">
+      <h3>Qué es esto</h3>
+      <p>
+        Un asistente que se mete en la web de un colegio con una línea de código
+        y responde las dudas de secretaría: matrícula, horarios, comedor,
+        calendario, trámites. Por dentro tiene <strong>tres niveles</strong>, y
+        el orden importa porque es lo que hace que casi no cueste dinero:
+      </p>
+      <ol>
+        <li><strong>Botones.</strong> Menús fijos con las respuestas que escribe el centro. Gratis.</li>
+        <li><strong>Buscador local.</strong> Busca en la base de preguntas dentro del navegador, tolerando erratas y sinónimos. Gratis.</li>
+        <li><strong>IA.</strong> Solo si los dos anteriores no resuelven. Es el único que cuesta.</li>
+      </ol>
+      <p class="nota">
+        Sobre 2.000 conversaciones al mes por centro, solo un 40 % llega al
+        nivel 3. Medido, no estimado: <code>npm run coste</code> lo desglosa sin
+        llamar a la API. Sale a <strong>0,21 € al mes por centro</strong>.
+      </p>
+    </div>
+
+    <div class="bloque">
+      <h3>Con qué está hecho</h3>
+      <div class="tabla-marco">
+        <table>
+          <tbody>
+            <tr><th>Servidor</th><td>Node.js 22.5 o superior. Una sola dependencia: Express.</td></tr>
+            <tr><th>Base de datos</th><td><code>node:sqlite</code>, el módulo nativo de Node. No hay motor externo que instalar.</td></tr>
+            <tr><th>Navegador</th><td>JavaScript sin framework y sin compilación. No hay build, no hay <code>npm run build</code>.</td></tr>
+            <tr><th>IA</th><td>Google Gemini por REST con respuesta en streaming, y modelos de respaldo si el principal se satura.</td></tr>
+            <tr><th>Aislamiento</th><td>El widget se inyecta en Shadow DOM: los estilos del colegio no lo tocan, ni él los de ellos.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="nota">
+        La decisión de fondo es deliberada: cuantas menos piezas, menos cosas
+        que actualizar en veinticinco servidores distintos.
+      </p>
+    </div>
+
+    <div class="bloque">
+      <h3>Los tres planes son un solo producto</h3>
+      <p>
+        Esto es lo más importante que tiene que entender quien toque el código.
+        <strong>No hay tres versiones.</strong> Hay un producto que mira qué ha
+        pagado el centro, en un campo del archivo de configuración:
+      </p>
+      <pre><code>"plan": "centro",
+"funcionalidades": { "ia_generativa": true, "test_orientacion_4eso": false }</code></pre>
+      <p>
+        El <code>plan</code> <strong>manda sobre los interruptores</strong>.
+        Sirven para que un centro apague algo que sí tiene contratado, nunca para
+        encender algo que no. Si alguien pone a <code>true</code> el test en un
+        centro de Centro, el servidor lo sigue sirviendo apagado.
+      </p>
+      <p>
+        Y se cobra <strong>en el servidor, no en la pantalla</strong>. Es la
+        diferencia entre separar los planes y aparentar que están separados: el
+        navegador se puede modificar, pero una petición hecha a mano no pasa por
+        ningún menú. Pedir el test desde un centro que no lo tiene devuelve un
+        403, y hay una prueba automática que lo comprueba en cada ejecución.
+      </p>
+      <p class="nota">
+        Un plan mal escrito, o que falte, cuenta como el más bajo. Una errata no
+        puede regalar producto que nadie ha pagado.
+      </p>
+    </div>
+
+    <div class="bloque">
+      <h3>Instalar un centro nuevo, paso a paso</h3>
+      <p>Esto es lo que se repite en cada colegio. Son unos veinte minutos.</p>
+      <ol class="pasos">
+        <li>
+          <h4>Copiar la carpeta del producto</h4>
+          <p>Se copia <code>02 - Chatbot Con IA</code> entera. Cada centro tiene la suya, con su base de datos.</p>
+        </li>
+        <li>
+          <h4>Instalar y crear el <code>.env</code></h4>
+          <pre><code>npm install
+
+GEMINI_API_KEY=...
+ADMIN_PASSWORD=...          # solo para entrar la primera vez
+ORIGENES_PERMITIDOS=https://www.elcolegio.es
+PORT=3000</code></pre>
+          <p class="nota">
+            <code>ORIGENES_PERMITIDOS</code> viene en <code>*</code> por defecto y
+            el servidor avisa al arrancar. Hay que fijarlo al dominio real del
+            centro. Ni el <code>.env</code> ni la base de datos se suben nunca a git.
+          </p>
+        </li>
+        <li>
+          <h4>Poner el plan</h4>
+          <p>
+            Se copia el bloque de <code>08 - Planes/&lt;plan&gt;/perfil.json</code>
+            dentro de <code>configuracion_centro.json</code>. Ya viene cuadrado:
+            no hay que acordarse de qué interruptor va en cada plan.
+          </p>
+        </li>
+        <li>
+          <h4>Rellenar los datos del centro</h4>
+          <p>
+            Todo en el mismo <code>configuracion_centro.json</code>: nombre,
+            teléfono, horario de secretaría, colores, calendario del curso y
+            plazos de conservación. <strong>Es el único archivo que adapta el
+            producto a un colegio.</strong> No se hardcodea nada de un centro
+            fuera de ahí.
+          </p>
+        </li>
+        <li>
+          <h4>Meter las preguntas del colegio</h4>
+          <p>
+            En <code>preguntas_frecuentes.json</code> van <strong>las preguntas
+            que nos pase el centro</strong>, no las de ejemplo. Son las que de
+            verdad le entran por teléfono, y cada colegio recibe unas distintas.
+          </p>
+          <p class="nota">
+            Una categoría puede llevar <code>plan_minimo</code> para aparecer solo
+            a partir de cierto plan. Sin ese campo sale en todos: olvidarlo deja
+            una pregunta de más, nunca una familia sin respuesta.
+          </p>
+        </li>
+        <li>
+          <h4>Arrancar y mirar el cartel de inicio</h4>
+          <pre><code>npm start</code></pre>
+          <p>
+            El servidor imprime el plan detectado y cuántas categorías quedan
+            visibles con él. <strong>Si ahí pone otro plan del que se ha
+            vendido, se para y se arregla antes de seguir.</strong>
+          </p>
+        </li>
+        <li>
+          <h4>Crear los usuarios reales</h4>
+          <p>
+            Se entra en <code>/panel</code> con la contraseña de arranque y se
+            crean las cuentas de las personas del centro, una por persona. A
+            partir de ahí esa contraseña deja de ser la vía de entrada.
+          </p>
+          <p class="nota">
+            Una cuenta por persona no es burocracia: el servidor anota quién abre
+            el teléfono o el correo de cada familia. Con una cuenta compartida esa
+            traza no vale para nada, y estamos tratando datos de menores.
+          </p>
+        </li>
+        <li>
+          <h4>Pasar el banco de seguridad</h4>
+          <pre><code>npm run seguridad</code></pre>
+          <p>
+            Con el servidor en marcha. Son 79 comprobaciones contra la
+            instalación real. <strong>No se entrega un centro con esto en
+            rojo.</strong>
+          </p>
+        </li>
+        <li>
+          <h4>Dar la línea al colegio</h4>
+          <pre><code>&lt;script src="https://servidor/widget.js"
+        data-servidor="https://servidor"&gt;&lt;/script&gt;</code></pre>
+          <p>Eso es todo lo que su informático tiene que pegar en su web.</p>
+        </li>
+      </ol>
+    </div>
+
+    <div class="bloque">
+      <h3>Qué está probado y qué no</h3>
+      <p>
+        Esta separación es la parte que más le va a interesar, y conviene ser
+        exactos: <strong>probado</strong> aquí significa que hay una prueba
+        automática que falla si se rompe.
+      </p>
+      <div class="tabla-marco">
+        <table>
+          <thead>
+            <tr><th>Qué</th><th>Cómo</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Seguridad del servidor entero</td>
+              <td>79 comprobaciones: archivos que no deben salir, inyección de prompt, inyección SQL, código metido por una familia, permisos por rol, planes.</td>
+              <td><span class="chip chip--hecho">probado</span></td>
+            </tr>
+            <tr>
+              <td>Buscador local</td>
+              <td>17 casos con erratas y sinónimos.</td>
+              <td><span class="chip chip--hecho">probado</span></td>
+            </tr>
+            <tr>
+              <td>Clasificación de temas</td>
+              <td>22 casos. Cuando no está seguro dice «sin clasificar» en vez de inventar.</td>
+              <td><span class="chip chip--hecho">probado</span></td>
+            </tr>
+            <tr>
+              <td>Detectar que la IA no supo responder</td>
+              <td>12 casos. Es lo que alimenta la lista de preguntas sin respuesta del panel.</td>
+              <td><span class="chip chip--hecho">probado</span></td>
+            </tr>
+            <tr>
+              <td>Que cada plan sirva lo suyo</td>
+              <td>Probado a mano con los tres planes y todos los interruptores en <code>true</code> a propósito, para ver quién gana. Más 6 comprobaciones automáticas.</td>
+              <td><span class="chip chip--hecho">probado</span></td>
+            </tr>
+            <tr>
+              <td>Respuestas del modelo real</td>
+              <td>Verificadas a mano sobre preguntas del calendario. No hay prueba automática: cuesta dinero y el modelo no es determinista.</td>
+              <td><span class="chip chip--medio">a mano</span></td>
+            </tr>
+            <tr>
+              <td>Carga y concurrencia</td>
+              <td>Nunca se ha medido. No sabemos cuántos centros aguanta un servidor.</td>
+              <td><span class="chip chip--alto">sin probar</span></td>
+            </tr>
+            <tr>
+              <td>Despliegue en producción</td>
+              <td>Nunca se ha hecho. Todo lo anterior es en local.</td>
+              <td><span class="chip chip--alto">sin probar</span></td>
+            </tr>
+            <tr>
+              <td>Copias de seguridad</td>
+              <td>No hay ninguna configurada, y la base tiene datos de familias.</td>
+              <td><span class="chip chip--alto">sin hacer</span></td>
+            </tr>
+            <tr>
+              <td>Varias sedes en un solo proceso</td>
+              <td>El esquema lo contempla, el arranque no. Hoy es una instalación por sede.</td>
+              <td><span class="chip chip--alto">sin hacer</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="bloque">
+      <h3>Lo que le pediría al informático, por orden</h3>
+      <ol>
+        <li><strong>Montar el servidor</strong>: VPS, HTTPS con Let's Encrypt, Nginx delante y el servicio arrancando solo si se reinicia la máquina.</li>
+        <li><strong>Copias de seguridad de la base</strong>, cifradas y con su propio plazo de borrado. Hoy no hay ninguna y contiene datos de menores.</li>
+        <li><strong>Limpiar el historial de git</strong>: hubo un <code>.env</code> versionado con una contraseña de panel. La clave ya no vale, pero sigue en el histórico.</li>
+        <li><strong>Medir cuántos centros aguanta una máquina</strong>, antes de vender el quinto.</li>
+        <li><strong>Monitorización</strong>: que si el servidor se cae, nos enteremos nosotros antes que el colegio.</li>
+      </ol>
+      <p class="nota">
+        Que no se preocupe por dos cosas que suelen salir en esta conversación:
+        las contraseñas ya van con scrypt y sal, y el servidor sirve una lista
+        cerrada de archivos públicos —no la carpeta entera— porque ahí dentro
+        está la base de datos.
+      </p>
+    </div>
+
+    <div class="bloque">
+      <h3>Cuatro reglas que no se rompen</h3>
+      <p>
+        Están en el <code>CLAUDE.md</code> del repositorio, pero conviene decirlas
+        en voz alta porque cada una costó un susto:
+      </p>
+      <ul>
+        <li>
+          <strong>Nunca servir la carpeta entera.</strong> Se hizo una vez y
+          cualquiera podía descargarse la base de datos con los nombres,
+          correos y teléfonos de las familias.
+        </li>
+        <li>
+          <strong>El correo y el teléfono de una familia no viajan con la lista
+          de solicitudes.</strong> Se piden de uno en uno y el servidor anota
+          quién los ha abierto.
+        </li>
+        <li>
+          <strong>La autoría la pone el servidor desde la sesión</strong>, nunca
+          el navegador. Si el cliente dice quién es, no vale como traza.
+        </li>
+        <li>
+          <strong>El panel no enseña cifras que no sean ciertas.</strong> Si no
+          se sabe el tema de una consulta, pone «sin clasificar». Un colegio que
+          pilla un número inventado no vuelve a creerse ninguno.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="cierre">
+    Todo lo que dice este documento sobre el código está comprobado ejecutándolo,
+    no deducido. Donde no he podido comprobar algo, lo he marcado como sin probar.
+  </p>
+
+</div>

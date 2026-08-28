@@ -43,3 +43,8 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# Skills de terceros instaladas con `npx skills add`. No se versionan: son
+# codigo ajeno y skills-lock.json basta para reinstalarlas igual.
+.agents/
+.claude/

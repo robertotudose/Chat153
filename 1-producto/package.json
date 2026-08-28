@@ -1,0 +1,30 @@
+{
+  "name": "asistente-escolar-ia",
+  "version": "3.0.0",
+  "description": "Asistente virtual de secretaría y orientación para centros educativos. Motor híbrido: navegación guiada, buscador local difuso e IA generativa con degradación automática a modo determinista.",
+  "main": "servidor_ia.js",
+  "scripts": {
+    "start": "node servidor_ia.js",
+    "dev": "node --watch servidor_ia.js",
+    "test": "node pruebas_motor.js && node pruebas_analisis.js",
+    "seguridad": "node pruebas_seguridad.js",
+    "coste": "node medir_coste.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "keywords": [
+    "chatbot",
+    "educacion",
+    "secretaria-virtual",
+    "orientacion-academica",
+    "gemini",
+    "express",
+    "sqlite"
+  ],
+  "author": "Roberto Tudose",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
